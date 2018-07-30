@@ -1,0 +1,27 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.netflix.nebula:gradle-resolution-rules-plugin:5.2.2"
+  }
+}
+
+
+apply plugin: 'java-library'
+apply plugin: 'nebula.resolution-rules'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
+    implementation("com.fasterxml.jackson.core:jackson-core:2.9.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.7.9") {
+      force = true
+    }
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1")
+}
