@@ -1,0 +1,15 @@
+plugins {
+  id 'java'
+}
+
+repositories {
+  maven {
+    url 'repo'
+  }
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'io.grpc:grpc-protobuf:1.10.0' // transitively excludes com.google.protobuf:protobuf-lite from io.grpc:protobuf-lite
+  implementation 'nebulatest:nebulabom:1.0.0'   // recommends a version of io.grpc:protobuf-lite without excludes
+}
