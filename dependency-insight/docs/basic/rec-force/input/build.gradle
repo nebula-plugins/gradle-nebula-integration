@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven { url 'repo' }
+}
+
+dependencies {
+    compile 'sample:bom:1.0.0'
+    compile 'com.google.guava:guava'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.guava:guava:14.0.1'
+    }
+}

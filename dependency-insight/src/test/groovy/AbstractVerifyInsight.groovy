@@ -15,6 +15,8 @@
  *     limitations under the License.
  *
  */
+
+import com.google.common.collect.ImmutableMap
 import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom
 
@@ -48,7 +50,7 @@ abstract class AbstractVerifyInsight extends TestKitSpecification {
 
 repositories {
     jcenter()$recRepo
-}
+}\n
 """.stripIndent()
     }
 
@@ -82,7 +84,7 @@ class Main {
         }
     }
 
-    def createForceConfigurationIfNeeded(String dep, String forceVersion, Map lookupRequestedModuleIdentifier) {
+    def createForceConfigurationIfNeeded(String dep, String forceVersion, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
         if (forceVersion != null) {
             buildFile << """
                 configurations.all {
@@ -103,6 +105,19 @@ class Main {
             localBom.addManagementDependency('org.slf4j', 'slf4j-api', '1.7.25')
             localBom.addManagementDependency('org.mockito', 'mockito-core', '1.9.5')
             ArtifactHelpers.setupSamplePomWith(repo, localBom, localBom.generate())
+        }
+    }
+
+    def createReplacementConfigurationIfNeeded(String dep, Coordinate replaceFrom, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (replaceFrom != null) {
+            def replaceToModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+            buildFile << """
+                project.dependencies.modules.module('${replaceFrom.moduleIdentifier}') {
+                    def details = it as ComponentModuleMetadataDetails
+                    def message = "replacement ${replaceFrom.moduleIdentifier} -> ${replaceToModuleIdentifier}"
+                    details.replacedBy('${replaceToModuleIdentifier}', message)
+                }
+                """.stripIndent()
         }
     }
 }

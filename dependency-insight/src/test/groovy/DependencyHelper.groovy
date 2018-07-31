@@ -29,7 +29,7 @@ class DependencyHelper {
     String overrideLockPropertyVersion
     String versionForDynamicToResolveTo
 
-    String replaceFrom
+    Coordinate replaceFrom
     String substituteWith
     Boolean exclude
 

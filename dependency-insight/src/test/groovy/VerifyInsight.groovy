@@ -28,7 +28,7 @@ class VerifyInsight extends AbstractVerifyInsight {
     static def guavaForce = '14.0.1'
     static def guavaLock = true
     static def guavaRec = '19.0'
-    static def guavaReplaceFrom = 'com.google.collections:google-collections:1.0'
+    static def guavaReplaceFrom = new Coordinate('com.google.collections:google-collections', '1.0')
 
     static def mockito = 'mockito'
     static def mockitoDependency = 'org.mockito:mockito-all'
@@ -76,14 +76,13 @@ class VerifyInsight extends AbstractVerifyInsight {
 
         def version = dependencyHelper.findRequestedVersion() // static, dynamic, or recommended
 
-        buildFile << """
-dependencies {
-    compile '${lookupRequestedModuleIdentifier[dep]}${version}'
-"""
+        buildFile << 'dependencies {\n'
 
         if (recVersion != null) {
             buildFile << '    compile \'sample:bom:1.0.0\'\n'
         }
+
+        buildFile << "    compile '${lookupRequestedModuleIdentifier[dep]}${version}'\n"
 
         if (replaceFrom != null) {
             buildFile << "    compile '$replaceFrom'\n"
@@ -91,6 +90,7 @@ dependencies {
         buildFile << '}\n'.stripIndent()
 
         createForceConfigurationIfNeeded(dep, forceVersion, lookupRequestedModuleIdentifier)
+        createReplacementConfigurationIfNeeded(dep, replaceFrom, lookupRequestedModuleIdentifier)
         createBomIfNeeded(recVersion)
         createLocksIfNeeded(useLocks)
 
@@ -105,7 +105,7 @@ dependencies {
         def result = runTasks(*tasks)
 
         then:
-        DocWriter w = new DocWriter(title, coreGradleV, projectDir)
+        DocWriter w = new DocWriter(title, coreGradleV, projectDir, group)
         w.writeCleanedUpBuildOutput('=== For the dependency under test ===\n' +
                 "Tasks: ${tasks.join(' ')}\n\n" +
                 result.output)
@@ -115,72 +115,72 @@ dependencies {
         w.writeFooter('completed assertions')
 
         where:
-        dep   | staticVersion | dynamicVersion | recVersion | forceVersion | useLocks  | replaceFrom | substitute | exclude | title
+        dep   | staticVersion | dynamicVersion | recVersion | forceVersion | useLocks  | replaceFrom      | substitute | exclude | group         | title
 //        static
-        guava | guavaStatic   | null           | null       | null         | null      | null        | null       | null    | 'static'
-        guava | guavaStatic   | null           | null       | guavaForce   | null      | null        | null       | null    | 'static-force'
-        guava | guavaStatic   | null           | null       | guavaForce   | guavaLock | null        | null       | null    | 'static-force-lock'
-        guava | guavaStatic   | null           | null       | null         | guavaLock | null        | null       | null    | 'static-lock'
+        guava | guavaStatic   | null           | null       | null         | null      | null             | null       | null    | 'basic'       | 'static'
+        guava | guavaStatic   | null           | null       | guavaForce   | null      | null             | null       | null    | 'basic'       | 'static-force'
+        guava | guavaStatic   | null           | null       | guavaForce   | guavaLock | null             | null       | null    | 'basic'       | 'static-force-lock'
+        guava | guavaStatic   | null           | null       | null         | guavaLock | null             | null       | null    | 'basic'       | 'static-lock'
 //         dynamic
-        guava | null          | guavaDynamic   | null       | null         | null      | null        | null       | null    | 'dynamic'
-        guava | null          | guavaDynamic   | null       | guavaForce   | null      | null        | null       | null    | 'dynamic-force'
-        guava | null          | guavaDynamic   | null       | guavaForce   | guavaLock | null        | null       | null    | 'dynamic-force-lock'
-        guava | null          | guavaDynamic   | null       | null         | guavaLock | null        | null       | null    | 'dynamic-lock'
+        guava | null          | guavaDynamic   | null       | null         | null      | null             | null       | null    | 'basic'       | 'dynamic'
+        guava | null          | guavaDynamic   | null       | guavaForce   | null      | null             | null       | null    | 'basic'       | 'dynamic-force'
+        guava | null          | guavaDynamic   | null       | guavaForce   | guavaLock | null             | null       | null    | 'basic'       | 'dynamic-force-lock'
+        guava | null          | guavaDynamic   | null       | null         | guavaLock | null             | null       | null    | 'basic'       | 'dynamic-lock'
 //         recommendation
-        guava | null          | null           | guavaRec   | null         | null      | null        | null       | null    | 'rec'
-        guava | null          | null           | guavaRec   | guavaForce   | null      | null        | null       | null    | 'rec-force'
-        guava | null          | null           | guavaRec   | guavaForce   | guavaLock | null        | null       | null    | 'rec-force-lock'
-        guava | null          | null           | guavaRec   | null         | guavaLock | null        | null       | null    | 'rec-lock'
-////        replacement - static
-//        guava   | guavaStatic   | null           | null       | null         | null        | guavaReplaceFrom | null         | null    | 'replacement-static'
-//        guava   | guavaStatic   | null           | null       | guavaForce   | null        | guavaReplaceFrom | null         | null    | 'replacement-static-force'
-//        guava   | guavaStatic   | null           | null       | guavaForce   | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-static-force-lock'
-//        guava   | guavaStatic   | null           | null       | null         | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-static-lock'
-////        replacement - dynamic
-//        guava   | null          | guavaDynamic   | null       | null         | null        | guavaReplaceFrom | null         | null    | 'replacement-dynamic'
-//        guava   | null          | guavaDynamic   | null       | guavaForce   | null        | guavaReplaceFrom | null         | null    | 'replacement-dynamic-force'
-//        guava   | null          | guavaDynamic   | null       | guavaForce   | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-dynamic-force-lock'
-//        guava   | null          | guavaDynamic   | null       | null         | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-dynamic-lock'
-////        replacement - with recommendation
-//        guava   | null          | null           | guavaRec   | null         | null        | guavaReplaceFrom | null         | null    | 'replacement-rec'
-//        guava   | null          | null           | guavaRec   | guavaForce   | null        | guavaReplaceFrom | null         | null    | 'replacement-rec-force'
-//        guava   | null          | null           | guavaRec   | guavaForce   | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-rec-force-lock'
-//        guava   | null          | null           | guavaRec   | null         | guavaLock   | guavaReplaceFrom | null         | null    | 'replacement-rec-lock'
+        guava | null          | null           | guavaRec   | null         | null      | null             | null       | null    | 'basic'       | 'rec'
+        guava | null          | null           | guavaRec   | guavaForce   | null      | null             | null       | null    | 'basic'       | 'rec-force'
+        guava | null          | null           | guavaRec   | guavaForce   | guavaLock | null             | null       | null    | 'basic'       | 'rec-force-lock'
+        guava | null          | null           | guavaRec   | null         | guavaLock | null             | null       | null    | 'basic'       | 'rec-lock'
+//        replacement - static
+        guava | guavaStatic   | null           | null       | null         | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-static'
+        guava | guavaStatic   | null           | null       | guavaForce   | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-static-force'
+        guava | guavaStatic   | null           | null       | guavaForce   | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-static-force-lock'
+        guava | guavaStatic   | null           | null       | null         | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-static-lock'
+//        replacement - dynamic
+        guava | null          | guavaDynamic   | null       | null         | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-dynamic'
+        guava | null          | guavaDynamic   | null       | guavaForce   | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-dynamic-force'
+        guava | null          | guavaDynamic   | null       | guavaForce   | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-dynamic-force-lock'
+        guava | null          | guavaDynamic   | null       | null         | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-dynamic-lock'
+//        replacement - with recommendation
+        guava | null          | null           | guavaRec   | null         | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-rec'
+        guava | null          | null           | guavaRec   | guavaForce   | null      | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-rec-force'
+        guava | null          | null           | guavaRec   | guavaForce   | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-rec-force-lock'
+        guava | null          | null           | guavaRec   | null         | guavaLock | guavaReplaceFrom | null       | null    | 'replacement' | 'replacement-rec-lock'
 ////        substitution - static
-//        mockito | mockitoStatic | null           | null       | null         | null        | null             | mockitoSubTo | null    | 'substitute-static'
-//        mockito | mockitoStatic | null           | null       | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute-static-force'
-//        mockito | mockitoStatic | null           | null       | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute-static-force-lock'
-//        mockito | mockitoStatic | null           | null       | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute-static-lock'
+//        mockito | mockitoStatic | null           | null       | null         | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-static'
+//        mockito | mockitoStatic | null           | null       | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-static-force'
+//        mockito | mockitoStatic | null           | null       | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-static-force-lock'
+//        mockito | mockitoStatic | null           | null       | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-static-lock'
 ////        substitution - dynamic
-//        mockito | null          | mockitoDynamic | null       | null         | null        | null             | mockitoSubTo | null    | 'substitute-dynamic'
-//        mockito | null          | mockitoDynamic | null       | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute-dynamic-force'
-//        mockito | null          | mockitoDynamic | null       | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute-dynamic-force-lock'
-//        mockito | null          | mockitoDynamic | null       | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute-dynamic-lock'
+//        mockito | null          | mockitoDynamic | null       | null         | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-dynamic'
+//        mockito | null          | mockitoDynamic | null       | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-dynamic-force'
+//        mockito | null          | mockitoDynamic | null       | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-dynamic-force-lock'
+//        mockito | null          | mockitoDynamic | null       | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-dynamic-lock'
 ////        substitution - with recommendation
-//        mockito | null          | null           | mockitoRec | null         | null        | null             | mockitoSubTo | null    | 'substitute-rec'
-//        mockito | null          | null           | mockitoRec | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute-rec-force'
-//        mockito | null          | null           | mockitoRec | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute-rec-force-lock'
-//        mockito | null          | null           | mockitoRec | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute-rec-lock'
+//        mockito | null          | null           | mockitoRec | null         | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-rec'
+//        mockito | null          | null           | mockitoRec | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute' | 'substitute-rec-force'
+//        mockito | null          | null           | mockitoRec | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-rec-force-lock'
+//        mockito | null          | null           | mockitoRec | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute' | 'substitute-rec-lock'
 ////        exclude - static
-//        netty   | nettyStatic   | null           | null       | null         | null        | null             | null         | true    | 'exclude-static'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | null         | true    | 'exclude-static-force'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude-static-force-lock'
-//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | null         | true    | 'exclude-static-lock'
+//        netty   | nettyStatic   | null           | null       | null         | null        | null             | null         | true    | 'exclude' | 'exclude-static'
+//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-static-force'
+//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-static-force-lock'
+//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-static-lock'
 ////        exclude - dynamic
-//        netty   | null          | nettyDynamic   | null       | null         | null        | null             | null         | true    | 'exclude-dynamic'
-//        netty   | null          | nettyDynamic   | null       | nettyForce   | null        | null             | null         | true    | 'exclude-dynamic-force'
-//        netty   | null          | nettyDynamic   | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude-dynamic-force-lock'
-//        netty   | null          | nettyDynamic   | null       | null         | nettyLock   | null             | null         | true    | 'exclude-dynamic-lock'
+//        netty   | null          | nettyDynamic   | null       | null         | null        | null             | null         | true    | 'exclude' | 'exclude-dynamic'
+//        netty   | null          | nettyDynamic   | null       | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-dynamic-force'
+//        netty   | null          | nettyDynamic   | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-dynamic-force-lock'
+//        netty   | null          | nettyDynamic   | null       | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-dynamic-lock'
 ////        exclude - with recommendation
-//        netty   | null          | null           | nettyRec   | null         | null        | null             | null         | true    | 'exclude-rec'
-//        netty   | null          | null           | nettyRec   | nettyForce   | null        | null             | null         | true    | 'exclude-rec-force'
-//        netty   | null          | null           | nettyRec   | nettyForce   | nettyLock   | null             | null         | true    | 'exclude-rec-force-lock'
-//        netty   | null          | null           | nettyRec   | null         | nettyLock   | null             | null         | true    | 'exclude-rec-lock'
+//        netty   | null          | null           | nettyRec   | null         | null        | null             | null         | true    | 'exclude' | 'exclude-rec'
+//        netty   | null          | null           | nettyRec   | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-rec-force'
+//        netty   | null          | null           | nettyRec   | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-rec-force-lock'
+//        netty   | null          | null           | nettyRec   | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-rec-lock'
 ////        exclude - static & with substitution
-//        netty   | nettyStatic   | null           | null       | null         | null        | null             | nettySubTo   | true    | 'exclude-substitute-static'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | nettySubTo   | true    | 'exclude-substitute-static-force'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | nettySubTo   | true    | 'exclude-substitute-static-force-lock'
-//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | nettySubTo   | true    | 'exclude-substitute-static-lock'
+//        netty   | nettyStatic   | null           | null       | null         | null        | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static'
+//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-force'
+//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-force-lock'
+//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-lock'
 
     }
 
@@ -251,9 +251,13 @@ dependencies {
         }
 
         if (dh.replaceFrom != null) {
-            def expectedOutput = "${dh.replaceFrom} -> ${expected}"
-            w.addAssertionToDoc("contains '$expectedOutput' [replaced from]")
+            def expectedOutput = 'Selected by rule : replacement'
+            w.addAssertionToDoc("contains '$expectedOutput' [replacement]")
             assert output.contains(expectedOutput)
+
+            def expectedRegex = "${dh.replaceFrom} -> ${expected}"
+            w.addAssertionToDoc("contains '$expectedRegex' [replacement end result]")
+            assert output.contains(expectedRegex)
         }
 
         if (dh.staticVersion != null) {

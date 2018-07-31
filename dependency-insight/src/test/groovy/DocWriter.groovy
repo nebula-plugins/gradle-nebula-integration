@@ -30,7 +30,7 @@ class DocWriter {
     private File projectDir
     private File depFolder
 
-    DocWriter(String title, String insightSource, File projectDir) {
+    DocWriter(String title, String insightSource, File projectDir, String group) {
         this.projectDir = projectDir
         this.title = title
         this.insightSource = insightSource
@@ -38,7 +38,10 @@ class DocWriter {
         File docs = new File("docs")
         docs.mkdirs()
 
-        depFolder = new File(docs, title)
+        File groupDir = new File(docs, group)
+        docs.mkdirs()
+
+        depFolder = new File(groupDir, title)
         depFolder.mkdirs()
     }
 

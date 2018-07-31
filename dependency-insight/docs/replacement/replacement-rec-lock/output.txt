@@ -1,0 +1,41 @@
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency guava --warning-mode all --write-locks
+
+
+> Task :dependencyInsight
+Persisted dependency lock state for configuration 'compileClasspath'
+com.google.guava:guava:19.0
+   variant "compile" [
+      org.gradle.status = release (not requested)
+      org.gradle.usage  = java-api
+   ]
+   Selection reasons:
+      - Was requested
+      - By constraint
+      - Selected by rule : replacement com.google.collections:google-collections -> com.google.guava:guava
+
+com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0
+\--- compileClasspath
+
+com.google.guava:guava:19.0
+\--- sample:bom:1.0.0
+     \--- compileClasspath
+
+com.google.guava:guava -> 19.0
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'Persisted dependency lock state' [locked & build matches lock version]
+- contains 'Selected by rule : replacement' [replacement]
+- contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0' [replacement end result]
+- contains 'com.google.guava:guava -> 19.0' [recommended]
+- contains 'Task.*
+.*com.google.guava:guava:19.0' [recommended end result]
+- contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
+
+completed assertions

@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.collections:google-collections:1.0'
+}
+
+project.dependencies.modules.module('com.google.collections:google-collections') {
+    def details = it as ComponentModuleMetadataDetails
+    def message = "replacement com.google.collections:google-collections -> com.google.guava:guava"
+    details.replacedBy('com.google.guava:guava', message)
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
