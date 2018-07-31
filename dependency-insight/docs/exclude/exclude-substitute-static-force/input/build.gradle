@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'io.netty:netty-all:4.1.20.FINAL'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'io.netty:netty-all:4.1.10.FINAL'
+    }
+}
+
+def substitutionMessage = '✭ substitution io.netty:netty-all -> io.netty:netty-common:4.1.23.Final'
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('io.netty:netty-all') because (substitutionMessage) with module('io.netty:netty-common:4.1.23.Final')
+    }
+}
+
+def exclusionMessage = '✭ exclusion io.netty:netty-all'
+configurations.all {
+    exclude group: 'io.netty', module: 'netty-all'
+}

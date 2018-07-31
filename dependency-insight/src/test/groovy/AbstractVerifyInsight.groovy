@@ -92,6 +92,7 @@ class Main {
             localBom.addManagementDependency('com.google.guava', 'guava', '19.0')
             localBom.addManagementDependency('org.slf4j', 'slf4j-api', '1.7.25')
             localBom.addManagementDependency('org.mockito', 'mockito-core', '1.9.5')
+            localBom.addManagementDependency('io.netty', 'netty-all', '4.1.22.FINAL')
             ArtifactHelpers.setupSamplePomWith(repo, localBom, localBom.generate())
         }
     }
@@ -112,11 +113,40 @@ class Main {
         if (substituteTo != null) {
             def substituteFromModuleIdentifier = lookupRequestedModuleIdentifier[dep]
             buildFile << """
-                def message = '✭ substitution $substituteFromModuleIdentifier -> $substituteTo'
+                def substitutionMessage = '✭ substitution $substituteFromModuleIdentifier -> $substituteTo'
                 configurations.all {
                     resolutionStrategy.dependencySubstitution {
-                        substitute module('$substituteFromModuleIdentifier') because (message) with module('$substituteTo')
+                        substitute module('$substituteFromModuleIdentifier') because (substitutionMessage) with module('$substituteTo')
                     }
+                }
+                """.stripIndent()
+        }
+    }
+
+    def createExclusionConfigurationIfNeeded(String dep, Boolean exclude, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (exclude) {
+            def excludeDepModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+            def depGroupAndArtifact = excludeDepModuleIdentifier.split(':')
+
+            buildFile << """
+                def exclusionMessage = '✭ exclusion $excludeDepModuleIdentifier'
+                configurations.all {
+                    exclude group: '${depGroupAndArtifact[0]}', module: '${depGroupAndArtifact[1]}'
+                }
+                """.stripIndent()
+        }
+    }
+
+    def createRejectionConfigurationIfNeeded(String dep, Boolean reject, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (reject) {
+            def excludeDepModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+
+            buildFile << """
+                def exclusionMessage = '✭ rejection $excludeDepModuleIdentifier'
+                configurations.all {
+                    resolutionStrategy.componentSelection.withModule("${excludeDepModuleIdentifier}", { selection ->
+                        selection.reject(exclusionMessage)
+                    })
                 }
                 """.stripIndent()
         }

@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'io.netty:netty-all:4.1.20.FINAL'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'io.netty:netty-all:4.1.10.FINAL'
+    }
+}
+
+def exclusionMessage = '✭ exclusion io.netty:netty-all'
+configurations.all {
+    exclude group: 'io.netty', module: 'netty-all'
+}

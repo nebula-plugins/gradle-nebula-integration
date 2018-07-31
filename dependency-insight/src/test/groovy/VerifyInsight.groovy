@@ -93,6 +93,8 @@ class VerifyInsight extends AbstractVerifyInsight {
         createForceConfigurationIfNeeded(dep, forceVersion, lookupRequestedModuleIdentifier)
         createReplacementConfigurationIfNeeded(dep, replaceFrom, lookupRequestedModuleIdentifier)
         createSubstitutionConfigurationIfNeeded(dep, substitute, lookupRequestedModuleIdentifier)
+        createExclusionConfigurationIfNeeded(dep, exclude, lookupRequestedModuleIdentifier)
+//        createRejectionConfigurationIfNeeded(dep, exclude, lookupRequestedModuleIdentifier)
 
         // add additional files
         createBomIfNeeded(recVersion)
@@ -165,26 +167,26 @@ class VerifyInsight extends AbstractVerifyInsight {
         mockito | null          | null           | mockitoRec | mockitoForce | null        | null             | mockitoSubTo | null    | 'substitute'  | 'substitute-rec-force'
         mockito | null          | null           | mockitoRec | mockitoForce | mockitoLock | null             | mockitoSubTo | null    | 'substitute'  | 'substitute-rec-force-lock'
         mockito | null          | null           | mockitoRec | null         | mockitoLock | null             | mockitoSubTo | null    | 'substitute'  | 'substitute-rec-lock'
-////        exclude - static
-//        netty   | nettyStatic   | null           | null       | null         | null        | null             | null         | true    | 'exclude' | 'exclude-static'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-static-force'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-static-force-lock'
-//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-static-lock'
-////        exclude - dynamic
-//        netty   | null          | nettyDynamic   | null       | null         | null        | null             | null         | true    | 'exclude' | 'exclude-dynamic'
-//        netty   | null          | nettyDynamic   | null       | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-dynamic-force'
-//        netty   | null          | nettyDynamic   | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-dynamic-force-lock'
-//        netty   | null          | nettyDynamic   | null       | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-dynamic-lock'
-////        exclude - with recommendation
-//        netty   | null          | null           | nettyRec   | null         | null        | null             | null         | true    | 'exclude' | 'exclude-rec'
-//        netty   | null          | null           | nettyRec   | nettyForce   | null        | null             | null         | true    | 'exclude' | 'exclude-rec-force'
-//        netty   | null          | null           | nettyRec   | nettyForce   | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-rec-force-lock'
-//        netty   | null          | null           | nettyRec   | null         | nettyLock   | null             | null         | true    | 'exclude' | 'exclude-rec-lock'
-////        exclude - static & with substitution
-//        netty   | nettyStatic   | null           | null       | null         | null        | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-force'
-//        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-force-lock'
-//        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | nettySubTo   | true    | 'exclude' | 'exclude-substitute-static-lock'
+//        exclude - static
+        netty   | nettyStatic   | null           | null       | null         | null        | null             | null         | true    | 'exclude'     | 'exclude-static'
+        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | null         | true    | 'exclude'     | 'exclude-static-force'
+        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-static-force-lock'
+        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-static-lock'
+//        exclude - dynamic
+        netty   | null          | nettyDynamic   | null       | null         | null        | null             | null         | true    | 'exclude'     | 'exclude-dynamic'
+        netty   | null          | nettyDynamic   | null       | nettyForce   | null        | null             | null         | true    | 'exclude'     | 'exclude-dynamic-force'
+        netty   | null          | nettyDynamic   | null       | nettyForce   | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-dynamic-force-lock'
+        netty   | null          | nettyDynamic   | null       | null         | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-dynamic-lock'
+//        exclude - with recommendation
+        netty   | null          | null           | nettyRec   | null         | null        | null             | null         | true    | 'exclude'     | 'exclude-rec'
+        netty   | null          | null           | nettyRec   | nettyForce   | null        | null             | null         | true    | 'exclude'     | 'exclude-rec-force'
+        netty   | null          | null           | nettyRec   | nettyForce   | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-rec-force-lock'
+        netty   | null          | null           | nettyRec   | null         | nettyLock   | null             | null         | true    | 'exclude'     | 'exclude-rec-lock'
+//        exclude - static & with substitution
+        netty   | nettyStatic   | null           | null       | null         | null        | null             | nettySubTo   | true    | 'exclude'     | 'exclude-substitute-static'
+        netty   | nettyStatic   | null           | null       | nettyForce   | null        | null             | nettySubTo   | true    | 'exclude'     | 'exclude-substitute-static-force'
+        netty   | nettyStatic   | null           | null       | nettyForce   | nettyLock   | null             | nettySubTo   | true    | 'exclude'     | 'exclude-substitute-static-force-lock'
+        netty   | nettyStatic   | null           | null       | null         | nettyLock   | null             | nettySubTo   | true    | 'exclude'     | 'exclude-substitute-static-lock'
 
     }
 
@@ -198,13 +200,24 @@ class VerifyInsight extends AbstractVerifyInsight {
             def expectedOutput = 'No dependencies matching given input were found in configuration'
             w.addAssertionToDoc("contains '$expectedOutput' [exclude]")
             assert output.contains(expectedOutput)
+
+            if (dh.substituteWith != null) {
+                def notFound = '✭ substitution'
+                w.addAssertionToDoc("does not contain '$notFound' [exclude > substitute]")
+                assert !output.contains(notFound)
+            }
+
+            def expectedReason = 'Selected by rule : ✭ exclusion'
+            w.addAssertionToDoc("contains '$expectedReason' [custom substitute reason]")
+            assert output.contains(expectedReason)
+
             return // if exclude occurs, stop checking here
         }
 
         if (dh.substituteWith != null) {
             def expectedReason = 'Selected by rule : ✭ substitution'
             w.addAssertionToDoc("contains '$expectedReason' [custom substitute reason]")
-            assert output.findAll { expectedReason }.size() > 0
+            assert output.contains(expectedReason)
 
             if (dh.staticVersion != null) {
                 def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]}:${dh.staticVersion} -> ${expected}"
@@ -222,8 +235,8 @@ class VerifyInsight extends AbstractVerifyInsight {
 
                 def bomDependencyConstraint = '\\--- sample:bom:1.0.0'
                 w.addAssertionToDoc("contains '$bomDependencyConstraint' [bom dependency constraint - recommended]")
-                assert output.findAll { bomDependencyConstraint }.size() > 0
-                
+                assert output.contains(bomDependencyConstraint)
+
             } else {
                 def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]}:${dh.dynamicVersion} -> ${expected}"
                 w.addAssertionToDoc("contains '$expectedFinalVersion' [substitute & dynamic]")

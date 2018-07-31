@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven { url 'repo' }
+}
+
+dependencies {
+    compile 'sample:bom:1.0.0'
+    compile 'io.netty:netty-all'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'io.netty:netty-all:4.1.10.FINAL'
+    }
+}
+
+def exclusionMessage = '✭ exclusion io.netty:netty-all'
+configurations.all {
+    exclude group: 'io.netty', module: 'netty-all'
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
