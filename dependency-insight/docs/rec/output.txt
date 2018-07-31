@@ -1,0 +1,30 @@
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency guava --warning-mode all
+
+
+> Task :dependencyInsight
+com.google.guava:guava:19.0 (via constraint)
+   variant "compile" [
+      org.gradle.status = release (not requested)
+      org.gradle.usage  = java-api
+   ]
+
+com.google.guava:guava:19.0
+\--- sample:bom:1.0.0
+     \--- compileClasspath
+
+com.google.guava:guava -> 19.0
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'guava -> 19.0' [recommended]
+- contains 'Task.*
+.*guava:19.0' [recommended end result]
+- contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
+
+completed assertions

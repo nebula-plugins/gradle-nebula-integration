@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:18.+'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.guava:guava:14.0.1'
+    }
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}

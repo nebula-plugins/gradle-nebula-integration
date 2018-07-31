@@ -1,0 +1,24 @@
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency guava --warning-mode all
+
+
+> Task :dependencyInsight
+com.google.guava:guava:18.0
+   variant "compile" [
+      org.gradle.status = release (not requested)
+      org.gradle.usage  = java-api
+   ]
+
+com.google.guava:guava:18.0
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'Task.*
+.*guava:18.0' [static version end result]
+
+completed assertions
