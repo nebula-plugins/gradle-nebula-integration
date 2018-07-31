@@ -84,18 +84,6 @@ class Main {
         }
     }
 
-    def createForceConfigurationIfNeeded(String dep, String forceVersion, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
-        if (forceVersion != null) {
-            buildFile << """
-                configurations.all {
-                    resolutionStrategy {
-                        force '${"${lookupRequestedModuleIdentifier[dep]}:${forceVersion}"}'
-                    }
-                }
-                """.stripIndent()
-        }
-    }
-
     def createBomIfNeeded(String recVersion) {
         if (recVersion != null) {
             repo.mkdirs()
@@ -108,13 +96,39 @@ class Main {
         }
     }
 
+    def createForceConfigurationIfNeeded(String dep, String forceVersion, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (forceVersion != null) {
+            buildFile << """
+                configurations.all {
+                    resolutionStrategy {
+                        force '${"${lookupRequestedModuleIdentifier[dep]}:${forceVersion}"}'
+                    }
+                }
+                """.stripIndent()
+        }
+    }
+
+    def createSubstitutionConfigurationIfNeeded(String dep, String substituteTo, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (substituteTo != null) {
+            def substituteFromModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+            buildFile << """
+                def message = '✭ substitution $substituteFromModuleIdentifier -> $substituteTo'
+                configurations.all {
+                    resolutionStrategy.dependencySubstitution {
+                        substitute module('$substituteFromModuleIdentifier') because (message) with module('$substituteTo')
+                    }
+                }
+                """.stripIndent()
+        }
+    }
+
     def createReplacementConfigurationIfNeeded(String dep, Coordinate replaceFrom, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
         if (replaceFrom != null) {
             def replaceToModuleIdentifier = lookupRequestedModuleIdentifier[dep]
             buildFile << """
                 project.dependencies.modules.module('${replaceFrom.moduleIdentifier}') {
                     def details = it as ComponentModuleMetadataDetails
-                    def message = "replacement ${replaceFrom.moduleIdentifier} -> ${replaceToModuleIdentifier}"
+                    def message = "✭ replacement ${replaceFrom.moduleIdentifier} -> ${replaceToModuleIdentifier}"
                     details.replacedBy('${replaceToModuleIdentifier}', message)
                 }
                 """.stripIndent()

@@ -12,7 +12,7 @@ com.google.guava:guava:19.0
    Selection reasons:
       - Was requested
       - By constraint
-      - Selected by rule : replacement com.google.collections:google-collections -> com.google.guava:guava
+      - Selected by rule : ✭ replacement com.google.collections:google-collections -> com.google.guava:guava
 
 com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0
 \--- compileClasspath
@@ -31,7 +31,7 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - contains 'Persisted dependency lock state' [locked & build matches lock version]
-- contains 'Selected by rule : replacement' [replacement]
+- contains 'Selected by rule : ✭ replacement' [custom replacement reason]
 - contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0' [replacement end result]
 - contains 'com.google.guava:guava -> 19.0' [recommended]
 - contains 'Task.*

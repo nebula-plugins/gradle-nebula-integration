@@ -11,7 +11,7 @@ dependencies {
 
 project.dependencies.modules.module('com.google.collections:google-collections') {
     def details = it as ComponentModuleMetadataDetails
-    def message = "replacement com.google.collections:google-collections -> com.google.guava:guava"
+    def message = "✭ replacement com.google.collections:google-collections -> com.google.guava:guava"
     details.replacedBy('com.google.guava:guava', message)
 }
 

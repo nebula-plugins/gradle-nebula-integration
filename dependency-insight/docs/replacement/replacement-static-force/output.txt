@@ -11,7 +11,7 @@ com.google.guava:guava:14.0.1
    Selection reasons:
       - Was requested
       - Forced
-      - Selected by rule : replacement com.google.collections:google-collections -> com.google.guava:guava
+      - Selected by rule : ✭ replacement com.google.collections:google-collections -> com.google.guava:guava
 
 com.google.collections:google-collections:1.0 -> com.google.guava:guava:14.0.1
 \--- compileClasspath
@@ -27,7 +27,7 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - contains 'forced/Forced'
 - contains 'com.google.guava:guava:18.0 -> 14.0.1' [forced and not locked]
-- contains 'Selected by rule : replacement' [replacement]
+- contains 'Selected by rule : ✭ replacement' [custom replacement reason]
 - contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:14.0.1' [replacement end result]
 - contains 'Task.*
 .*com.google.guava:guava:14.0.1' [static version end result]

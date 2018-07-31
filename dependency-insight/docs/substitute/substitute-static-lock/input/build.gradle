@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-all:1.8.0'
+}
+
+def message = '✭ substitution org.mockito:mockito-all -> org.mockito:mockito-core:1.10.19'
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('org.mockito:mockito-all') because (message) with module('org.mockito:mockito-core:1.10.19')
+    }
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
