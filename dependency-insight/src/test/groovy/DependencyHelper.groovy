@@ -32,6 +32,7 @@ class DependencyHelper {
     Coordinate replaceFrom
     String substituteWith
     Boolean exclude
+    String resolveRejectionTo
 
     String resolvedModuleIdentifier
 
@@ -55,6 +56,9 @@ class DependencyHelper {
         }
         if (recommendedVersion != null) {
             return new Coordinate(resolvedModuleIdentifier, recommendedVersion)
+        }
+        if (resolveRejectionTo != null) {
+            return new Coordinate(resolvedModuleIdentifier, resolveRejectionTo)
         }
         return new Coordinate(resolvedModuleIdentifier, versionForDynamicToResolveTo)
     }

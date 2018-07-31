@@ -8,19 +8,12 @@ repositories {
 dependencies {
     compile 'sample:bom:1.0.0'
     compile 'com.google.guava:guava'
-    compile 'com.google.collections:google-collections:1.0'
 }
 
 configurations.all {
     resolutionStrategy {
         force 'com.google.guava:guava:14.0.1'
     }
-}
-
-project.dependencies.modules.module('com.google.collections:google-collections') {
-    def details = it as ComponentModuleMetadataDetails
-    def message = "✭ replacement com.google.collections:google-collections -> com.google.guava:guava"
-    details.replacedBy('com.google.guava:guava', message)
 }
 
 dependencyLocking {

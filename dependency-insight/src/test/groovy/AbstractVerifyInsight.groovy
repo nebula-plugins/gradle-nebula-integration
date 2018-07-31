@@ -137,15 +137,29 @@ class Main {
         }
     }
 
-    def createRejectionConfigurationIfNeeded(String dep, Boolean reject, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
-        if (reject) {
+    def createRejectionConfigurationIfNeeded(String dep, String rejectedVersion, String candidateVersion, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        if (rejectedVersion != null) {
             def excludeDepModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+            def depGroupAndArtifact = excludeDepModuleIdentifier.split(':')
+            def group = depGroupAndArtifact[0]
+            def artifact = depGroupAndArtifact[1]
 
             buildFile << """
-                def exclusionMessage = '✭ rejection $excludeDepModuleIdentifier'
+                import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.DefaultVersionSelectorScheme
+                import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.DefaultVersionComparator
                 configurations.all {
-                    resolutionStrategy.componentSelection.withModule("${excludeDepModuleIdentifier}", { selection ->
-                        selection.reject(exclusionMessage)
+                    resolutionStrategy.componentSelection.all({ selection ->
+                        def candidate = selection.candidate
+                        def rejectionMessage = '✭ rejection of com.google.guava:guava:$rejectedVersion'
+                        if (candidate.group == '${group}' && candidate.module == '${artifact}') {
+                            def comparator = new DefaultVersionComparator()
+                            def scheme = new DefaultVersionSelectorScheme(comparator)
+
+                            def versionSelector = scheme.parseSelector('$rejectedVersion')
+                            if (candidate.version == null || candidate.version == '' || versionSelector.accept(candidate.version)) {
+                                selection.reject(rejectionMessage)
+                            }
+                        }
                     })
                 }
                 """.stripIndent()

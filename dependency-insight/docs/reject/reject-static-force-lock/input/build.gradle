@@ -1,0 +1,37 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:18.0'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.guava:guava:14.0.1'
+    }
+}
+
+import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.DefaultVersionSelectorScheme
+import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.DefaultVersionComparator
+configurations.all {
+    resolutionStrategy.componentSelection.all({ selection ->
+        def candidate = selection.candidate
+        def rejectionMessage = '✭ rejection of com.google.guava:guava:16.0.1'
+        if (candidate.group == 'com.google.guava' && candidate.module == 'guava') {
+            def comparator = new DefaultVersionComparator()
+            def scheme = new DefaultVersionSelectorScheme(comparator)
+
+            def versionSelector = scheme.parseSelector('16.0.1')
+            if (candidate.version == null || candidate.version == '' || versionSelector.accept(candidate.version)) {
+                selection.reject(rejectionMessage)
+            }
+        }
+    })
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}

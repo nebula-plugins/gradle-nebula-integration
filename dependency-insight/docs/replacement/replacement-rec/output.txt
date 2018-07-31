@@ -3,18 +3,11 @@ Tasks: dependencyInsight --dependency guava --warning-mode all
 
 
 > Task :dependencyInsight
-com.google.guava:guava:19.0
+com.google.guava:guava:19.0 (via constraint)
    variant "compile" [
       org.gradle.status = release (not requested)
       org.gradle.usage  = java-api
    ]
-   Selection reasons:
-      - Was requested
-      - By constraint
-      - Selected by rule : ✭ replacement com.google.collections:google-collections -> com.google.guava:guava
-
-com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0
-\--- compileClasspath
 
 com.google.guava:guava:19.0
 \--- sample:bom:1.0.0
@@ -29,11 +22,9 @@ BUILD SUCCESSFUL
 1 actionable task: 1 executed
 
 === Asserting on... ===
-- contains 'Selected by rule : ✭ replacement' [custom replacement reason]
-- contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:19.0' [replacement end result]
-- contains 'com.google.guava:guava -> 19.0' [recommended]
+- contains 'guava -> 19.0' [recommended]
 - contains 'Task.*
-.*com.google.guava:guava:19.0' [recommended end result]
+.*guava:19.0' [recommended end result]
 - contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
 
 completed assertions
