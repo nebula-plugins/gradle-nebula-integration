@@ -31,6 +31,7 @@ BUILD SUCCESSFUL
 - contains 'Selected by rule : ✭ replacement' [custom replacement reason]
 - contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:14.0.1' [replacement end result]
 - contains 'Task.*
-.*com.google.guava:guava:14.0.1' [static version end result]
+.*
+.*com.google.guava:guava:14.0.1' [static end result]
 
 completed assertions

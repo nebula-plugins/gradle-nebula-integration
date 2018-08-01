@@ -23,7 +23,7 @@ import nebula.test.dependencies.maven.Pom
 import java.time.LocalDateTime
 
 abstract class AbstractVerifyInsight extends TestKitSpecification {
-    static def coreGradleV = '4.9' // gradle v
+    static def coreGradleV = '4.10-20180801000007+0000' // gradle v
 
     File repo
 
@@ -177,5 +177,25 @@ class Main {
                 }
                 """.stripIndent()
         }
+    }
+
+    def createAlignmentConfiguration(String dep, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        def alignmentModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+        def depGroupAndArtifact = alignmentModuleIdentifier.split(':')
+        def group = depGroupAndArtifact[0]
+        def platform = group.split('\\.').last() + '-platform'
+
+        buildFile << """
+            project.dependencies.components.all(AlignJackson.class)\n
+            class AlignJackson implements ComponentMetadataRule {
+                void execute(ComponentMetadataContext ctx) {
+                    ctx.details.with { it ->
+                        if (it.getId().getGroup().startsWith("$group")) {
+                            it.belongsTo("$group:$platform:\${it.getId().getVersion()}")
+                        }
+                    }
+                }
+            }
+            """.stripIndent()
     }
 }

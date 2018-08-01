@@ -25,15 +25,13 @@ import org.apache.commons.io.filefilter.NotFileFilter
 
 class DocWriter {
     private String title
-    private String insightSource
 
     private File projectDir
     private File depFolder
 
-    DocWriter(String title, String insightSource, File projectDir, String group) {
+    DocWriter(String title, File projectDir, String group) {
         this.projectDir = projectDir
         this.title = title
-        this.insightSource = insightSource
 
         File docs = new File("docs")
         docs.mkdirs()
@@ -50,9 +48,21 @@ class DocWriter {
         file.delete()
         file.createNewFile()
 
-        file << output.replaceAll("nebula.dependency-recommender uses a properties file: .*/investigate-insight",
-                "nebula.dependency-recommender uses a properties file: ./investigate-insight")
-                .replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+        file << output.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+
+        file << """
+=== Asserting on... ===
+""".stripIndent()
+    }
+
+    void writeCleanedUpBuildOutput(String firstOutput, String secondOutput) {
+        def file = new File(depFolder, 'output.txt')
+        file.delete()
+        file.createNewFile()
+
+        file << firstOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+
+        file << secondOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
 
         file << """
 === Asserting on... ===

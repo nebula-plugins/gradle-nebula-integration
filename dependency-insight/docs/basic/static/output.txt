@@ -19,6 +19,6 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - contains 'Task.*
-.*guava:18.0' [static version end result]
+.*guava:18.0' [static end result]
 
 completed assertions

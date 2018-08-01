@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven { url 'repo' }
+}
+
+dependencies {
+    compile 'sample:bom:1.0.0'
+    compile 'org.slf4j:slf4j-api'
+    compile 'org.slf4j:slf4j-simple:1.7.20'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.slf4j:slf4j-simple:1.5.5'
+    }
+}
+
+project.dependencies.components.all(AlignJackson.class)
+
+class AlignJackson implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("org.slf4j")) {
+                it.belongsTo("org.slf4j:slf4j-platform:${it.getId().getVersion()}")
+            }
+        }
+    }
+}

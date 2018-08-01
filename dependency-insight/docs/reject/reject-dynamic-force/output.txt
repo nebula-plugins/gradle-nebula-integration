@@ -23,5 +23,5 @@ BUILD SUCCESSFUL
 - contains 'guava:16.+ -> 14.0.1' [forced and not locked]
 - contains 'guava:16.+ -> 14.0.1' [dynamic]
 - contains 'Task.*
-.*guava:14.0.1' [dynamic version end result]
+.*guava:14.0.1' [dynamic end result]
 - contains '✭ rejection' [custom substitute reason]

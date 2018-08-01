@@ -118,7 +118,7 @@ class VerifyInsight extends AbstractVerifyInsight {
         def result = runTasks(*tasks)
 
         then:
-        DocWriter w = new DocWriter(title, coreGradleV, projectDir, group)
+        DocWriter w = new DocWriter(title, projectDir, grouping)
         w.writeCleanedUpBuildOutput('=== For the dependency under test ===\n' +
                 "Tasks: ${tasks.join(' ')}\n\n" +
                 result.output)
@@ -128,7 +128,7 @@ class VerifyInsight extends AbstractVerifyInsight {
         w.writeFooter('completed assertions')
 
         where:
-        dep     | staticVersion | dynamicVersion           | recVersion | forceVersion | useLocks    | replaceFrom      | substitute   | exclude | resolveRejectionTo    | group         | title
+        dep     | staticVersion | dynamicVersion           | recVersion | forceVersion | useLocks    | replaceFrom      | substitute   | exclude | resolveRejectionTo    | grouping      | title
 //        static
         guava   | guavaStatic   | null                     | null       | null         | null        | null             | null         | null    | null                  | 'basic'       | 'static'
         guava   | guavaStatic   | null                     | null       | guavaForce   | null        | null             | null         | null    | null                  | 'basic'       | 'static-force'
@@ -283,9 +283,15 @@ class VerifyInsight extends AbstractVerifyInsight {
                 assert output.toLowerCase().contains('forced')
             }
 
-            def endResultRegex = "Task.*\n.*$expected"
-            w.addAssertionToDoc("contains '$endResultRegex' [substitute end result]")
-            assert output.findAll { endResultRegex }.size() > 0
+            if (dh.useLocks) {
+                def endResultRegex = "Task.*\n.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [substitute end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            } else {
+                def endResultRegex = "Task.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [substitute end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            }
 
             return // if substitution occurs, stop checking here
         }
@@ -318,35 +324,51 @@ class VerifyInsight extends AbstractVerifyInsight {
         }
 
         if (dh.staticVersion != null) {
-            def endResultRegex = "Task.*\n.*$expected"
-            w.addAssertionToDoc("contains '$endResultRegex' [static version end result]")
-            assert output.findAll { endResultRegex }.size() > 0
+            if (dh.useLocks) {
+                def endResultRegex = "Task.*\n.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [static end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            } else {
+                def endResultRegex = "Task.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [static end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            }
         }
 
         if (dh.dynamicVersion != null) {
             def expectedOutput = "${expected.moduleIdentifier}:$dh.dynamicVersion -> ${expected.version}"
             w.addAssertionToDoc("contains '$expectedOutput' [dynamic]")
             assert output.contains(expectedOutput)
-//            assert output.contains('Was requested')
 
-            def endResultRegex = "Task.*\n.*$expected"
-            w.addAssertionToDoc("contains '$endResultRegex' [dynamic version end result]")
-            assert output.findAll { endResultRegex }.size() > 0
+            if (dh.useLocks) {
+                def endResultRegex = "Task.*\n.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [dynamic end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            } else {
+                def endResultRegex = "Task.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [dynamic end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            }
         }
 
         if (dh.recommendedVersion != null) {
-//                assert output.contains("Recommending version ${m.recommendedVersion} for dependency")
             def expectedOutput = "${expected.moduleIdentifier} -> ${expected.version}"
             w.addAssertionToDoc("contains '$expectedOutput' [recommended]")
             assert output.contains(expectedOutput)
 
-            def endResultRegex = "Task.*\n.*$expected"
-            w.addAssertionToDoc("contains '$endResultRegex' [recommended end result]")
-            assert output.findAll { endResultRegex }.size() > 0
+            if (dh.useLocks) {
+                def endResultRegex = "Task.*\n.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [recommended end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            } else {
+                def endResultRegex = "Task.*\n.*$expected"
+                w.addAssertionToDoc("contains '$endResultRegex' [recommended end result]")
+                assert output.findAll(endResultRegex).size() > 0
+            }
 
             def bomDependencyConstraint = '\\--- sample:bom:1.0.0'
             w.addAssertionToDoc("contains '$bomDependencyConstraint' [bom dependency constraint - recommended]")
-            assert output.findAll { bomDependencyConstraint }.size() > 0
+            assert output.findAll(bomDependencyConstraint).size() > 0
         }
 
         if (dh.resolveRejectionTo) {

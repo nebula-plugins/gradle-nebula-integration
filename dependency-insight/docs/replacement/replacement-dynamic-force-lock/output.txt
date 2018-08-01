@@ -32,6 +32,7 @@ BUILD SUCCESSFUL
 - contains 'com.google.collections:google-collections:1.0 -> com.google.guava:guava:14.0.1' [replacement end result]
 - contains 'com.google.guava:guava:18.+ -> 14.0.1' [dynamic]
 - contains 'Task.*
-.*com.google.guava:guava:14.0.1' [dynamic version end result]
+.*
+.*com.google.guava:guava:14.0.1' [dynamic end result]
 
 completed assertions

@@ -21,6 +21,6 @@ BUILD SUCCESSFUL
 - contains 'forced/Forced'
 - contains 'guava:18.0 -> 14.0.1' [forced and not locked]
 - contains 'Task.*
-.*guava:14.0.1' [static version end result]
+.*guava:14.0.1' [static end result]
 
 completed assertions
