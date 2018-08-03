@@ -20,7 +20,6 @@ The following selection reasons are combined to ensure all selection reasons are
     - Rejections
     - Replacements
     - Substitutions
-    - Alignment
 
 ## Results
 
@@ -41,6 +40,8 @@ Using a bom
     - `replacement-rec-force-lock`
     - `substitute-rec-force`
     - `substitute-rec-force-lock`
+- Related open issues:
+    - [gradle-nebula-integration issue #3](https://github.com/nebula-plugins/gradle-nebula-integration/issues/3): Dependency insight: "Force" selection reason does not show up when there is a recommendation in place
 
 #### Force messages with substitutions
 Using `substitute module('<module>') because (substitutionMessage) with module('<other-module>')`
@@ -51,11 +52,15 @@ Using `substitute module('<module>') because (substitutionMessage) with module('
     - `substitute-static-force-lock`
     - `substitute-rec-force`
     - `substitute-rec-force-lock`
+- Related open issues:
+    - [gradle-nebula-integration issue #4](https://github.com/nebula-plugins/gradle-nebula-integration/issues/4): Dependency insight: "Force" selection reason does not show up when there is a substitution in place
 
 #### Rejection messages with non-dynamic dependencies
 Using `selection.reject(rejectionMessage)`
-- Rejections do not show up as a contributer when user has not selected a dynamic version
+- Rejections do not show up as a contributor when user has not selected a dynamic version
     - ★ `reject-static` is the simplest example. See also the other failing tests starting with `reject-`
+- Related open issues:
+    - [gradle-nebula-integration issue #5](https://github.com/nebula-plugins/gradle-nebula-integration/issues/5): Dependency insight: Rejections do not show up as a contributor when user has not selected a dynamic version
 
 #### Exclude messages
 Using `exclude group: '<group>', module: '<name>'`
@@ -71,6 +76,9 @@ No dependencies matching given input were found in configuration ':compileClassp
 - Other information contributing to selection reasons also does not show up.
     - Forces, locks, and more selection reasons do not show up 
     - More importantly, `exclude-substitute-static` (and related projects) would be a great place to see that substitutions contributed, but did not take priority to the resolution
+- Related open issues:
+    - [gradle-nebula-integration issue #6](https://github.com/nebula-plugins/gradle-nebula-integration/issues/6): Dependency insight: exclusions do not have any selection reasons
+
 #### Alignment
 Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
 - Given I have a dependency on `a:a:1.0` and `a:b:2.0` (which brings in `a:a:2.0`)
@@ -80,6 +88,9 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
         - `alignment-static-direct-force-lock`
         - `alignment-rec-direct-force`
         - `alignment-rec-direct-force`
+    - Related open issues:
+        - [gradle-nebula-integration issue #2](https://github.com/nebula-plugins/gradle-nebula-integration/issues/2): Aligned group through belongsTo needs to be easily downgraded to a specific version
+        - [gradle-nebula-integration issue #7](https://github.com/nebula-plugins/gradle-nebula-integration/issues/7): Alignment: dependencies are not aligned when there is a force in place
 - Given I have a dependency on `d:d:5.0` and `d:e:6.0` (which brings in `d:d:6.0`)
     - and I have a force on `d:e` to `4.0` 
     - then I am seeing a resolved configuration of `d:d:5.0` and `d:e:5.0`, which is different than other aligning behavior, making alignment override the force of dependency `d:e`.
@@ -87,3 +98,5 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
         - `alignment-static-transitive-force-lock`
         - `alignment-rec-transitive-force`
         - `alignment-rec-transitive-force`
+    - Related open issues:
+        - [gradle-nebula-integration issue #8](https://github.com/nebula-plugins/gradle-nebula-integration/issues/8): Alignment: dependencies aligned to a non-forced version when there is a force in place
