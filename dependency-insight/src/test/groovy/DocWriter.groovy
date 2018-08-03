@@ -37,7 +37,7 @@ class DocWriter {
         docs.mkdirs()
 
         File groupDir = new File(docs, group)
-        docs.mkdirs()
+        groupDir.mkdirs()
 
         depFolder = new File(groupDir, title)
         depFolder.mkdirs()

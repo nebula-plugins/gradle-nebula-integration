@@ -100,3 +100,8 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
         - `alignment-rec-transitive-force`
     - Related open issues:
         - [gradle-nebula-integration issue #8](https://github.com/nebula-plugins/gradle-nebula-integration/issues/8): Alignment: dependencies aligned to a non-forced version when there is a force in place
+        
+#### Second order contributors insight
+- Given I have `dependencyA` that is brought in by `dependencyB` that was already conflict resolved
+    - then I would like to see an indication that `dependencyB` has been conflict resolved rather than looking like a particular version of `dependencyB` had been simply requested
+    -  ★ `second-order-contributer` is the example

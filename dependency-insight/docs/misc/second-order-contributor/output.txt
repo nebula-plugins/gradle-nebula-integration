@@ -1,0 +1,65 @@
+Mercury
+Tasks: dependencyInsight --dependency mercury
+
+
+> Task :dependencyInsight
+planet:mercury:1.0.2
+   variant "runtime" [
+      org.gradle.status = release (not requested)
+      Requested attributes not found in the selected variant:
+         org.gradle.usage  = java-api
+   ]
+   Selection reasons:
+      - Was requested
+      - By conflict resolution : between versions 1.0.2 and 1.0.1
+
+planet:mercury:1.0.2
+\--- planet:jupiter:5.0.0
+     \--- compileClasspath
+
+planet:mercury:1.0.1 -> 1.0.2
+\--- planet:venus:2.0.1
+     +--- planet:earth:3.0.0
+     |    \--- compileClasspath
+     \--- planet:mars:4.0.0
+          \--- compileClasspath
+
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+Venus
+Tasks: dependencyInsight --dependency venus
+
+
+> Task :dependencyInsight
+planet:venus:2.0.1
+   variant "runtime" [
+      org.gradle.status = release (not requested)
+      Requested attributes not found in the selected variant:
+         org.gradle.usage  = java-api
+   ]
+   Selection reasons:
+      - Was requested
+      - By conflict resolution : between versions 2.0.0 and 2.0.1
+
+planet:venus:2.0.1
+\--- planet:mars:4.0.0
+     \--- compileClasspath
+
+planet:venus:2.0.0 -> 2.0.1
+\--- planet:earth:3.0.0
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
