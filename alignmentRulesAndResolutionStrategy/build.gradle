@@ -1,0 +1,23 @@
+plugins {
+    id 'nebula.resolution-rules' version '6.0.5'
+    id 'java'
+}
+
+repositories {
+    maven { url 'testrepogen/mavenrepo' }
+}
+
+dependencies {
+    resolutionRules files('rules.json')
+    compile 'test.nebula:a:1.0.0'
+    compile 'test.nebula:b:0.15.0'
+    compile 'test.nebula:c:1.0.0'
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.name == 'a') {
+            details.useVersion '0.15.0'
+        }
+    }
+}
