@@ -26,4 +26,5 @@ BUILD SUCCESSFUL
 - contains 'Task.*
 .*
 .*guava:14.0.1' [dynamic end result]
-- contains '✭ rejection' [custom substitute reason]
+
+completed assertions

@@ -11,4 +11,5 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - contains 'No dependencies matching given input were found in configuration' [exclude]
-- contains 'Selected by rule : ✭ exclusion' [custom substitute reason]
+
+completed assertions

@@ -29,4 +29,5 @@ BUILD SUCCESSFUL
 .*
 .*guava:19.0' [recommended end result]
 - contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
-- contains '✭ rejection' [custom substitute reason]
+
+completed assertions

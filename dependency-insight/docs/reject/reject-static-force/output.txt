@@ -22,4 +22,5 @@ BUILD SUCCESSFUL
 - contains 'guava:18.0 -> 14.0.1' [forced and not locked]
 - contains 'Task.*
 .*guava:14.0.1' [static end result]
-- contains '✭ rejection' [custom substitute reason]
+
+completed assertions
