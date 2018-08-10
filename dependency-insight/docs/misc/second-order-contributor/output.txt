@@ -61,3 +61,6 @@ BUILD SUCCESSFUL
 
 
 === Asserting on... ===
+- [mercury dependencyInsight] contains '\--- planet:venus:2.0.1 (conflict resolution between versions'
+
+completed assertions
