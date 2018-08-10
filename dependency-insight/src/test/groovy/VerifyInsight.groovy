@@ -278,7 +278,9 @@ class VerifyInsight extends AbstractVerifyInsight {
                 assert output.contains(expectedOutput)
             }
 
-            if (dh.forceVersion != null) {
+            def forceIsAppliedToSubstitutedModule = expected.toString().contains("${lookupRequestedModuleIdentifier[dep]}")
+            if (dh.forceVersion != null && forceIsAppliedToSubstitutedModule) {
+                // TODO: create this example
                 w.addAssertionToDoc("contains 'forced/Forced'")
                 assert output.toLowerCase().contains('forced')
             }
