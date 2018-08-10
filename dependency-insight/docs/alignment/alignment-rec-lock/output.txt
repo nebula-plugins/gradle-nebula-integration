@@ -10,13 +10,12 @@ org.slf4j:slf4j-api:1.7.25
       org.gradle.usage  = java-api
    ]
    Selection reasons:
-      - Was requested
       - By constraint
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.25
-      - By conflict resolution : between versions 1.7.20 and 1.7.25
+      - By conflict resolution : between versions 1.7.25 and 1.7.20
 
 org.slf4j:slf4j-api:1.7.25
-+--- org.slf4j:slf4j-simple:1.7.25
++--- org.slf4j:slf4j-simple:1.7.25 (conflict resolution between versions 1.7.20 and 1.7.25)
 |    +--- compileClasspath
 |    \--- compileClasspath
 \--- sample:bom:1.0.0
@@ -45,7 +44,6 @@ org.slf4j:slf4j-simple:1.7.25
       org.gradle.usage  = java-api
    ]
    Selection reasons:
-      - Was requested
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.25
       - By conflict resolution : between versions 1.7.20 and 1.7.25
 

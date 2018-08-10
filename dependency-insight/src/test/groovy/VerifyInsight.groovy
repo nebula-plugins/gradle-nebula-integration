@@ -62,7 +62,6 @@ class VerifyInsight extends AbstractVerifyInsight {
     def "#title"() {
         given:
         createSimpleBuildFile(recVersion)
-        gradleVersion = coreGradleV
         createSettingsFile()
 
         def dependencyHelper = new DependencyHelper()

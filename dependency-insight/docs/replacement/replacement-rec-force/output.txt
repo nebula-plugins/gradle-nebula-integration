@@ -3,11 +3,14 @@ Tasks: dependencyInsight --dependency guava --warning-mode all
 
 
 > Task :dependencyInsight
-com.google.guava:guava:14.0.1 (via constraint)
+com.google.guava:guava:14.0.1
    variant "compile" [
       org.gradle.status = release (not requested)
       org.gradle.usage  = java-api
    ]
+   Selection reasons:
+      - Forced
+      - By constraint
 
 com.google.guava:guava -> 14.0.1
 \--- compileClasspath
@@ -23,3 +26,10 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - contains 'forced/Forced'
+- contains 'guava -> 14.0.1' [forced and not locked]
+- contains 'guava -> 14.0.1' [recommended]
+- contains 'Task.*
+.*guava:14.0.1' [recommended end result]
+- contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
+
+completed assertions

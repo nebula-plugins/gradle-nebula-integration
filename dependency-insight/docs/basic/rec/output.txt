@@ -3,7 +3,7 @@ Tasks: dependencyInsight --dependency guava --warning-mode all
 
 
 > Task :dependencyInsight
-com.google.guava:guava:19.0 (via constraint)
+com.google.guava:guava:19.0 (by constraint)
    variant "compile" [
       org.gradle.status = release (not requested)
       org.gradle.usage  = java-api

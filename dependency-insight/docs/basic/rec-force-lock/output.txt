@@ -4,11 +4,14 @@ Tasks: dependencyInsight --dependency guava --warning-mode all --write-locks
 
 > Task :dependencyInsight
 Persisted dependency lock state for configuration 'compileClasspath'
-com.google.guava:guava:14.0.1 (via constraint)
+com.google.guava:guava:14.0.1
    variant "compile" [
       org.gradle.status = release (not requested)
       org.gradle.usage  = java-api
    ]
+   Selection reasons:
+      - Forced
+      - By constraint
 
 com.google.guava:guava -> 14.0.1
 \--- compileClasspath
@@ -25,3 +28,10 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - contains 'Persisted dependency lock state' [locked & build matches lock version]
 - contains 'forced/Forced'
+- contains 'guava -> 14.0.1' [recommended]
+- contains 'Task.*
+.*
+.*guava:14.0.1' [recommended end result]
+- contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
+
+completed assertions

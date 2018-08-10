@@ -23,8 +23,6 @@ import nebula.test.dependencies.maven.Pom
 import java.time.LocalDateTime
 
 abstract class AbstractVerifyInsight extends TestKitSpecification {
-    static def coreGradleV = '4.10-20180801000007+0000' // gradle v
-
     File repo
 
     def setup() {

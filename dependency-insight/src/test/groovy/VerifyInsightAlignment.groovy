@@ -53,7 +53,6 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
     def "#asDirect: #title"() {
         given:
         createSimpleBuildFile(recAsDirect)
-        gradleVersion = coreGradleV
         createSettingsFile()
 
         dhAsDirect = new DependencyHelper()

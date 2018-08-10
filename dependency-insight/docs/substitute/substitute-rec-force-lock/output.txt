@@ -10,7 +10,6 @@ org.mockito:mockito-core:1.10.19
       org.gradle.usage  = java-api
    ]
    Selection reasons:
-      - Was requested
       - Selected by rule : ✭ substitution org.mockito:mockito-all -> org.mockito:mockito-core:1.10.19
       - By constraint
       - By conflict resolution : between versions 1.10.19 and 1.9.5

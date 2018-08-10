@@ -9,7 +9,6 @@ com.google.guava:guava:14.0.1
       org.gradle.usage  = java-api
    ]
    Selection reasons:
-      - Was requested
       - Forced
       - Selected by rule : ✭ replacement com.google.collections:google-collections -> com.google.guava:guava
 
