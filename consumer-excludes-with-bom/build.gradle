@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-	implementation('org.springframework:spring-beans:5.0.6.RELEASE') {
+  implementation('org.springframework:spring-beans:5.0.6.RELEASE') {
     exclude group: 'org.yaml', module: 'snakeyaml'
   }
-	implementation 'nebulatest:mylib:latest.release'
+  implementation 'nebulatest:mylib:latest.release'
 }
