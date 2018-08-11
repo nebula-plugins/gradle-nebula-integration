@@ -1,0 +1,3 @@
+if (Boolean.getBoolean('improvedPom')) {
+    enableFeaturePreview('IMPROVED_POM_SUPPORT')
+}
