@@ -1,0 +1,16 @@
+plugins {
+  id 'java'
+}
+
+repositories {
+  maven {
+    url 'repo'
+  }
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'nebulatest:nebulabom:1.0.0'       // recommends a version of spring-beans excluding snakeyaml
+  implementation 'org.springframework:spring-beans' // expecting snakeyaml to be excluded
+  implementation 'org.yaml:snakeyaml:1.19'          // snakeyaml loses to spring-bean's snakeyaml
+}
