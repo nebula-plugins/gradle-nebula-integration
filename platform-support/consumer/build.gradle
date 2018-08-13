@@ -1,0 +1,18 @@
+apply plugin: 'java'
+// apply plugin: 'platform-tbd' // this depends on rules produced from platform and adds them to dependencies.components
+
+repositories {
+    maven {
+        url "${rootProject.projectDir}/repo"
+    }
+}
+
+dependencies {
+    compile "${group}:platform:${version}"
+    implementation "${group}:platform:${version}" // must be specified where used
+
+    compile 'com.squareup.retrofit2:retrofit'
+    implementation 'org.springframework:spring-beans'
+
+    implementation 'org.yaml:snakeyaml'
+}

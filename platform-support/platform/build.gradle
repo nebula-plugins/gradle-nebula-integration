@@ -1,0 +1,55 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+configurations {
+    from
+}
+
+dependencies {
+    // take opinions from upstream BOM
+    api 'org.springframework:spring-framework-bom:5.0.6.RELEASE'
+
+    // add my opinions
+    constraints {
+        api 'com.squareup.retrofit2:retrofit:2.4.0'
+        api 'org.yaml:snakeyaml:1.19'
+    }
+
+    // exclude an upstream opinion
+    from('org.springframework:spring-beans') {
+        exclude group: 'org.yaml', module: 'snakeyaml'
+    }
+
+    // collect these exclusions and turn them into shippable rules
+    // consumers must apply plugin that applies these rules from an artifact
+    /*
+        components {
+            withModule('org.springframework:spring-beans') {
+                allVariants {
+                    withDependencies {
+                        it.removeIf { it.group == 'org.yaml' && it.name == 'snakeyaml' }
+                    }
+                    withDependencyConstraints {
+                        it.removeIf { it.group == 'org.yaml' && it.name == 'snakeyaml' }
+                    }
+                }
+            }
+        }
+    */
+}
+
+publishing {
+    publications {
+        platform(MavenPublication) {
+            from components.java
+            pom {
+                packaging = 'pom'
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "${rootProject.projectDir}/repo"
+        }
+    }
+}
