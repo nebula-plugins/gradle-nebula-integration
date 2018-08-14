@@ -13,8 +13,16 @@ dependencies {
 
     // add my opinions
     constraints {
+        // none of our BOMs contain this, but we see enough of it that we'd like to recommend everyone use
+        // a compatible version
+        
         api 'com.squareup.retrofit2:retrofit:2.4.0'
-        api 'org.yaml:snakeyaml:1.19'                // ideally this is enough to not have to also exclude it from anywhere
+        
+        // typical cause: we're conflict resolving too high because of a recommendation in the bom,
+        // how can we make it easy to fix that and cut a new release?
+        // ideally this is enough to not have to also exclude it from anywhere
+        
+        api 'org.yaml:snakeyaml:1.19'
     }
 
     // exclude an upstream opinion (non-working example)
