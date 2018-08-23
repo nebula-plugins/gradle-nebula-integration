@@ -1,0 +1,3 @@
+rootProject.name = 'page-common'
+
+enableFeaturePreview('IMPROVED_POM_SUPPORT')
