@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
+        classpath "com.netflix.nebula:gradle-resolution-rules-plugin:6.0.5"
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://repo.spring.io/libs-milestone'
+    }
+    maven {
+        url "https://repo.spring.io/libs-snapshot"
+    }
+}
+
+apply plugin: 'nebula.resolution-rules'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RC1'
+    }
+    dependencies {
+        dependencySet(group: 'com.amazonaws', version: '1.11.315') {
+            entry 'aws-java-sdk-core'
+            entry 'aws-java-sdk-sqs'
+        }
+    }
+}
+
+dependencies {
+    resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
+    compile 'org.springframework.cloud:spring-cloud-aws-core'
+}
