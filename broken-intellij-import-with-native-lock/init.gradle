@@ -1,0 +1,12 @@
+boolean coreBomSupportEnabled = Boolean.getBoolean("nebula.features.coreBomSupport")
+
+rootProject {
+    if (coreBomSupportEnabled) {
+        def rootProject = it
+        rootProject.plugins.withId('nebula.dependency-recommender') {
+            rootProject.dependencyRecommendations {
+                excludeConfigurations('versionManagement', 'resolutionRules')
+            }
+        }
+    }
+}
