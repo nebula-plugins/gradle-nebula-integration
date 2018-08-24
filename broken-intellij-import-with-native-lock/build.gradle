@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        maven {
+           url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+       classpath "com.netflix.nebula:nebula-dependency-recommender:6.1.1"
+       classpath "com.netflix.nebula:gradle-resolution-rules-plugin:6.0.5"
+    }
+}
+
+apply plugin: 'nebula.dependency-recommender'
+apply plugin: 'nebula.resolution-rules'
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+dependencyRecommendations {
+    mavenBom module: 'io.spring.platform:platform-bom:1.0.1.RELEASE'
+}
+
+dependencies {
+    resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
+}
