@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+repositories {
+    maven {
+        url = './repo'
+    }
+    mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.6'
+        //those exludes doesnt affect the problem. They just limit dependencies in play
+        exclude group: 'com.google.guava'
+        exclude group: 'joda-time'
+        exclude group: 'com.fasterxml.jackson.core'
+        exclude group: 'com.fasterxml.jackson.module'
+    }
+}
+
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.group.startsWith('com.fasterxml.jackson')) {
+            details.belongsTo("aligned-platform:jackson:${details.id.version}")
+        }
+    }
+
+    compile "example:bom:1.0"
+    compile "example:dependency1:1.0"
+    compile "example:dependency2:1.0"
+}
