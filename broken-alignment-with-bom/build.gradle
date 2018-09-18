@@ -25,7 +25,7 @@ dependencies {
         }
     }
 
-    compile "example:bom:1.0"
+    compile platform("example:bom:1.0")
     compile "example:dependency1:1.0"
     compile "example:dependency2:1.0"
 }
