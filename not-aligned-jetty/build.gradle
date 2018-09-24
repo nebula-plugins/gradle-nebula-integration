@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.gretty:gretty:2.1.0"
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url './repo'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: "org.gretty"
+
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.module.group == "org.eclipse.jetty") {
+            details.belongsTo("aligned:jetty:${details.id.version}")
+        }
+    }
+
+    grettyRunnerJetty8 platform('example:bom:1.0')
+}
