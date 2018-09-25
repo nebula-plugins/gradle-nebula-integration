@@ -76,7 +76,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         buildFile << 'dependencies {\n'
 
         if (recAsDirect != null) {
-            buildFile << '    compile \'sample:bom:1.0.0\'\n'
+            buildFile << '    compile platform(\'sample:bom:1.0.0\')\n'
         }
 
         buildFile << "    compile '${lookupRequestedModuleIdentifier[asDirect]}${version1}'\n"
@@ -110,6 +110,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         w = new DocWriter(title, projectDir, grouping)
 
         then:
+        w.writeGradleVersion(project.gradle.gradleVersion)
         w.writeCleanedUpBuildOutput("=== For the dependency under test: ${asDirect} as a direct dependency ===\n" +
                 "Tasks: ${asDirectTasks.join(' ')}\n\n" +
                 asDirectResult.output,

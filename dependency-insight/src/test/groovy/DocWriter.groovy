@@ -28,6 +28,7 @@ class DocWriter {
 
     private File projectDir
     private File depFolder
+    private File outputFile
 
     DocWriter(String title, File projectDir, String group) {
         this.projectDir = projectDir
@@ -41,30 +42,26 @@ class DocWriter {
 
         depFolder = new File(groupDir, title)
         depFolder.mkdirs()
+
+        outputFile = new File(depFolder, 'output.txt')
+        outputFile.delete()
+        outputFile.createNewFile()
     }
 
     void writeCleanedUpBuildOutput(String output) {
-        def file = new File(depFolder, 'output.txt')
-        file.delete()
-        file.createNewFile()
+        outputFile << output.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
 
-        file << output.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
-
-        file << """
+        outputFile << """
 === Asserting on... ===
 """.stripIndent()
     }
 
     void writeCleanedUpBuildOutput(String firstOutput, String secondOutput) {
-        def file = new File(depFolder, 'output.txt')
-        file.delete()
-        file.createNewFile()
+        outputFile << firstOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
 
-        file << firstOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+        outputFile << secondOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
 
-        file << secondOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
-
-        file << """
+        outputFile << """
 === Asserting on... ===
 """.stripIndent()
     }
@@ -86,14 +83,15 @@ class DocWriter {
     }
 
     def addAssertionToDoc(String message) {
-        def file = new File(depFolder, 'output.txt')
+        outputFile << "- $message\n"
+    }
 
-        file << "- $message\n"
+    def writeGradleVersion(String message) {
+        def gradleVersion = message.find { "Welcome to Gradle .*" }
+        outputFile << "=== Using Gradle version ===\n$message\n\n"
     }
 
     void writeFooter(String first) {
-        def file = new File(depFolder, 'output.txt')
-
-        file << "\n$first\n"
+        outputFile << "\n$first\n"
     }
 }

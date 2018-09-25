@@ -16,6 +16,7 @@
  *
  */
 
+
 import com.google.common.collect.ImmutableMap
 import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom

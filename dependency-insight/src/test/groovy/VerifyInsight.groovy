@@ -84,7 +84,7 @@ class VerifyInsight extends AbstractVerifyInsight {
         buildFile << 'dependencies {\n'
 
         if (recVersion != null) {
-            buildFile << '    compile \'sample:bom:1.0.0\'\n'
+            buildFile << '    compile platform(\'sample:bom:1.0.0\')\n'
         }
 
         buildFile << "    compile '${lookupRequestedModuleIdentifier[dep]}${version}'\n"
@@ -115,13 +115,15 @@ class VerifyInsight extends AbstractVerifyInsight {
 
         when:
         def result = runTasks(*tasks)
+        DocWriter w = new DocWriter(title, projectDir, grouping)
 
         then:
-        DocWriter w = new DocWriter(title, projectDir, grouping)
+        w.writeGradleVersion(project.gradle.gradleVersion)
         w.writeCleanedUpBuildOutput('=== For the dependency under test ===\n' +
                 "Tasks: ${tasks.join(' ')}\n\n" +
                 result.output)
         w.writeProjectFiles()
+
 
         verifyInsightOutput(result.output, dependencyHelper, dep, w)
         w.writeFooter('completed assertions')
