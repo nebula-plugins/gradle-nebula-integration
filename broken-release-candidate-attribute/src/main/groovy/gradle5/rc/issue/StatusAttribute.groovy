@@ -57,6 +57,7 @@ class StatusAttribute {
                 withDependencies { transitiveDependencies ->
                     transitiveDependencies.each { dependency ->
                         setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.preferredVersion)
+                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.requiredVersion)
                     }
                 }
             }
