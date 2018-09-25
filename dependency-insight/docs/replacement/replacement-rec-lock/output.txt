@@ -1,13 +1,17 @@
+=== Using Gradle version ===
+5.0-20180924235845+0000
+
 === For the dependency under test ===
 Tasks: dependencyInsight --dependency guava --warning-mode all --write-locks
 
 
 > Task :dependencyInsight
-Persisted dependency lock state for configuration 'compileClasspath'
+Persisted dependency lock state for configuration ':compileClasspath'
 com.google.guava:guava:19.0 (by constraint)
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
 
 com.google.guava:guava:19.0

@@ -1,3 +1,6 @@
+=== Using Gradle version ===
+5.0-20180924235845+0000
+
 === For the dependency under test ===
 Tasks: dependencyInsight --dependency guava --warning-mode all
 
@@ -5,8 +8,9 @@ Tasks: dependencyInsight --dependency guava --warning-mode all
 > Task :dependencyInsight
 com.google.guava:guava:18.0
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - Selected by rule : ✭ replacement com.google.collections:google-collections -> com.google.guava:guava
