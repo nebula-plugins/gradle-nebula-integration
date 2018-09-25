@@ -1,13 +1,17 @@
+=== Using Gradle version ===
+5.0-20180924235845+0000
+
 === For the dependency under test: slf4j-api as a direct dependency ===
 Tasks: dependencyInsight --dependency slf4j-api --warning-mode all --write-locks
 
 
 > Task :dependencyInsight
-Persisted dependency lock state for configuration 'compileClasspath'
+Persisted dependency lock state for configuration ':compileClasspath'
 org.slf4j:slf4j-api:1.7.20
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.20
@@ -32,11 +36,12 @@ Tasks: dependencyInsight --dependency slf4j-simple --warning-mode all --write-lo
 
 
 > Task :dependencyInsight
-Persisted dependency lock state for configuration 'compileClasspath'
+Persisted dependency lock state for configuration ':compileClasspath'
 org.slf4j:slf4j-simple:1.7.20
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.20

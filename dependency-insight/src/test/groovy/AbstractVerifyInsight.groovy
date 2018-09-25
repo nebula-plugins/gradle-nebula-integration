@@ -185,8 +185,8 @@ class Main {
         def platform = group.split('\\.').last() + '-platform'
 
         buildFile << """
-            project.dependencies.components.all(AlignJackson.class)\n
-            class AlignJackson implements ComponentMetadataRule {
+            project.dependencies.components.all(AlignGroup.class)\n
+            class AlignGroup implements ComponentMetadataRule {
                 void execute(ComponentMetadataContext ctx) {
                     ctx.details.with { it ->
                         if (it.getId().getGroup().startsWith("$group")) {
