@@ -63,7 +63,9 @@ class MyPluginSpec extends IntegrationSpec {
                     ${mavenrepo.mavenRepositoryBlock}
                 }
                 dependencies {
-                    classpath 'test.nebula:a:1.1.1-rc.1'
+                    classpath 'test.nebula:a:1.1.1-rc.1', {
+                            attributes { attribute(org.gradle.api.internal.project.ProjectInternal.STATUS_ATTRIBUTE, 'candidate') }
+                    }
                     classpath 'test.nebula:b:latest.candidate'
                 }
             }

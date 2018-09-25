@@ -20,6 +20,9 @@ class StatusAttribute {
             configureDefaultStatusAttribute(it.configurations)
             configureStatusOverrideForDirectDependencies(it.configurations)
             configureStatusOverrideForTransitiveDependencies(it.dependencies)
+            it.configurations.each {
+                it
+            }
         }
     }
 
