@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile 'sample:bom:1.0.0'
+    compile platform('sample:bom:1.0.0')
     compile 'io.netty:netty-all'
 }
 
