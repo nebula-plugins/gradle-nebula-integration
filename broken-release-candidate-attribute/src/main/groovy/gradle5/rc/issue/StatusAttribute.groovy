@@ -18,6 +18,8 @@ class StatusAttribute {
 
         project.buildscript {
             configureDefaultStatusAttribute(it.configurations)
+            configureStatusOverrideForDirectDependencies(it.configurations)
+            configureStatusOverrideForTransitiveDependencies(it.dependencies)
         }
     }
 
@@ -35,4 +37,35 @@ class StatusAttribute {
         }
     }
 
+
+    static void configureStatusOverrideForDirectDependencies(configurations) {
+        configurations.all {
+            withDependencies { dependencies ->
+                dependencies.each { dependency ->
+                    setLowerStatusAttributeBasedOnVersion(dependency, dependency.version)
+                }
+            }
+        }
+    }
+
+    static void configureStatusOverrideForTransitiveDependencies(dependencies) {
+        dependencies.components.all { componentMetadata ->
+            allVariants {
+                withDependencies { transitiveDependencies ->
+                    transitiveDependencies.each { dependency ->
+                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.preferredVersion)
+                    }
+                }
+            }
+        }
+    }
+
+    private static void setLowerStatusAttributeBasedOnVersion(dependency, version) {
+        if (isCandidate(version))
+            dependency.attributes(withStatus('candidate'))
+    }
+
+    private static boolean isCandidate(version) {
+        version == "latest.candidate" || version =~ MyPlugin.CANDIDATE_VERSION
+    }
 }
