@@ -4,10 +4,10 @@ Tasks: dependencyInsight --dependency mercury
 
 > Task :dependencyInsight
 planet:mercury:1.0.2
-   variant "runtime" [
-      org.gradle.status = release (not requested)
-      Requested attributes not found in the selected variant:
-         org.gradle.usage  = java-api
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - By conflict resolution : between versions 1.0.2 and 1.0.1
@@ -37,10 +37,10 @@ Tasks: dependencyInsight --dependency venus
 
 > Task :dependencyInsight
 planet:venus:2.0.1
-   variant "runtime" [
-      org.gradle.status = release (not requested)
-      Requested attributes not found in the selected variant:
-         org.gradle.usage  = java-api
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - By conflict resolution : between versions 2.0.0 and 2.0.1

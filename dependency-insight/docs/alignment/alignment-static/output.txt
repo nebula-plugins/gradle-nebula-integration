@@ -58,6 +58,8 @@ BUILD SUCCESSFUL
 - org.slf4j:slf4j-api output contains 'By constraint : belongs to platform org.slf4j:slf4j-platform:' [platform constraint]
 - org.slf4j:slf4j-simple output contains 'By constraint : belongs to platform org.slf4j:slf4j-platform:' [platform constraint]
 - org.slf4j:slf4j-api output contains '--- org.slf4j:slf4j-simple:' [dependency is brought in by...]
+- org.slf4j:slf4j-api output does not contain 'forced'
+- org.slf4j:slf4j-simple output does not contain 'forced'
 - org.slf4j:slf4j-api contains 'org.slf4j:slf4j-api:1.6.0 -> 1.7.20' [static version reason]
 
 completed assertions

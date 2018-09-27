@@ -219,23 +219,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         def runningForceAssertions = false
 
         def expectedForceOutput = 'forced'
-        if (dhAsDirect.forceVersion == null && dhAsTransitive.forceVersion != null) {
-            w.addAssertionToDoc("$moduleAsDirect does not contain '$expectedForceOutput'")
-            assert !asDirectOutput.toLowerCase().contains(expectedForceOutput)
-
-            w.addAssertionToDoc("$moduleAsTransitive output contains '$expectedForceOutput'")
-            assert asTransitiveOutput.toLowerCase().contains(expectedForceOutput)
-
-            runningForceAssertions = true
-        } else if (dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion == null) {
-            w.addAssertionToDoc("$moduleAsDirect contains '$expectedForceOutput'")
-            assert asDirectOutput.toLowerCase().contains(expectedForceOutput)
-
-            w.addAssertionToDoc("$moduleAsTransitive output does not contain '$expectedForceOutput'")
-            assert !asTransitiveOutput.toLowerCase().contains(expectedForceOutput)
-
-            runningForceAssertions = true
-        } else if (dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion != null) {
+        if (dhAsDirect.forceVersion != null || dhAsTransitive.forceVersion != null) {
             w.addAssertionToDoc("$moduleAsDirect output contains '$expectedForceOutput'")
             assert asDirectOutput.toLowerCase().contains(expectedForceOutput)
 
@@ -243,6 +227,12 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
             assert asTransitiveOutput.toLowerCase().contains(expectedForceOutput)
 
             runningForceAssertions = true
+        } else {
+            w.addAssertionToDoc("$moduleAsDirect output does not contain '$expectedForceOutput'")
+            assert !asDirectOutput.toLowerCase().contains(expectedForceOutput)
+
+            w.addAssertionToDoc("$moduleAsTransitive output does not contain '$expectedForceOutput'")
+            assert !asTransitiveOutput.toLowerCase().contains(expectedForceOutput)
         }
 
         runningForceAssertions

@@ -21,9 +21,9 @@ configurations.all {
     }
 }
 
-project.dependencies.components.all(AlignJackson.class)
+project.dependencies.components.all(AlignGroup.class)
 
-class AlignJackson implements ComponentMetadataRule {
+class AlignGroup implements ComponentMetadataRule {
     void execute(ComponentMetadataContext ctx) {
         ctx.details.with { it ->
             if (it.getId().getGroup().startsWith("org.slf4j")) {

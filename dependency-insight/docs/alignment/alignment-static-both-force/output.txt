@@ -1,3 +1,6 @@
+=== Using Gradle version ===
+5.0-20180924235845+0000
+
 === For the dependency under test: slf4j-api as a direct dependency ===
 Tasks: dependencyInsight --dependency slf4j-api --warning-mode all
 
@@ -5,15 +8,17 @@ Tasks: dependencyInsight --dependency slf4j-api --warning-mode all
 > Task :dependencyInsight
 org.slf4j:slf4j-api:1.5.0
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - Forced
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
+      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
 
-org.slf4j:slf4j-api:1.5.5 -> 1.5.0
-\--- org.slf4j:slf4j-simple:1.5.5
+org.slf4j:slf4j-api:1.5.0
+\--- org.slf4j:slf4j-simple:1.5.0
      +--- compileClasspath
      \--- compileClasspath
 
@@ -33,8 +38,9 @@ Tasks: dependencyInsight --dependency slf4j-simple --warning-mode all
 > Task :dependencyInsight
 org.slf4j:slf4j-simple:1.5.5
    variant "compile" [
-      org.gradle.status = release (not requested)
-      org.gradle.usage  = java-api
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
       - Forced

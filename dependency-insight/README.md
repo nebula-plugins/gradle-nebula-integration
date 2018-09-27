@@ -100,6 +100,9 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
         - `alignment-rec-transitive-force`
     - Related open issues:
         - [gradle-nebula-integration issue #8](https://github.com/nebula-plugins/gradle-nebula-integration/issues/8): Alignment: dependencies aligned to a non-forced version when there is a force in place
+    
+- Given I have a force on `a:a` and `a:b`, then I expect the build to fail. 
+    - ★ `alignment-static-both-force` is the simplest example.
         
 #### Second order contributors insight
 - Given I have `dependencyA` that is brought in by `dependencyB` that was already conflict resolved
