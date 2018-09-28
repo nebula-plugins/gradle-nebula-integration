@@ -32,14 +32,13 @@ class MyPluginSpec extends IntegrationSpec {
             allprojects {
                 configureStatusAttribute(it)
                 buildscript {
-                    defineStatuses(dependencies, ['candidate', 'release'])
+                    defineStatuses(dependencies)
                 }
             } 
         """
         addInitScript(initScript)
     }
 
-    @Unroll
     def "specific transitive candidates or snapshots resolved"() {
         given:
         def graph = new DependencyGraphBuilder()
@@ -77,10 +76,20 @@ class MyPluginSpec extends IntegrationSpec {
 
 
         when:
-        def result = runTasksSuccessfully("build")
+        def result = runTasksSuccessfully("build", "--build-cache")
 
         then:
         result.standardOutput.contains("test.nebula:c:1.1.1-rc.1")
+
+        and:
+        result.standardOutput.contains("Executing CacheableStatusRule")
+
+        when:
+        def result2 = runTasksSuccessfully("build", "--build-cache")
+
+        then:
+        !result2.standardOutput.contains("Executing CacheableStatusRule")
+
     }
 
 

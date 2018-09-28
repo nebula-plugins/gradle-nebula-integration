@@ -2,9 +2,11 @@ package gradle5.rc.issue
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.ComponentMetadataDetails
+import org.gradle.api.artifacts.CacheableRule
+import org.gradle.api.artifacts.ComponentMetadataContext
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.initialization.dsl.ScriptHandler
+import org.gradle.api.artifacts.ComponentMetadataRule
 
 class MyPlugin implements Plugin<Project> {
     static final CANDIDATE_VERSION = ~/(?i).+(-|\.)(BETA|CANDIDATE|CR|RC).*/
@@ -13,13 +15,21 @@ class MyPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.buildscript { ScriptHandler b ->
-            defineStatuses(b.dependencies, DEFAULT_STATUS_SCHEME)
+            defineStatuses(b.dependencies)
         }
-        defineStatuses(project.dependencies, DEFAULT_STATUS_SCHEME)
+        defineStatuses(project.dependencies)
     }
 
-    static def defineStatuses(DependencyHandler dependencies, List<String> statusScheme) {
-        dependencies.components.all { ComponentMetadataDetails details ->
+    static def defineStatuses(DependencyHandler dependencies) {
+        dependencies.components.all(CacheableStatusRule)
+    }
+
+    @CacheableRule
+    private static class CacheableStatusRule implements ComponentMetadataRule {
+        @Override
+        void execute(ComponentMetadataContext componentMetadataContext) {
+            println("Executing CacheableStatusRule")
+            def details = componentMetadataContext.details
             def version = details.id.version
             if (version =~ CANDIDATE_VERSION) {
                 details.status = 'candidate'
@@ -28,7 +38,8 @@ class MyPlugin implements Plugin<Project> {
             if (details.status == null) {
                 details.status = 'release'
             }
-            details.statusScheme = statusScheme
+
+            details.statusScheme = DEFAULT_STATUS_SCHEME
         }
     }
 }
