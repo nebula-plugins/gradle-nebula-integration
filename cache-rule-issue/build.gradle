@@ -1,0 +1,21 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation 'org.codehaus.groovy:groovy-all:2.5.2'
+    testImplementation('org.spockframework:spock-core:1.2-groovy-2.5-SNAPSHOT') {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-xml'
+    }
+    testImplementation gradleApi()
+    testCompile 'com.netflix.nebula:nebula-test:latest.release'
+}
