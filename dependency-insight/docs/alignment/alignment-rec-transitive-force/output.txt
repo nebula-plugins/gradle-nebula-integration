@@ -69,4 +69,11 @@ BUILD SUCCESSFUL
 - org.slf4j:slf4j-api output contains 'forced'
 - org.slf4j:slf4j-simple output contains 'forced'
 - org.slf4j:slf4j-api output contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
-- org.slf4j:slf4j-api contains 'org.slf4j:slf4j-api -> 1.7.25' [recommended version with force(s) output]
+- org.slf4j:slf4j-api contains 'org.slf4j:slf4j-api -> 1.5.5' [recommended version with force(s) output]
+- org.slf4j:slf4j-api output contains 'Task.*
+.*org.slf4j:slf4j-api:1.5.5' [recommended end result with force(s)]
+- org.slf4j:slf4j-simple contains 'org.slf4j:slf4j-simple:1.7.20 -> 1.5.5' [recommended]
+- org.slf4j:slf4j-simple output contains 'Task.*
+.*org.slf4j:slf4j-simple:1.5.5' [recommended end result]
+
+completed assertions

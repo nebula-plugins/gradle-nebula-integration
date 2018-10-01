@@ -284,8 +284,14 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
 
             // asDirect result
             def expectedOutput1
-            w.addAssertionToDoc("$moduleAsDirect contains '${moduleAsDirect} -> ${expected1.version}' [recommended version with force(s) output]")
-            assert asDirectOutput.contains("${moduleAsDirect} -> ${expected1.version}")
+            if (dhAsTransitive.forceVersion != null) {
+                expectedOutput1 = "${moduleAsDirect} -> ${expected2.version}"
+            } else {
+                expectedOutput1 = "${moduleAsDirect} -> ${expected1.version}"
+            }
+
+            w.addAssertionToDoc("$moduleAsDirect contains '${expectedOutput1}' [recommended version with force(s) output]")
+            assert asDirectOutput.contains(expectedOutput1)
 
             def endResultRegex1
             if (dhAsDirect.useLocks) {
@@ -293,7 +299,11 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
             } else {
                 endResultRegex1 = "Task.*\n.*"
             }
-            endResultRegex1 += "${moduleAsDirect}:${expected1.version}"
+            if (dhAsTransitive.forceVersion != null) {
+                endResultRegex1 += "${moduleAsDirect}:${expected2.version}"
+            } else {
+                endResultRegex1 += "${moduleAsDirect}:${expected1.version}"
+            }
 
             w.addAssertionToDoc("$moduleAsDirect output contains '$endResultRegex1' [recommended end result with force(s)]")
             assert asDirectOutput.findAll(endResultRegex1).size() > 0

@@ -16,14 +16,15 @@ org.slf4j:slf4j-api:1.5.0
       - Forced
       - By constraint
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
+      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
+
+org.slf4j:slf4j-api:1.5.0
+\--- org.slf4j:slf4j-simple:1.5.0
+     +--- compileClasspath
+     \--- compileClasspath
 
 org.slf4j:slf4j-api -> 1.5.0
 \--- compileClasspath
-
-org.slf4j:slf4j-api:1.5.5 -> 1.5.0
-\--- org.slf4j:slf4j-simple:1.5.5
-     +--- compileClasspath
-     \--- compileClasspath
 
 org.slf4j:slf4j-api:1.7.25 -> 1.5.0
 \--- sample:bom:1.0.0
