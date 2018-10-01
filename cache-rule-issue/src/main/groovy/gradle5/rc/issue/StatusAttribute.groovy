@@ -2,6 +2,9 @@ package gradle5.rc.issue
 
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.artifacts.CacheableRule
+import org.gradle.api.artifacts.ComponentMetadataContext
+import org.gradle.api.artifacts.ComponentMetadataRule
 import org.gradle.api.attributes.AttributeContainer
 import org.gradle.api.internal.project.ProjectInternal
 
@@ -52,16 +55,7 @@ class StatusAttribute {
     }
 
     static void configureStatusOverrideForTransitiveDependencies(dependencies) {
-        dependencies.components.all { componentMetadata ->
-            allVariants {
-                withDependencies { transitiveDependencies ->
-                    transitiveDependencies.each { dependency ->
-                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.preferredVersion)
-                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.requiredVersion)
-                    }
-                }
-            }
-        }
+            dependencies.components.all(MyRule)
     }
 
     private static void setLowerStatusAttributeBasedOnVersion(dependency, version) {
@@ -71,5 +65,21 @@ class StatusAttribute {
 
     private static boolean isCandidate(version) {
         version == "latest.candidate" || version =~ MyPlugin.CANDIDATE_VERSION
+    }
+
+    @CacheableRule
+    private static class MyRule implements ComponentMetadataRule {
+        @Override
+        void execute(ComponentMetadataContext componentMetadataContext) {
+            def details = componentMetadataContext.details
+            details.allVariants {
+                withDependencies { transitiveDependencies ->
+                    transitiveDependencies.each { dependency ->
+                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.preferredVersion)
+                        setLowerStatusAttributeBasedOnVersion(dependency, dependency.versionConstraint.requiredVersion)
+                    }
+                }
+            }
+        }
     }
 }
