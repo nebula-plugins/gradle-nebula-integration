@@ -38,7 +38,7 @@ Tasks: dependencyInsight --dependency slf4j-simple --warning-mode all --write-lo
 
 > Task :dependencyInsight
 Persisted dependency lock state for configuration ':compileClasspath'
-org.slf4j:slf4j-simple:1.5.5
+org.slf4j:slf4j-simple:1.5.0
    variant "compile" [
       org.gradle.status             = release (not requested)
       org.gradle.usage              = java-api
@@ -47,8 +47,9 @@ org.slf4j:slf4j-simple:1.5.5
    Selection reasons:
       - Forced
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
+      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
 
-org.slf4j:slf4j-simple:1.7.20 -> 1.5.5
+org.slf4j:slf4j-simple:1.7.20 -> 1.5.0
 \--- compileClasspath
 
 A web-based, searchable dependency report is available by adding the --scan option.
@@ -67,3 +68,5 @@ BUILD SUCCESSFUL
 - org.slf4j:slf4j-simple output contains 'forced'
 - org.slf4j:slf4j-api contains 'org.slf4j:slf4j-api:1.6.0 -> 1.5.0' [static version with force(s) output]
 - org.slf4j:slf4j-simple contains 'org.slf4j:slf4j-simple:1.7.20 -> 1.5.0' [static version with force(s) output]
+
+completed assertions

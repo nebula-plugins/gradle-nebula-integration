@@ -16,14 +16,15 @@ org.slf4j:slf4j-api:1.5.0
       - Forced
       - By constraint
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
+      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
+
+org.slf4j:slf4j-api:1.5.0
+\--- org.slf4j:slf4j-simple:1.5.0
+     +--- compileClasspath
+     \--- compileClasspath
 
 org.slf4j:slf4j-api -> 1.5.0
 \--- compileClasspath
-
-org.slf4j:slf4j-api:1.5.5 -> 1.5.0
-\--- org.slf4j:slf4j-simple:1.5.5
-     +--- compileClasspath
-     \--- compileClasspath
 
 org.slf4j:slf4j-api:1.7.25 -> 1.5.0
 \--- sample:bom:1.0.0
@@ -40,7 +41,7 @@ Tasks: dependencyInsight --dependency slf4j-simple --warning-mode all
 
 
 > Task :dependencyInsight
-org.slf4j:slf4j-simple:1.5.5
+org.slf4j:slf4j-simple:1.5.0
    variant "compile" [
       org.gradle.status             = release (not requested)
       org.gradle.usage              = java-api
@@ -49,8 +50,9 @@ org.slf4j:slf4j-simple:1.5.5
    Selection reasons:
       - Forced
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
+      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
 
-org.slf4j:slf4j-simple:1.7.20 -> 1.5.5
+org.slf4j:slf4j-simple:1.7.20 -> 1.5.0
 \--- compileClasspath
 
 A web-based, searchable dependency report is available by adding the --scan option.
@@ -70,3 +72,7 @@ BUILD SUCCESSFUL
 - org.slf4j:slf4j-api output contains 'Task.*
 .*org.slf4j:slf4j-api:1.5.0' [recommended end result with force(s)]
 - org.slf4j:slf4j-simple contains 'org.slf4j:slf4j-simple:1.7.20 -> 1.5.0' [recommended]
+- org.slf4j:slf4j-simple output contains 'Task.*
+.*org.slf4j:slf4j-simple:1.5.0' [recommended end result]
+
+completed assertions

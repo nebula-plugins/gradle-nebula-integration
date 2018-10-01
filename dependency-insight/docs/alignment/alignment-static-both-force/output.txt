@@ -15,10 +15,9 @@ org.slf4j:slf4j-api:1.5.0
    Selection reasons:
       - Forced
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
-      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
 
-org.slf4j:slf4j-api:1.5.0
-\--- org.slf4j:slf4j-simple:1.5.0
+org.slf4j:slf4j-api:1.5.5 -> 1.5.0
+\--- org.slf4j:slf4j-simple:1.5.5
      +--- compileClasspath
      \--- compileClasspath
 
