@@ -81,16 +81,9 @@ No dependencies matching given input were found in configuration ':compileClassp
 
 #### Alignment
 Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
-- Given I have a dependency on `a:a:1.0` and `a:b:2.0` (which brings in `a:a:2.0`)
-    - and I have a force on `a:a` to `3.0` 
-    - then I am seeing a resolved configuration of `a:a:3.0` and `a:b:2.0`, which is not aligning the dependencies.
-    - ★ `alignment-static-direct-force` is the simplest example. See also:
-        - `alignment-static-direct-force-lock`
-        - `alignment-rec-direct-force`
-        - `alignment-rec-direct-force`
+- Given I have two dependencies in the same platform, and I have multiple forces
     - Related open issues:
         - [gradle-nebula-integration issue #2](https://github.com/nebula-plugins/gradle-nebula-integration/issues/2): Aligned group through belongsTo needs to be easily downgraded to a specific version
-        - [gradle-nebula-integration issue #7](https://github.com/nebula-plugins/gradle-nebula-integration/issues/7): Alignment: dependencies are not aligned when there is a force in place
 - Given I have a dependency on `d:d:5.0` and `d:e:6.0` (which brings in `d:d:6.0`)
     - and I have a force on `d:e` to `4.0` 
     - then I am seeing a resolved configuration of `d:d:5.0` and `d:e:5.0`, which is different than other aligning behavior, making alignment override the force of dependency `d:e`.
