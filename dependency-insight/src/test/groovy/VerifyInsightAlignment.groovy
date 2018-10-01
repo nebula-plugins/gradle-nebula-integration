@@ -134,7 +134,13 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         assert expected1.version != null || expected1.moduleIdentifierWithVersion != null
         assert expected2.version != null || expected2.moduleIdentifierWithVersion != null
 
-        runAssertions()
+        if (forceAsDirect != null && forceAsTransitive != null) {
+            def taskOutcome = asDirectResult.task(":dependencyInsight").outcome
+            w.addAssertionToDoc("Multiple forces should fail to resolve: task has status ${taskOutcome}")
+            assert taskOutcome == org.gradle.testkit.runner.TaskOutcome.FAILED
+        } else {
+            runAssertions()
+        }
 
         w.writeFooter('completed assertions')
 
@@ -276,18 +282,10 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         if (dhAsDirect.recommendedVersion != null) {
             assertBomIsInUse()
 
-            def lowerForceVersion = returnLowerOf(expected1.version, expected2.version)
-            def bothAreForced = dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion != null
-
             // asDirect result
             def expectedOutput1
-            if (bothAreForced) {
-                expectedOutput1 = "${moduleAsDirect} -> ${lowerForceVersion}"
-            } else {
-                expectedOutput1 = "${moduleAsDirect} -> ${expected1.version}"
-            }
-            w.addAssertionToDoc("$moduleAsDirect contains '$expectedOutput1' [recommended version with force(s) output]")
-            assert asDirectOutput.contains(expectedOutput1)
+            w.addAssertionToDoc("$moduleAsDirect contains '${moduleAsDirect} -> ${expected1.version}' [recommended version with force(s) output]")
+            assert asDirectOutput.contains("${moduleAsDirect} -> ${expected1.version}")
 
             def endResultRegex1
             if (dhAsDirect.useLocks) {
@@ -295,11 +293,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
             } else {
                 endResultRegex1 = "Task.*\n.*"
             }
-            if (bothAreForced) {
-                endResultRegex1 += "${moduleAsDirect}:${lowerForceVersion}"
-            } else {
-                endResultRegex1 += "${moduleAsDirect}:${expected1.version}"
-            }
+            endResultRegex1 += "${moduleAsDirect}:${expected1.version}"
 
             w.addAssertionToDoc("$moduleAsDirect output contains '$endResultRegex1' [recommended end result with force(s)]")
             assert asDirectOutput.findAll(endResultRegex1).size() > 0
@@ -307,11 +301,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
             // asTransitive result
             def expectedOutput2
             if (dhAsTransitive.forceVersion != null) {
-                if (bothAreForced) {
-                    expectedOutput2 = "${moduleAsTransitive}${dhAsTransitive.findRequestedVersion()} -> ${lowerForceVersion}"
-                } else {
-                    expectedOutput2 = "${moduleAsTransitive}${dhAsTransitive.findRequestedVersion()} -> ${expected2.version}"
-                }
+                expectedOutput2 = "${moduleAsTransitive}${dhAsTransitive.findRequestedVersion()} -> ${expected2.version}"
             } else {
                 expectedOutput2 = "${moduleAsTransitive}:${expected2.version} -> ${expected1.version}"
             }
@@ -325,11 +315,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
                 endResultRegex2 = "Task.*\n.*"
             }
             if (dhAsTransitive.forceVersion != null) {
-                if (bothAreForced) {
-                    endResultRegex2 += "${moduleAsTransitive}:${lowerForceVersion}"
-                } else {
-                    endResultRegex2 += "${moduleAsTransitive}:${expected2.version}"
-                }
+                endResultRegex2 += "${moduleAsTransitive}:${expected2.version}"
             } else {
                 endResultRegex2 += "${moduleAsTransitive}:${expected1.version}"
             }
@@ -349,16 +335,9 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
 
     def assertionsOnStaticDefinitionsWithForces() {
         if (dhAsDirect.staticVersion != null) {
-            def lowerForceVersion = returnLowerOf(expected1.version, expected2.version)
-            def bothAreForced = dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion != null
-
             def reasonOutput1
             if (dhAsDirect.forceVersion != null) {
-                if (bothAreForced) {
-                    reasonOutput1 = "$moduleAsDirect${dhAsDirect.findRequestedVersion()} -> ${lowerForceVersion}"
-                } else {
-                    reasonOutput1 = "$moduleAsDirect${dhAsDirect.findRequestedVersion()} -> ${expected1.version}"
-                }
+                reasonOutput1 = "$moduleAsDirect${dhAsDirect.findRequestedVersion()} -> ${expected1.version}"
             } else {
                 reasonOutput1 = "$moduleAsDirect${dhAsDirect.findRequestedVersion()} -> ${expected2.version}"
             }
@@ -368,11 +347,7 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
 
             def reasonOutput2
             if (dhAsTransitive.forceVersion != null) {
-                if (bothAreForced) {
-                    reasonOutput2 = "$moduleAsTransitive${dhAsTransitive.findRequestedVersion()} -> ${lowerForceVersion}"
-                } else {
-                    reasonOutput2 = "$moduleAsTransitive${dhAsTransitive.findRequestedVersion()} -> ${expected2.version}"
-                }
+                reasonOutput2 = "$moduleAsTransitive${dhAsTransitive.findRequestedVersion()} -> ${expected2.version}"
             } else {
                 reasonOutput2 = "$moduleAsTransitive${dhAsTransitive.findRequestedVersion()} -> ${expected1.version}"
             }

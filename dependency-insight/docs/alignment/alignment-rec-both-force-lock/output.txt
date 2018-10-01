@@ -17,15 +17,14 @@ org.slf4j:slf4j-api:1.5.0
       - Forced
       - By constraint
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.5
-      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
-
-org.slf4j:slf4j-api:1.5.0
-\--- org.slf4j:slf4j-simple:1.5.0
-     +--- compileClasspath
-     \--- compileClasspath
 
 org.slf4j:slf4j-api -> 1.5.0
 \--- compileClasspath
+
+org.slf4j:slf4j-api:1.5.5 -> 1.5.0
+\--- org.slf4j:slf4j-simple:1.5.5
+     +--- compileClasspath
+     \--- compileClasspath
 
 org.slf4j:slf4j-api:1.7.25 -> 1.5.0
 \--- sample:bom:1.0.0
@@ -63,16 +62,4 @@ BUILD SUCCESSFUL
 
 
 === Asserting on... ===
-- org.slf4j:slf4j-api output contains 'By constraint : belongs to platform org.slf4j:slf4j-platform:' [platform constraint]
-- org.slf4j:slf4j-simple output contains 'By constraint : belongs to platform org.slf4j:slf4j-platform:' [platform constraint]
-- org.slf4j:slf4j-api output contains '--- org.slf4j:slf4j-simple:' [dependency is brought in by...]
-- org.slf4j:slf4j-api output contains 'Persisted dependency lock state' [locked & build matches lock version]
-- org.slf4j:slf4j-simple output contains 'Persisted dependency lock state' [locked & build matches lock version]
-- org.slf4j:slf4j-api output contains 'forced'
-- org.slf4j:slf4j-simple output contains 'forced'
-- org.slf4j:slf4j-api output contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
-- org.slf4j:slf4j-api contains 'org.slf4j:slf4j-api -> 1.5.0' [recommended version with force(s) output]
-- org.slf4j:slf4j-api output contains 'Task.*
-.*
-.*org.slf4j:slf4j-api:1.5.0' [recommended end result with force(s)]
-- org.slf4j:slf4j-simple contains 'org.slf4j:slf4j-simple:1.7.20 -> 1.5.0' [recommended]
+- Multiple forces should fail to resolve: task has status SUCCESS
