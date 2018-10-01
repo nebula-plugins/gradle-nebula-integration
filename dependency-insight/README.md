@@ -84,15 +84,6 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
 - Given I have two dependencies in the same platform, and I have multiple forces
     - Related open issues:
         - [gradle-nebula-integration issue #2](https://github.com/nebula-plugins/gradle-nebula-integration/issues/2): Aligned group through belongsTo needs to be easily downgraded to a specific version
-- Given I have a dependency on `d:d:5.0` and `d:e:6.0` (which brings in `d:d:6.0`)
-    - and I have a force on `d:e` to `4.0` 
-    - then I am seeing a resolved configuration of `d:d:5.0` and `d:e:5.0`, which is different than other aligning behavior, making alignment override the force of dependency `d:e`.
-    - ★ `alignment-static-transitive-force` is the simplest example. See also:
-        - `alignment-static-transitive-force-lock`
-        - `alignment-rec-transitive-force`
-        - `alignment-rec-transitive-force`
-    - Related open issues:
-        - [gradle-nebula-integration issue #8](https://github.com/nebula-plugins/gradle-nebula-integration/issues/8): Alignment: dependencies aligned to a non-forced version when there is a force in place
     
 - Given I have a force on `a:a` and `a:b`, then I expect the build to fail. 
     - ★ `alignment-static-both-force` is the simplest example.
