@@ -20,6 +20,7 @@
 import com.google.common.collect.ImmutableMap
 import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom
+import org.gradle.util.VersionNumber
 
 import java.time.LocalDateTime
 
@@ -196,5 +197,13 @@ class Main {
                 }
             }
             """.stripIndent()
+    }
+
+    def returnLowerOf(String v1, String v2) {
+        def compareTo = VersionNumber.parse(v1).compareTo(VersionNumber.parse(v2))
+        if (compareTo < 0) {
+            return v1
+        }
+        return v2
     }
 }
