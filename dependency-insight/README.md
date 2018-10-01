@@ -87,10 +87,3 @@ Using a `ComponentMetadataRule` and `ComponentMetadataDetails.belongsTo(...)`
     
 - Given I have a force on `a:a` and `a:b`, then I expect the build to fail. 
     - ★ `alignment-static-both-force` is the simplest example.
-        
-#### Second order contributors insight
-- Given I have `dependencyA` that is brought in by `dependencyB` that was already conflict resolved
-    - then I would like to see an indication that `dependencyB` has been conflict resolved rather than looking like a particular version of `dependencyB` had been simply requested
-    -  ★ `second-order-contributer` is the example
-    - Related open issues:
-        - [gradle-nebula-integration issue #9](https://github.com/nebula-plugins/gradle-nebula-integration/issues/9): Dependency insight: second order contributors are missing information
