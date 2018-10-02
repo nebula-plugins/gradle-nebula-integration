@@ -1,0 +1,33 @@
+Tasks: dependencyInsight --dependency acacia
+
+
+> Task :dependencyInsight
+tree:acacia:2.0
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - By conflict resolution : between versions 1.0 and 2.0
+
+tree:acacia:2.0
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia:1.0 -> 2.0
+\--- project :blue-palo-verde
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Winning dep resulting version: 'tree:acacia:2.0'
+- Losing dep resulting version: 'tree:acacia:1.0 -> 2.0'
+
+completed assertions
