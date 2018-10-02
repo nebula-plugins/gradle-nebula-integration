@@ -1,0 +1,38 @@
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: preference with bom - prefer > bom & > other prefer
+Preferred version(s): 1.5, 1.7
+
+
+> Task :dependencyInsight
+tree:acacia:1.7
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+
+tree:acacia:1.7
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia -> 1.7
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia:[1.2, 2.0) -> 1.7
+\--- project :blue-palo-verde
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Winning dep resulting version: 'tree:acacia:1.7'
+- Losing dep resulting version: 'tree:acacia:[1.2, 2.0) -> 1.7'
+
+completed assertions
