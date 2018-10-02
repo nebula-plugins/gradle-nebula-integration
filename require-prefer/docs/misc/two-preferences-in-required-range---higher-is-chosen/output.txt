@@ -1,5 +1,8 @@
 Tasks: dependencyInsight --dependency acacia
 
+Scenario: two preferences in required range - higher is chosen
+Preferred version(s): 1.5, 1.6
+
 
 > Task :dependencyInsight
 tree:acacia:1.6

@@ -46,12 +46,15 @@ class RequirePreferSpec extends TestKitSpecification {
         def tasks = ['dependencyInsight', '--dependency', "$dep"]
         def result = runTasks(*tasks)
 
-        DocWriter docWriter = new DocWriter(title, projectDir, 'misc')
+        DocWriter docWriter = new DocWriter(title.replace(' ', '-'), projectDir, 'misc')
 
         then:
         docWriter.writeProjectFiles()
         docWriter.writeCleanedUpBuildOutput(
-                "Tasks: ${String.join(' ', tasks)}\n\n${result.output}\n\n")
+                "Tasks: ${String.join(' ', tasks)}\n\n" +
+                        "Scenario: $title\n" +
+                        "Preferred version(s): $preferFirstVersion, $preferSecondVersion\n\n" +
+                        "${result.output}\n\n")
 
         def versionRangeIndicators = ['[', ']', '(', ')']
         def firstHasDynamicDep = versionRangeIndicators.any { firstRequireVersion.contains(it) }
@@ -85,11 +88,11 @@ class RequirePreferSpec extends TestKitSpecification {
 
         where:
         preferFirstVersion | preferSecondVersion | firstRequireVersion | secondRequireVersion | resultingVersion | title
-        '1.5'              | null                | '[1.2, 2.0)'        | '[1.2, 2.0)'         | '1.5'            | 'one-preference-in-required-range'
-        '1.5'              | '1.6'               | '[1.2, 2.0)'        | '[1.2, 2.0)'         | '1.6'            | 'two-preferences-in-required-range'
-        '1.5'              | null                | '[1.2, 2.0)'        | '[2.0, 3.0)'         | '2.9'            | 'conflict-resolution-when-ranges-do-not-overlap---preference-is-not-used'
-        '1.5'              | null                | '[1.4, 2.0)'        | '[1.0, 1.2)'         | '1.5'            | 'conflict-resolution-when-ranges-do-not-overlap---preference-is-used'
-        '1.5'              | null                | '1.0'               | '2.0'                | '2.0'            | 'preference-not-used-with-static-dependency'
+        '1.5'              | null                | '[1.2, 2.0)'        | '[1.2, 2.0)'         | '1.5'            | 'one preference in required range'
+        '1.5'              | '1.6'               | '[1.2, 2.0)'        | '[1.2, 2.0)'         | '1.6'            | 'two preferences in required range - higher is chosen'
+        '1.5'              | null                | '[1.2, 2.0)'        | '[2.0, 3.0)'         | '2.9'            | 'conflict resolution - higher range does not have a preference'
+        '1.5'              | null                | '[1.4, 2.0)'        | '[1.0, 1.2)'         | '1.5'            | 'conflict resolution - higher range has a preference'
+        '1.5'              | null                | '1.0'               | '2.0'                | '2.0'            | 'preference not used with static dependency'
     }
 
     private def simpleParentMultiProjectBuildFile() {
