@@ -31,6 +31,7 @@ class ArtifactHelpers {
         def sample = new File(repo, getPathFromPom(pom))
         sample.mkdirs()
         def sampleFile = new File(sample, pom.getArtifact().getArtifact() + '-' + pom.getArtifact().getVersion() + '.pom')
+        sampleFile.delete()
         sampleFile << sampleFileContents
     }
 

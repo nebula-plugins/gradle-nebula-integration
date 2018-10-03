@@ -1,5 +1,6 @@
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.AndFileFilter
+import org.apache.commons.io.filefilter.DirectoryFileFilter
 import org.apache.commons.io.filefilter.IOFileFilter
 import org.apache.commons.io.filefilter.NameFileFilter
 import org.apache.commons.io.filefilter.NotFileFilter
@@ -50,6 +51,7 @@ class DocWriter {
 
     void writeCleanedUpBuildOutput(String output) {
         outputFile << output.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+                .replaceAll('publication=".*"', 'publication="recently"')
 
         outputFile << """
 === Asserting on... ===
@@ -72,7 +74,17 @@ class DocWriter {
         FileUtils.copyDirectory(projectDir, destinationDir, combinationFilter)
 
         def buildFile = new File(destinationDir, 'build.gradle')
-        buildFile.text = buildFile.text.replaceAll("'.*/repo'", "'../../../../repo'")
+        buildFile.text = buildFile.text.replaceAll("'.*/repo", "'../../../../repo")
+
+        def directoryNames = destinationDir.list(DirectoryFileFilter.INSTANCE)
+        for (String dirName : directoryNames) {
+            def directory = new File(destinationDir, dirName)
+            def innerBuildFileNames = directory.list(new NameFileFilter('build.gradle'))
+            for (String buildFileName : innerBuildFileNames) {
+                def innerBuildFile = new File(directory, buildFileName)
+                innerBuildFile.text = innerBuildFile.text.replaceAll("'.*/repo", "'../../../../../repo")
+            }
+        }
     }
 
     def addAssertionToDoc(String message) {
@@ -80,7 +92,6 @@ class DocWriter {
     }
 
     def writeGradleVersion(String message) {
-        def gradleVersion = message.find { "Welcome to Gradle .*" }
         outputFile << "=== Using Gradle version ===\n$message\n\n"
     }
 

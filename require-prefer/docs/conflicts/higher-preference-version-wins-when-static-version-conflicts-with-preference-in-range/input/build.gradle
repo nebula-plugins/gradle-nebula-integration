@@ -1,0 +1,11 @@
+
+apply plugin: 'java'
+
+repositories {
+    maven { url { '../../../../repo/maven' } }
+}
+
+dependencies {
+    compile project(':blue-palo-verde')
+    compile project(':coast-redwood')
+}

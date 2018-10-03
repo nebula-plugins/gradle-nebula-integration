@@ -29,7 +29,7 @@ abstract class TestKitSpecification extends Specification {
 
     def setup() {
         methodName = testName.methodName.replaceAll(/\W+/, '-')
-        projectDir = new File("build/nebulatest/${this.class.canonicalName}/${testName}").absoluteFile
+        projectDir = new File("build/nebulatest/${this.class.canonicalName}/${methodName}").absoluteFile
         if (projectDir.exists()) {
             projectDir.deleteDir()
         }

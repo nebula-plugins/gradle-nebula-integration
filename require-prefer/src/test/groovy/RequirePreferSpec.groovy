@@ -1,9 +1,3 @@
-import nebula.test.dependencies.maven.ArtifactType
-import nebula.test.dependencies.maven.Pom
-import org.assertj.core.util.Lists
-import org.gradle.testkit.runner.BuildResult
-import spock.lang.Unroll
-
 /**
  *
  *  Copyright 2018 Netflix, Inc.
@@ -21,24 +15,32 @@ import spock.lang.Unroll
  *     limitations under the License.
  *
  */
+
+import nebula.test.dependencies.maven.ArtifactType
+import nebula.test.dependencies.maven.Pom
+import org.assertj.core.util.Lists
+import org.gradle.testkit.runner.BuildResult
+import spock.lang.Unroll
+
 class RequirePreferSpec extends TestKitSpecification {
-    String dep = 'acacia'
-    String first = 'blue-palo-verde'
-    String second = 'coast-redwood'
+    static final String dep = 'acacia'
+    static final String first = 'blue-palo-verde'
+    static final String second = 'coast-redwood'
+    static final String publishedVersion = '1.0'
 
     String group = 'tree'
-    File repo
+    static File repo
+    static File mavenRepo
     def tasks = ['dependencyInsight', '--dependency', "$dep"]
 
-
-    def setup() {
+    def setupSpec() {
         repo = new File('repo')
         repo.deleteDir()
         setupDependenciesInLocalRepo()
     }
 
     @Unroll
-    def "preference in ranges - #title"() {
+    def "prefer #doesWhat when #title"() {
         given:
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
         addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
@@ -49,22 +51,22 @@ class RequirePreferSpec extends TestKitSpecification {
         def result = runTasks(*tasks)
 
         and:
-        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'multiple-ranges')
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
         assertWhenAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
 
         where:
-        prefer1 | require1     | prefer2 | require2     | finalVersion | title
-        '1.5'   | '[1.2, 2.0)' | null    | '[1.2, 2.0)' | '1.5'        | 'one preference in required range'
-        '1.5'   | '[1.2, 2.0)' | '1.6'   | '[1.2, 2.0)' | '1.6'        | 'two preferences in required range - higher is chosen'
-        '1.5'   | '[1.2, 2.0)' | null    | '[2.0, 3.0)' | '2.9'        | 'conflict resolution - higher range does not have a preference'
-        '2.5'   | '[2.0, 3.0)' | null    | '[1.0, 1.2)' | '2.5'        | 'conflict resolution - higher range has a preference'
+        prefer1 | require1     | prefer2 | require2     | finalVersion | doesWhat       | title
+        '1.5'   | '[1.2, 2.0)' | null    | '[1.2, 2.0)' | '1.5'        | 'wins'         | 'one preference is in required range'
+        '1.5'   | '[1.2, 2.0)' | '1.6'   | '[1.2, 2.0)' | '1.6'        | 'wins'         | 'two preferences are in required range and the higher is chosen'
+        '1.5'   | '[1.2, 2.0)' | null    | '[2.0, 3.0)' | '2.9'        | 'does not win' | 'higher range does not have a preference'
+        '2.5'   | '[2.0, 3.0)' | null    | '[1.0, 1.2)' | '2.5'        | 'wins'         | 'higher range has a preference'
     }
 
     @Unroll
-    def "preference in range vs static version: #title"() {
+    def "#title when static version conflicts with preference in range"() {
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
         addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
 
@@ -74,7 +76,7 @@ class RequirePreferSpec extends TestKitSpecification {
         def result = runTasks(*tasks)
 
         and:
-        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'conflicts')
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
@@ -82,13 +84,12 @@ class RequirePreferSpec extends TestKitSpecification {
 
         where:
         prefer1 | require1     | prefer2 | require2 | finalVersion | title
-        '1.5'   | '[1.2, 2.0)' | null    | '2.9'    | '2.9'        | 'static > preference'
-        '1.5'   | '[1.4, 2.0)' | null    | '1.2'    | '1.5'        | 'preference > static'
-        '1.6'   | '1.0'        | null    | '1.4'    | '1.4'        | 'preference not applied with static dependency'
+        '1.5'   | '[1.2, 2.0)' | null    | '2.9'    | '2.9'        | 'higher static version wins'
+        '1.5'   | '[1.4, 2.0)' | null    | '1.2'    | '1.5'        | 'higher preference version wins'
     }
 
     @Unroll
-    def "dynamic versions do not apply prefer - #title"() {
+    def "preference is not applied when #title"() {
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
         addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
 
@@ -98,7 +99,29 @@ class RequirePreferSpec extends TestKitSpecification {
         def result = runTasks(*tasks)
 
         and:
-        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'static')
+        writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
+
+        then:
+        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
+
+        where:
+        prefer1 | require1 | prefer2 | require2 | finalVersion | title
+        '1.6'   | '1.0'    | null    | '1.4'    | '1.4'        | 'only static dependencies are listed'
+    }
+
+    @Unroll
+    def "highest dynamic version wins when #title"() {
+        addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
+        addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
+
+        buildFile << simpleParentMultiProjectBuildFile(true)
+
+        when:
+        def result = runTasks(*tasks)
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'dynamic')
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
@@ -106,12 +129,12 @@ class RequirePreferSpec extends TestKitSpecification {
 
         where:
         prefer1 | require1 | prefer2 | require2 | finalVersion | title
-        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static > preference'
-        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'preference > static'
+        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static is higher than preference'
+        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'preference is higher than static'
     }
 
     @Unroll
-    def "bom versions do not apply prefer - #title"() {
+    def "bom version wins when #title"() {
         given:
         addSubprojectUsingABomAndPreference(bomVersion, prefer)
 
@@ -122,7 +145,7 @@ class RequirePreferSpec extends TestKitSpecification {
         def result = runTasks(*tasks)
 
         and:
-        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'bom')
         writeRelevantOutput(docWriter, result.output, prefer, null)
 
         then:
@@ -130,9 +153,67 @@ class RequirePreferSpec extends TestKitSpecification {
 
         where:
         prefer | bomVersion | finalVersion | title
-        null   | '1.6'      | '1.6'        | 'with only bom'
-        '1.2'  | '1.6'      | '1.6'        | 'bom > prefer'
-        '1.8'  | '1.6'      | '1.6'        | 'prefer > bom'
+        null   | '1.6'      | '1.6'        | 'only bom'
+        '1.2'  | '1.6'      | '1.6'        | 'bom is higher than prefer'
+        '1.8'  | '1.6'      | '1.6'        | 'prefer is higher than bom'
+    }
+
+    @Unroll
+    def "#title with ivy"() {
+        // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
+        given:
+        buildFile << buildFilePublishingToIvy(require, prefer)
+
+        when:
+        runTasks('publish')
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing')
+        def publishedPom = new File(repo, 'ivy' + File.separator +
+                group + File.separator +
+                first + File.separator +
+                publishedVersion + File.separator +
+                'ivy' + '-' + publishedVersion + '.xml')
+        writeRelevantOutput(docWriter, "Publishing to 'repo' with metadata:\n\n${publishedPom.text}", prefer, null)
+
+        then:
+        docWriter.addAssertionToDoc("Published metadata does not contain prefer version '$prefer")
+        !publishedPom.text.contains(prefer)
+
+        docWriter.writeFooter('completed assertions')
+
+        where:
+        prefer | require      | preferInMetadata | title
+        '1.5'  | '[1.2, 2.0)' | false            | 'prefer does not live through publishing'
+    }
+
+    @Unroll
+    def "#title with maven"() {
+        // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
+        given:
+        buildFile << buildFilePublishingToMaven(require, prefer)
+
+        when:
+        runTasks('publish')
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing')
+        def publishedPom = new File(mavenRepo, group + File.separator +
+                first + File.separator +
+                publishedVersion + File.separator +
+                first + '-' + publishedVersion + '.pom')
+
+        writeRelevantOutput(docWriter, "Publishing to 'repo' with metadata:\n\n${publishedPom.text}", prefer, null)
+
+        then:
+        docWriter.addAssertionToDoc("Published metadata does not contain prefer version '$prefer")
+        !publishedPom.text.contains(prefer)
+
+        docWriter.writeFooter('completed assertions')
+
+        where:
+        prefer | require      | preferInMetadata | title
+        '1.5'  | '[1.2, 2.0)' | false            | 'prefer does not live through publishing'
     }
 
     private def createBom(String depVersion) {
@@ -140,10 +221,11 @@ class RequirePreferSpec extends TestKitSpecification {
 
         def localBom = new Pom('sample', 'bom', '1.0.0', ArtifactType.POM)
         localBom.addManagementDependency(group, dep, depVersion)
-        ArtifactHelpers.setupSamplePomWith(repo, localBom, localBom.generate())
+        ArtifactHelpers.setupSamplePomWith(mavenRepo, localBom, localBom.generate())
     }
 
-    private def simpleParentMultiProjectBuildFile(boolean shouldUseFirstProject) {
+
+    private static def simpleParentMultiProjectBuildFile(boolean shouldUseFirstProject) {
         def firstProject = ''
         if (shouldUseFirstProject) {
             firstProject = "compile project(':$first')"
@@ -153,7 +235,7 @@ class RequirePreferSpec extends TestKitSpecification {
 apply plugin: 'java'
 
 repositories {
-    maven { url { '${repo.absolutePath}' } }
+    maven { url { '${mavenRepo.absolutePath}' } }
 }
 
 dependencies {
@@ -193,8 +275,94 @@ repositories {
 """
     }
 
-    private void setupDependenciesInLocalRepo() {
+    private def buildFilePublishingToMaven(String require1, String prefer1) {
+        """
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group '$group'
+version '1.0'
+
+dependencies {
+    api ('$group:$dep') {
+        version {
+            require '${require1}'
+            prefer '${prefer1}'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+publishing {
+    repositories {
+        maven { url '${mavenRepo.absolutePath}' }
+    }
+    publications {
+        ivy(MavenPublication) {
+            groupId = '$group'
+            artifactId = '$first'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+}
+"""
+    }
+
+    private def buildFilePublishingToIvy(String require1, String prefer1) {
+        """
+plugins {
+    id 'java-library'
+    id 'ivy-publish'
+}
+
+group '$group'
+version '1.0'
+
+dependencies {
+    api ('$group:$dep') {
+        version {
+            require '${require1}'
+            prefer '${prefer1}'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+publishing {
+    repositories {
+        ivy { url '${repo.absolutePath + File.separator + 'ivy'}' }
+    }
+    publications {
+        ivy(IvyPublication) {
+            organisation = '$group'
+            module = '${first}'
+            revision = '1.0'
+            descriptor.status = 'snapshot'
+            descriptor.branch = 'master'
+
+            from components.java
+        }
+    }
+}
+"""
+    }
+
+
+    private static void setupDependenciesInLocalRepo() {
         repo.mkdirs()
+        mavenRepo = new File(repo, 'maven')
+        mavenRepo.mkdirs()
+
         for (def major in 1..2) {
             for (def minor in 0..9) {
                 setupLocalDependency(dep, "$major.$minor", Collections.emptyMap())
@@ -202,13 +370,13 @@ repositories {
         }
     }
 
-    private void setupLocalDependency(String artifactName, String version, Map<String, String> dependencies) {
+    private static void setupLocalDependency(String artifactName, String version, Map<String, String> dependencies) {
         def group = 'tree'
         def pom = new Pom(group, artifactName, version)
         for (Map.Entry<String, String> entry : dependencies) {
             pom.addDependency(group, entry.key, entry.value)
         }
-        ArtifactHelpers.setupSamplePomWith(repo, pom, pom.generate())
+        ArtifactHelpers.setupSamplePomWith(mavenRepo, pom, pom.generate())
     }
 
     private def writeRelevantOutput(DocWriter docWriter, String output, String prefer1, String prefer2) {
@@ -246,7 +414,7 @@ dependencies {
 
 repositories {
     jcenter()
-    maven { url '${repo.absolutePath}' }
+    maven { url '${mavenRepo.absolutePath}' }
 }
 """)
     }

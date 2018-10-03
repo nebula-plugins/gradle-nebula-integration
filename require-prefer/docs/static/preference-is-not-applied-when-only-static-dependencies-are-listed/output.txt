@@ -1,0 +1,39 @@
+=== Using Gradle version ===
+5.0-20180930235830+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: preference is not applied when only static dependencies are listed
+Preferred version(s): 1.6, null
+
+
+> Task :dependencyInsight
+tree:acacia:1.4
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - By conflict resolution : between versions 1.0 and 1.4
+
+tree:acacia:1.4
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia:1.0 -> 1.4
+\--- project :blue-palo-verde
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Winning dep resulting version: 'tree:acacia:1.4'
+- Losing dep resulting version: 'tree:acacia:1.0 -> 1.4'
+
+completed assertions

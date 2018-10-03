@@ -1,0 +1,39 @@
+=== Using Gradle version ===
+5.0-20180930235830+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: higher preference version wins when static version conflicts with preference in range
+Preferred version(s): 1.5, null
+
+
+> Task :dependencyInsight
+tree:acacia:1.5
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - By conflict resolution : between versions 1.5 and 1.2
+
+tree:acacia:1.2 -> 1.5
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia:[1.4, 2.0) -> 1.5
+\--- project :blue-palo-verde
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Winning dep resulting version: 'tree:acacia:1.5'
+- Losing dep resulting version: 'tree:acacia:[1.4, 2.0) -> 1.5'
+
+completed assertions
