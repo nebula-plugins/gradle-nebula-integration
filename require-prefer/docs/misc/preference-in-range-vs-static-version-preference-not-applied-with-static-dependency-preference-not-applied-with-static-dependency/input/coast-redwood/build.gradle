@@ -1,0 +1,20 @@
+
+plugins {
+    id 'java-library'
+}
+
+group 'tree'
+version '1.0'
+
+dependencies {
+    api ('tree:acacia') {
+        version {
+            require '1.4'
+            
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}

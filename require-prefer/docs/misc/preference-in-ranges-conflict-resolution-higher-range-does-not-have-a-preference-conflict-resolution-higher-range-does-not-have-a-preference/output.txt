@@ -1,0 +1,36 @@
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: preference in ranges - conflict resolution - higher range does not have a preference
+Preferred version(s): 1.5, null
+
+
+> Task :dependencyInsight
+tree:acacia:2.9
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - By conflict resolution : between versions 1.5 and 2.9
+
+tree:acacia:[1.2, 2.0) -> 2.9
+\--- project :blue-palo-verde
+     \--- compileClasspath
+
+tree:acacia:[2.0, 3.0) -> 2.9
+\--- project :coast-redwood
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- First dep resulting version: 'tree:acacia:[1.2, 2.0) -> 2.9'
+- Second dep resulting version: 'tree:acacia:[2.0, 3.0) -> 2.9'
+
+completed assertions

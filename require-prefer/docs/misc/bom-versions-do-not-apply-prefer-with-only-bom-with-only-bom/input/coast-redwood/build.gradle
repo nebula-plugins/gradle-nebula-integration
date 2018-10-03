@@ -1,0 +1,22 @@
+
+plugins {
+    id 'java-library'
+}
+
+group 'tree'
+version '1.0'
+
+dependencies {
+    api platform('sample:bom:1.0.0')
+    api 'tree:acacia'
+    api ('tree:acacia') {
+        version {
+            prefer '1.6'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url '/Users/achipman/Projects/github/nebula-plugins/gradle-nebula-integration/require-prefer/repo' }
+}

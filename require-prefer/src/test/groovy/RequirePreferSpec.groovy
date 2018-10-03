@@ -1,7 +1,7 @@
 import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom
 import org.assertj.core.util.Lists
-import org.gradle.util.VersionNumber
+import org.gradle.testkit.runner.BuildResult
 import spock.lang.Unroll
 
 /**
@@ -27,8 +27,9 @@ class RequirePreferSpec extends TestKitSpecification {
     String second = 'coast-redwood'
 
     String group = 'tree'
-    def versionRangeIndicators = ['[', ']', '(', ')']
     File repo
+    def tasks = ['dependencyInsight', '--dependency', "$dep"]
+
 
     def setup() {
         repo = new File('repo')
@@ -37,157 +38,104 @@ class RequirePreferSpec extends TestKitSpecification {
     }
 
     @Unroll
-    def "1. #title"() {
+    def "preference in ranges - #title"() {
         given:
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
         addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
 
-        buildFile << simpleParentMultiProjectBuildFile()
+        buildFile << simpleParentMultiProjectBuildFile(true)
 
         when:
-        def tasks = ['dependencyInsight', '--dependency', "$dep"]
         def result = runTasks(*tasks)
 
-        DocWriter docWriter = new DocWriter(title.replace(' ', '-'), projectDir, 'misc')
+        and:
+        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        docWriter.writeProjectFiles()
-        docWriter.writeCleanedUpBuildOutput(
-                "Tasks: ${String.join(' ', tasks)}\n\n" +
-                        "Scenario: $title\n" +
-                        "Preferred version(s): $prefer1, $prefer2\n\n" +
-                        "${result.output}\n\n")
-
-        def firstHasDynamicDep = versionRangeIndicators.any { require1.contains(it) }
-        def secondHasDynamicDep = versionRangeIndicators.any { require2.contains(it) }
-
-        if (!firstHasDynamicDep || !secondHasDynamicDep) {
-            String winningVersion = finalVersion
-
-            def losingVersion = Lists.newArrayList(require1, require2)
-            losingVersion.remove(winningVersion)
-
-            def winningReasonResultingVersion = "$group:$dep:$winningVersion"
-            docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
-            assert result.output.contains(winningReasonResultingVersion)
-
-            def losingReasonResultingVersion = "$group:$dep:${losingVersion.first()} -> $winningVersion"
-            docWriter.addAssertionToDoc("Losing dep resulting version: '$losingReasonResultingVersion'")
-            assert result.output.contains(losingReasonResultingVersion)
-
-
-        } else {
-            def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
-            docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
-            assert result.output.contains(firstReasonResultingVersion)
-
-            def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
-            docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
-            assert result.output.contains(secondReasonResultingVersion)
-        }
-
-        docWriter.writeFooter('completed assertions')
+        assertWhenAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
 
         where:
-        prefer1 | prefer2 | require1     | require2     | finalVersion | title
-        '1.5'   | null    | '[1.2, 2.0)' | '[1.2, 2.0)' | '1.5'        | 'one preference in required range'
-        '1.5'   | '1.6'   | '[1.2, 2.0)' | '[1.2, 2.0)' | '1.6'        | 'two preferences in required range - higher is chosen'
-        '1.5'   | null    | '[1.2, 2.0)' | '[2.0, 3.0)' | '2.9'        | 'conflict resolution - higher range does not have a preference'
-        '1.5'   | null    | '[1.4, 2.0)' | '[1.0, 1.2)' | '1.5'        | 'conflict resolution - higher range has a preference'
-        '1.5'   | null    | '[1.2, 2.0)' | '2.9'        | '2.9'        | 'conflict resolution with range and static - higher does not use preference'
-        '1.5'   | null    | '[1.4, 2.0)' | '1.2'        | '1.5'        | 'conflict resolution with range and static - preference is higher'
-        '1.5'   | null    | '1.0'        | '2.0'        | '2.0'        | 'preference not used with static dependency'
+        prefer1 | require1     | prefer2 | require2     | finalVersion | title
+        '1.5'   | '[1.2, 2.0)' | null    | '[1.2, 2.0)' | '1.5'        | 'one preference in required range'
+        '1.5'   | '[1.2, 2.0)' | '1.6'   | '[1.2, 2.0)' | '1.6'        | 'two preferences in required range - higher is chosen'
+        '1.5'   | '[1.2, 2.0)' | null    | '[2.0, 3.0)' | '2.9'        | 'conflict resolution - higher range does not have a preference'
+        '2.5'   | '[2.0, 3.0)' | null    | '[1.0, 1.2)' | '2.5'        | 'conflict resolution - higher range has a preference'
     }
 
     @Unroll
-    def '2. #title'() {
-        def shouldUseFirstProject = prefer1 != null && require1 != null && prefer1 != '' & require1 != ''
-        given:
-        if (shouldUseFirstProject) {
-            addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
-        }
-        addSubproject(second, """
-plugins {
-    id 'java-library'
-}
+    def "preference in range vs static version: #title"() {
+        addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
+        addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
 
-group '$group'
-version '1.0'
-
-dependencies {
-    api platform('sample:bom:1.0.0')
-    api '$group:$dep'
-    api ('$group:$dep') {
-        version {
-            prefer '$bomVersion'
-        }
-    }
-}
-
-repositories {
-    jcenter()
-    maven { url '${repo.absolutePath}' }
-}
-""")
-        buildFile << simpleParentMultiProjectBuildFile(shouldUseFirstProject)
+        buildFile << simpleParentMultiProjectBuildFile(true)
 
         when:
-        def tasks = ['dependencyInsight', '--dependency', "$dep"]
         def result = runTasks(*tasks)
 
-        DocWriter docWriter = new DocWriter(title.replace(' ', '-'), projectDir, 'misc')
+        and:
+        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        docWriter.writeProjectFiles()
-        docWriter.writeCleanedUpBuildOutput(
-                "Tasks: ${String.join(' ', tasks)}\n\n" +
-                        "Scenario: $title\n" +
-                        "Preferred version(s): $prefer1, $bomVersion\n\n" +
-                        "${result.output}\n\n")
-
-        def firstHasDynamicDep = versionRangeIndicators.any { require1.contains(it) }
-        def secondHasDynamicDep = versionRangeIndicators.any { require2.contains(it) }
-
-        if (!firstHasDynamicDep || !secondHasDynamicDep) {
-            String winningVersion = finalVersion
-
-            def losingVersion = Lists.newArrayList(require1, require2)
-            losingVersion.remove(winningVersion)
-
-            def winningReasonResultingVersion = "$group:$dep:$winningVersion"
-            docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
-            assert result.output.contains(winningReasonResultingVersion)
-
-
-            def losingReasonResultingVersion
-            if (losingVersion.any { (it == '') }) {
-                losingReasonResultingVersion = "$group:$dep -> $winningVersion"
-            } else {
-                losingReasonResultingVersion = "$group:$dep:${losingVersion.first()} -> $winningVersion"
-            }
-            docWriter.addAssertionToDoc("Losing dep resulting version: '$losingReasonResultingVersion'")
-            assert result.output.contains(losingReasonResultingVersion)
-
-
-        } else {
-            def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
-            docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
-            assert result.output.contains(firstReasonResultingVersion)
-
-            def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
-            docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
-            assert result.output.contains(secondReasonResultingVersion)
-        }
-
-        docWriter.writeFooter('completed assertions')
+        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
 
         where:
-        prefer1 | bomVersion | require1     | require2 | finalVersion | title
-        ''      | '1.7'      | ''           | '1.6'    | '1.7'        | 'preference with bom - prefer > bom'
-        '1.5'   | '1.7'      | '[1.2, 2.0)' | '1.6'    | '1.7'        | 'preference with bom - prefer > bom & > other prefer'
+        prefer1 | require1     | prefer2 | require2 | finalVersion | title
+        '1.5'   | '[1.2, 2.0)' | null    | '2.9'    | '2.9'        | 'static > preference'
+        '1.5'   | '[1.4, 2.0)' | null    | '1.2'    | '1.5'        | 'preference > static'
+        '1.6'   | '1.0'        | null    | '1.4'    | '1.4'        | 'preference not applied with static dependency'
     }
 
-    def createBom(String depVersion) {
+    @Unroll
+    def "dynamic versions do not apply prefer - #title"() {
+        addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
+        addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
+
+        buildFile << simpleParentMultiProjectBuildFile(true)
+
+        when:
+        def result = runTasks(*tasks)
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
+
+        then:
+        assertWithDynamicAndStaticAndPreferenceVersions(docWriter, result, require1, require2, finalVersion)
+
+        where:
+        prefer1 | require1 | prefer2 | require2 | finalVersion | title
+        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static > preference'
+        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'preference > static'
+    }
+
+    @Unroll
+    def "bom versions do not apply prefer - #title"() {
+        given:
+        addSubprojectUsingABomAndPreference(bomVersion, prefer)
+
+        buildFile << simpleParentMultiProjectBuildFile(false)
+        createBom(bomVersion)
+
+        when:
+        def result = runTasks(*tasks)
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName + '-' + title.replaceAll(/\W+/, '-'), projectDir, 'misc')
+        writeRelevantOutput(docWriter, result.output, prefer, null)
+
+        then:
+        assertWithBomAndPrefer(docWriter, result, prefer, bomVersion, finalVersion)
+
+        where:
+        prefer | bomVersion | finalVersion | title
+        null   | '1.6'      | '1.6'        | 'with only bom'
+        '1.2'  | '1.6'      | '1.6'        | 'bom > prefer'
+        '1.8'  | '1.6'      | '1.6'        | 'prefer > bom'
+    }
+
+    private def createBom(String depVersion) {
         repo.mkdirs()
 
         def localBom = new Pom('sample', 'bom', '1.0.0', ArtifactType.POM)
@@ -263,19 +211,108 @@ repositories {
         ArtifactHelpers.setupSamplePomWith(repo, pom, pom.generate())
     }
 
-    def returnLowerOf(String v1, String v2) {
-        def compareTo = VersionNumber.parse(v1).compareTo(VersionNumber.parse(v2))
-        if (compareTo < 0) {
-            return v1
-        }
-        return v2
+    private def writeRelevantOutput(DocWriter docWriter, String output, String prefer1, String prefer2) {
+        docWriter.writeProjectFiles()
+        docWriter.writeCleanedUpBuildOutput(
+                "Tasks: ${String.join(' ', tasks)}\n\n" +
+                        "Scenario: ${testName.methodName}\n" +
+                        "Preferred version(s): $prefer1, $prefer2\n\n" +
+                        "${output}\n\n")
     }
 
-    def returnHigherOf(String v1, String v2) {
-        def compareTo = VersionNumber.parse(v1).compareTo(VersionNumber.parse(v2))
-        if (compareTo < 0) {
-            return v2
+    private def addSubprojectUsingABomAndPreference(String bomVersion, String prefer) {
+        def preferInSubproject = ''
+        if (prefer != '') {
+            preferInSubproject = "prefer '$bomVersion'"
         }
-        return v1
+        addSubproject(second, """
+plugins {
+    id 'java-library'
+}
+
+group '$group'
+version '1.0'
+
+dependencies {
+    api platform('sample:bom:1.0.0')
+    api '$group:$dep'
+    api ('$group:$dep') {
+        version {
+            $preferInSubproject
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url '${repo.absolutePath}' }
+}
+""")
+    }
+
+    private void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+        def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
+        docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
+        assert result.output.contains(firstReasonResultingVersion)
+
+        def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
+        docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
+        assert result.output.contains(secondReasonResultingVersion)
+
+        docWriter.writeFooter('completed assertions')
+    }
+
+    private void assertWhenNotAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+        def losingVersion = Lists.newArrayList(require1, require2)
+        losingVersion.remove(finalVersion)
+
+        def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
+        docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
+        assert result.output.contains(winningReasonResultingVersion)
+
+        def losingReasonResultingVersion = "$group:$dep:${losingVersion.first()} -> ${finalVersion}"
+        docWriter.addAssertionToDoc("Losing dep resulting version: '$losingReasonResultingVersion'")
+        assert result.output.contains(losingReasonResultingVersion)
+
+        docWriter.writeFooter('completed assertions')
+    }
+
+    private void assertWithBomAndPrefer(DocWriter docWriter, BuildResult result, String prefer, String bomVersion, String finalVersion) {
+        def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
+        docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
+        assert result.output.contains(winningReasonResultingVersion)
+
+        def losingReasonResultingVersion = "$group:$dep -> $finalVersion"
+        docWriter.addAssertionToDoc("Losing dep resulting version: '$losingReasonResultingVersion'")
+        assert result.output.contains(losingReasonResultingVersion)
+
+        docWriter.addAssertionToDoc("Ensure 'bomVersion == finalVersion': ${bomVersion == finalVersion}")
+        assert bomVersion == finalVersion
+
+        def bomIsApplied = '--- sample:bom:1.0.0'
+        docWriter.addAssertionToDoc("Contains '$bomIsApplied'")
+        assert result.output.contains(bomIsApplied)
+
+        docWriter.writeFooter('completed assertions')
+    }
+
+    private void assertWithDynamicAndStaticAndPreferenceVersions(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+        def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
+        docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
+        assert result.output.contains(winningReasonResultingVersion)
+
+        if (require1 != finalVersion) {
+            def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
+            docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
+            assert result.output.contains(firstReasonResultingVersion)
+        }
+
+        if (require2 != finalVersion) {
+            def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
+            docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
+            assert result.output.contains(secondReasonResultingVersion)
+        }
+
+        docWriter.writeFooter('completed assertions')
     }
 }

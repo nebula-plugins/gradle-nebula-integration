@@ -25,9 +25,11 @@ abstract class TestKitSpecification extends Specification {
     String gradleVersion
     Project project
     MultiProjectHelper helper
+    String methodName
 
     def setup() {
-        projectDir = new File("build/nebulatest/${this.class.canonicalName}/${testName.methodName.replaceAll(/\W+/, '-')}").absoluteFile
+        methodName = testName.methodName.replaceAll(/\W+/, '-')
+        projectDir = new File("build/nebulatest/${this.class.canonicalName}/${testName}").absoluteFile
         if (projectDir.exists()) {
             projectDir.deleteDir()
         }

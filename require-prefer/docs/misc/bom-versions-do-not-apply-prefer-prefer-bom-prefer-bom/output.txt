@@ -1,0 +1,41 @@
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: bom versions do not apply prefer - prefer > bom
+Preferred version(s): 1.8, null
+
+
+> Task :dependencyInsight
+tree:acacia:1.6 (by constraint)
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+
+tree:acacia:1.6
+\--- project :coast-redwood
+     \--- compileClasspath
+
+tree:acacia:1.6
+\--- sample:bom:1.0.0
+     \--- project :coast-redwood
+          \--- compileClasspath
+
+tree:acacia -> 1.6
+\--- project :coast-redwood
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Winning dep resulting version: 'tree:acacia:1.6'
+- Losing dep resulting version: 'tree:acacia -> 1.6'
+- Ensure 'bomVersion == finalVersion': true
+- Contains '--- sample:bom:1.0.0'
+
+completed assertions
