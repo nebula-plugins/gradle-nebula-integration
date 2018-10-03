@@ -1,3 +1,6 @@
+=== Using Gradle version ===
+5.0-20180930235830+0000
+
 Tasks: dependencyInsight --dependency acacia
 
 Scenario: bom versions do not apply prefer - prefer > bom

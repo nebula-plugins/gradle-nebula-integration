@@ -213,6 +213,7 @@ repositories {
 
     private def writeRelevantOutput(DocWriter docWriter, String output, String prefer1, String prefer2) {
         docWriter.writeProjectFiles()
+        docWriter.writeGradleVersion(project.gradle.gradleVersion)
         docWriter.writeCleanedUpBuildOutput(
                 "Tasks: ${String.join(' ', tasks)}\n\n" +
                         "Scenario: ${testName.methodName}\n" +
