@@ -2,7 +2,7 @@
 apply plugin: 'java'
 
 repositories {
-    maven { url { '../../../../repo/maven' } }
+    maven { url { '../../../../repo/maven-repo' } }
 }
 
 dependencies {

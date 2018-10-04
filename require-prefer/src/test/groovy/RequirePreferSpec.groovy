@@ -27,15 +27,14 @@ class RequirePreferSpec extends TestKitSpecification {
     static final String first = 'blue-palo-verde'
     static final String second = 'coast-redwood'
     static final String publishedVersion = '1.0'
+    static final String group = 'tree'
 
-    String group = 'tree'
     static File repo
     static File mavenRepo
     def tasks = ['dependencyInsight', '--dependency', "$dep"]
 
     def setupSpec() {
         repo = new File('repo')
-        repo.deleteDir()
         setupDependenciesInLocalRepo()
     }
 
@@ -159,71 +158,94 @@ class RequirePreferSpec extends TestKitSpecification {
     }
 
     @Unroll
-    def "#title with ivy"() {
+    def "#publishingWith #title"() {
         // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
+        // and related to https://github.com/gradle/gradle/issues/6610
         given:
-        buildFile << buildFilePublishingToIvy(require, prefer)
+        buildFile << buildFilePublishingWith(publishingWith, false, require, prefer)
+        settingsFile << "rootProject.name = '$first'"
 
         when:
+        def insightResult = runTasks('dependencyInsight', '--dependency', dep)
         runTasks('publish')
 
         and:
         DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing')
-        def publishedPom = new File(repo, 'ivy' + File.separator +
-                group + File.separator +
-                first + File.separator +
-                publishedVersion + File.separator +
-                'ivy' + '-' + publishedVersion + '.xml')
-        writeRelevantOutput(docWriter, "Publishing to 'repo' with metadata:\n\n${publishedPom.text}", prefer, null)
+        File publishedMetadata = publishedMetadata(publishingWith)
+
+        def outputToWrite = "Publishing $publishingWith metadata:\n\n${publishedMetadata.text}"
+        writeRelevantOutput(docWriter, outputToWrite, prefer, null)
 
         then:
-        docWriter.addAssertionToDoc("Published metadata does not contain prefer version '$prefer")
-        !publishedPom.text.contains(prefer)
+        !insightResult.output.contains('FAILED')
+
+        docWriter.addAssertionToDoc("$preferedVersionInMetadata: Published $publishingWith metadata contains prefer version '$prefer")
+        assert publishedMetadata.text.contains(prefer) == preferedVersionInMetadata
 
         docWriter.writeFooter('completed assertions')
 
         where:
-        prefer | require      | preferInMetadata | title
-        '1.5'  | '[1.2, 2.0)' | false            | 'prefer does not live through publishing'
+        publishingWith | prefer | require      | preferedVersionInMetadata | title
+        'maven'        | '1.5'  | '[1.2, 2.0)' | false                     | 'publishing contains a range'
+        'maven'        | '1.5'  | null         | true                      | 'publishing contains prefer when require is blank'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                     | 'publishing contains a range'
+        'ivy'          | '1.5'  | null         | true                      | 'publishing contains prefer when require is blank'
     }
 
     @Unroll
-    def "#title with maven"() {
+    def "#publishingWith publishing with gradle metadata #title"() {
         // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
+        // and related to https://github.com/gradle/gradle/issues/6610
         given:
-        buildFile << buildFilePublishingToMaven(require, prefer)
+        buildFile << buildFilePublishingWith(publishingWith, true, require, prefer)
+        settingsFile << "rootProject.name = '$first'"
+
+        settingsFile << """
+            enableFeaturePreview('GRADLE_METADATA')
+            enableFeaturePreview('STABLE_PUBLISHING')
+            """.stripIndent()
 
         when:
+        def insightResult = runTasks('dependencyInsight', '--dependency', dep)
         runTasks('publish')
 
         and:
-        DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing')
-        def publishedPom = new File(mavenRepo, group + File.separator +
-                first + File.separator +
-                publishedVersion + File.separator +
-                first + '-' + publishedVersion + '.pom')
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing-gradle-metadata')
+        File publishedMetadata = publishedMetadata(publishingWith)
+        File publishedGradleMetadata = publishedGradleMetadata(publishingWith)
 
-        writeRelevantOutput(docWriter, "Publishing to 'repo' with metadata:\n\n${publishedPom.text}", prefer, null)
+        def outputToWrite = "Publishing $publishingWith metadata:\n\n" +
+                "${publishedMetadata.text}\n\n" +
+                "Publishing Gradle metadata snippet:\n\n" +
+                "      dependencies ${publishedGradleMetadata.text.split('dependencies')[1]}"
+        writeRelevantOutput(docWriter, outputToWrite, prefer, null)
 
         then:
-        docWriter.addAssertionToDoc("Published metadata does not contain prefer version '$prefer")
-        !publishedPom.text.contains(prefer)
+        !insightResult.output.contains('FAILED')
+
+        docWriter.addAssertionToDoc("$preferedVersionInMetadata: Published $publishingWith metadata contains prefer version '$prefer")
+        assert publishedMetadata.text.contains(prefer) == preferedVersionInMetadata
+
+        docWriter.addAssertionToDoc("$preferedVersionInMetadata: Published Gradle metadata contains prefer version '$prefer")
+        assert publishedGradleMetadata.text.contains(prefer) == preferedVersionInGradleMetadata
 
         docWriter.writeFooter('completed assertions')
 
         where:
-        prefer | require      | preferInMetadata | title
-        '1.5'  | '[1.2, 2.0)' | false            | 'prefer does not live through publishing'
+        publishingWith | prefer | require      | preferedVersionInMetadata | preferedVersionInGradleMetadata | title
+        'maven'        | '1.5'  | '[1.2, 2.0)' | false                     | false                           | 'contains a range'
+        'maven'        | '1.5'  | null         | true                      | true                            | 'contains prefer when require is blank'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                     | false                           | 'contains a range'
+        'ivy'          | '1.5'  | null         | true                      | true                            | 'contains prefer when require is blank'
     }
 
-    private def createBom(String depVersion) {
+    private static def createBom(String depVersion) {
         repo.mkdirs()
 
         def localBom = new Pom('sample', 'bom', '1.0.0', ArtifactType.POM)
         localBom.addManagementDependency(group, dep, depVersion)
         ArtifactHelpers.setupSamplePomWith(mavenRepo, localBom, localBom.generate())
     }
-
 
     private static def simpleParentMultiProjectBuildFile(boolean shouldUseFirstProject) {
         def firstProject = ''
@@ -244,7 +266,7 @@ dependencies {
 }"""
     }
 
-    private def buildFileWithDependencyVersions(String requireVersion, String preferVersion) {
+    private static def buildFileWithDependencyVersions(String requireVersion, String preferVersion) {
         assert requireVersion != null
 
         def preferConfiguration = ''
@@ -270,12 +292,66 @@ dependencies {
 }
 
 repositories {
-    jcenter()
+    maven { url { '${mavenRepo.absolutePath}' } }
 }
 """
     }
 
-    private def buildFilePublishingToMaven(String require1, String prefer1) {
+    private def buildFilePublishingWith(String publishingWith, boolean enableGradleMetadata, String require1, String prefer1) {
+        def compConfig = ''
+        if (enableGradleMetadata) {
+            compConfig = """
+// TODO - use public APIs when available
+class TestComponent implements org.gradle.api.internal.component.SoftwareComponentInternal, ComponentWithVariants {
+    String name
+    Set usages = []
+    Set variants = []
+}
+
+class TestUsage implements org.gradle.api.internal.component.UsageContext {
+    String name
+    Usage usage
+    Set dependencies = []
+    Set dependencyConstraints = []
+    Set artifacts = []
+    Set capabilities = []
+    Set globalExcludes = []
+    AttributeContainer attributes
+}
+
+class TestVariant implements org.gradle.api.internal.component.SoftwareComponentInternal {
+    String name
+    Set usages = []
+}
+
+class TestCapability implements Capability {
+    String group
+    String name
+    String version
+}
+
+def comp = new TestComponent()
+comp.usages.add(new TestUsage(
+                    name: 'api',
+                    usage: objects.named(Usage, 'api'),
+                    dependencies: configurations.implementation.allDependencies,
+                    attributes: configurations.implementation.attributes))
+"""
+        }
+
+        def publicationsFrom = enableGradleMetadata ? 'comp' : 'components.java'
+
+        if (publishingWith == 'ivy') {
+            return buildFilePublishingWithIvy(compConfig, publicationsFrom, require1, prefer1)
+        }
+        return buildFilePublishingWithMaven(compConfig, publicationsFrom, require1, prefer1)
+    }
+
+    private def buildFilePublishingWithMaven(String compConfig, String publicationsFrom, String require1, String prefer1) {
+        def requireBlock = ''
+        if (require1 != null) {
+            requireBlock = "\n            require '${require1}'"
+        }
         """
 plugins {
     id 'java-library'
@@ -283,84 +359,86 @@ plugins {
 }
 
 group '$group'
-version '1.0'
+version '$publishedVersion'
+$compConfig
 
 dependencies {
     api ('$group:$dep') {
-        version {
-            require '${require1}'
+        version {$requireBlock
             prefer '${prefer1}'
         }
     }
 }
 
 repositories {
-    jcenter()
+    maven { url { '${mavenRepo.absolutePath}' } }
 }
 
 publishing {
     repositories {
-        maven { url '${mavenRepo.absolutePath}' }
+        maven { url '${projectDir.absolutePath + File.separator + 'maven-repo'}' }
     }
     publications {
-        ivy(MavenPublication) {
+        maven(MavenPublication) {
             groupId = '$group'
             artifactId = '$first'
             version = '1.0'
 
-            from components.java
+            from ${publicationsFrom}
         }
     }
 }
 """
     }
 
-    private def buildFilePublishingToIvy(String require1, String prefer1) {
+    private def buildFilePublishingWithIvy(String compConfig, String publicationsFrom, String require1, String prefer1) {
+        def requireBlock = ''
+        if (require1 != null) {
+            requireBlock = "\n            require '${require1}'"
+        }
+
         """
 plugins {
     id 'java-library'
     id 'ivy-publish'
 }
 
-group '$group'
-version '1.0'
+allprojects {
+    configurations { implementation }
+}
+
+group = '$group'
+version = '$publishedVersion'
+$compConfig
 
 dependencies {
-    api ('$group:$dep') {
-        version {
-            require '${require1}'
-            prefer '${prefer1}'
+    api ("$group:$dep") {
+        version {$requireBlock
+            prefer '$prefer1'
         }
     }
 }
 
 repositories {
-    jcenter()
+    maven { url { '${mavenRepo.absolutePath}' } }
 }
 
 publishing {
     repositories {
-        ivy { url '${repo.absolutePath + File.separator + 'ivy'}' }
+        ivy { url '${projectDir.absolutePath + File.separator + 'ivy-repo'}' }
     }
     publications {
         ivy(IvyPublication) {
-            organisation = '$group'
-            module = '${first}'
-            revision = '1.0'
-            descriptor.status = 'snapshot'
-            descriptor.branch = 'master'
-
-            from components.java
+            from ${publicationsFrom}
         }
     }
 }
 """
     }
 
-
     private static void setupDependenciesInLocalRepo() {
         repo.mkdirs()
-        mavenRepo = new File(repo, 'maven')
+        mavenRepo = new File(repo, 'maven-repo')
         mavenRepo.mkdirs()
 
         for (def major in 1..2) {
@@ -368,6 +446,29 @@ publishing {
                 setupLocalDependency(dep, "$major.$minor", Collections.emptyMap())
             }
         }
+        def mavenMetadata = new File(mavenRepo, group + File.separator + dep + File.separator + 'maven-metadata.xml')
+        mavenMetadata.mkdirs()
+        mavenMetadata.delete()
+
+        def versions = ''
+        for (def major in 1..2) {
+            for (def minor in 0..9) {
+                versions += "\n            <version>${major}.${minor}</version>"
+            }
+        }
+
+        mavenMetadata << """<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+    <groupId>tree</groupId>
+    <artifactId>blue-palo-verde</artifactId>
+    <versioning>
+        <release>1.0</release>
+        <versions>$versions
+        </versions>
+        <lastUpdated>20181005164307</lastUpdated>
+    </versioning>
+</metadata>
+"""
     }
 
     private static void setupLocalDependency(String artifactName, String version, Map<String, String> dependencies) {
@@ -413,13 +514,40 @@ dependencies {
 }
 
 repositories {
-    jcenter()
     maven { url '${mavenRepo.absolutePath}' }
 }
 """)
     }
 
-    private void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+    private File publishedGradleMetadata(String publishingWith) {
+        if (publishingWith == 'ivy') {
+            return new File(ivyArtifactPath(), "${first}-${publishedVersion}.module")
+        }
+        return new File(mavenArtifactPath(), "${first}-${publishedVersion}.module")
+    }
+
+    private File publishedMetadata(String publishingWith) {
+        if (publishingWith == 'ivy') {
+            return new File(ivyArtifactPath(), 'ivy' + '-' + publishedVersion + '.xml')
+        }
+        return new File(mavenArtifactPath(), first + '-' + publishedVersion + '.pom')
+    }
+
+    private String ivyArtifactPath() {
+        new File(projectDir, 'ivy-repo' + File.separator +
+                group + File.separator +
+                first + File.separator +
+                publishedVersion + File.separator)
+    }
+
+    private String mavenArtifactPath() {
+        new File(projectDir, 'maven-repo' + File.separator +
+                group + File.separator +
+                first + File.separator +
+                publishedVersion + File.separator)
+    }
+
+    private static void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
         def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
         docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
         assert result.output.contains(firstReasonResultingVersion)
@@ -431,7 +559,7 @@ repositories {
         docWriter.writeFooter('completed assertions')
     }
 
-    private void assertWhenNotAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+    private static void assertWhenNotAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
         def losingVersion = Lists.newArrayList(require1, require2)
         losingVersion.remove(finalVersion)
 
@@ -446,7 +574,7 @@ repositories {
         docWriter.writeFooter('completed assertions')
     }
 
-    private void assertWithBomAndPrefer(DocWriter docWriter, BuildResult result, String prefer, String bomVersion, String finalVersion) {
+    private static void assertWithBomAndPrefer(DocWriter docWriter, BuildResult result, String prefer, String bomVersion, String finalVersion) {
         def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
         docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
         assert result.output.contains(winningReasonResultingVersion)
@@ -465,7 +593,7 @@ repositories {
         docWriter.writeFooter('completed assertions')
     }
 
-    private void assertWithDynamicAndStaticAndPreferenceVersions(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+    private static void assertWithDynamicAndStaticAndPreferenceVersions(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
         def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
         docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
         assert result.output.contains(winningReasonResultingVersion)

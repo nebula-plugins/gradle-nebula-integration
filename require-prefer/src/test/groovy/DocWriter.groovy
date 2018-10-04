@@ -4,6 +4,8 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter
 import org.apache.commons.io.filefilter.IOFileFilter
 import org.apache.commons.io.filefilter.NameFileFilter
 import org.apache.commons.io.filefilter.NotFileFilter
+import org.apache.commons.io.filefilter.SuffixFileFilter
+import org.apache.commons.io.filefilter.TrueFileFilter
 
 /**
  *
@@ -75,15 +77,38 @@ class DocWriter {
 
         def buildFile = new File(destinationDir, 'build.gradle')
         buildFile.text = buildFile.text.replaceAll("'.*/repo", "'../../../../repo")
+                .replaceAll("'.*build/.*/ivy-repo", "'ivy-repo")
+                .replaceAll("'.*/build/.*/maven-repo", "'maven-repo") //FIXME
 
         def directoryNames = destinationDir.list(DirectoryFileFilter.INSTANCE)
         for (String dirName : directoryNames) {
             def directory = new File(destinationDir, dirName)
-            def innerBuildFileNames = directory.list(new NameFileFilter('build.gradle'))
-            for (String buildFileName : innerBuildFileNames) {
-                def innerBuildFile = new File(directory, buildFileName)
-                innerBuildFile.text = innerBuildFile.text.replaceAll("'.*/repo", "'../../../../../repo")
-            }
+            replacePathForRepo(directory)
+            makeLastUpdatedTimestampConsistent(directory)
+            makeBuildIdConsistent(directory)
+        }
+    }
+
+    private static void replacePathForRepo(File directory) {
+        def innerBuildFileNames = directory.list(new NameFileFilter('build.gradle'))
+        for (String buildFileName : innerBuildFileNames) {
+            def innerBuildFile = new File(directory, buildFileName)
+            innerBuildFile.text = innerBuildFile.text.replaceAll("'.*/repo", "'../../../../../repo")
+        }
+    }
+
+    private static void makeLastUpdatedTimestampConsistent(File directory) {
+        def xmlFiles = FileUtils.listFiles(directory, new SuffixFileFilter('.xml'), TrueFileFilter.INSTANCE)
+        for (File xmlFile : xmlFiles) {
+            xmlFile.text = xmlFile.text.replaceAll("<lastUpdated>.*</lastUpdated>", "<lastUpdated>20181001020304</lastUpdated>")
+                    .replaceAll("publication=\".*\"", "publication=\"20181001020304\"")
+        }
+    }
+
+    private static void makeBuildIdConsistent(File directory) {
+        def moduleFiles = FileUtils.listFiles(directory, new SuffixFileFilter('.module'), TrueFileFilter.INSTANCE)
+        for (File moduleFile : moduleFiles) {
+            moduleFile.text = moduleFile.text.replaceAll("\"buildId\": \".*\"", "\"buildId\": \"aaaaabbbbbcccccdddddeeeeef\"")
         }
     }
 

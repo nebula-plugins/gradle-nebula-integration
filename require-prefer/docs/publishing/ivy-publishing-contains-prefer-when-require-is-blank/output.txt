@@ -1,0 +1,32 @@
+=== Using Gradle version ===
+5.0-20180930235830+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: ivy publishing contains prefer when require is blank
+Preferred version(s): 1.5, null
+
+Publishing ivy metadata:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="tree" module="blue-palo-verde" revision="1.0" status="integration" publication="recently"/>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="blue-palo-verde" type="jar" ext="jar" conf="compile"/>
+  </publications>
+  <dependencies>
+    <dependency org="tree" name="acacia" rev="1.5" conf="compile-&gt;default"/>
+  </dependencies>
+</ivy-module>
+
+
+
+=== Asserting on... ===
+- true: Published ivy metadata contains prefer version '1.5
+
+completed assertions

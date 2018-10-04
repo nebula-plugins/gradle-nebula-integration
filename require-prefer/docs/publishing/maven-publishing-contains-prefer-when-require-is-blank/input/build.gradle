@@ -1,0 +1,36 @@
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group 'tree'
+version '1.0'
+
+
+dependencies {
+    api ('tree:acacia') {
+        version {
+            prefer '1.5'
+        }
+    }
+}
+
+repositories {
+    maven { url { '../../../../repo/maven-repo' } }
+}
+
+publishing {
+    repositories {
+        maven { url 'maven-repo' }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'tree'
+            artifactId = 'blue-palo-verde'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+}
