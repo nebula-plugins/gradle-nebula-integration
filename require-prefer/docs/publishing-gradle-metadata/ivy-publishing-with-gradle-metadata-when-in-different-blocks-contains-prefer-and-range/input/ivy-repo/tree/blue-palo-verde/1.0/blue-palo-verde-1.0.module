@@ -1,0 +1,38 @@
+{
+  "formatVersion": "0.4",
+  "component": {
+    "group": "tree",
+    "module": "blue-palo-verde",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "5.0-20180930235830+0000",
+      "buildId": "aaaaabbbbbcccccdddddeeeeef"
+    }
+  },
+  "variants": [
+    {
+      "name": "api",
+      "dependencies": [
+        {
+          "group": "tree",
+          "module": "acacia",
+          "version": {
+            "prefers": "1.5"
+          }
+        },
+        {
+          "group": "tree",
+          "module": "acacia",
+          "version": {
+            "requires": "[1.2, 2.0)"
+          }
+        }
+      ]
+    }
+  ]
+}

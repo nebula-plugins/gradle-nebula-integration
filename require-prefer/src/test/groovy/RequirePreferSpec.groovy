@@ -162,7 +162,7 @@ class RequirePreferSpec extends TestKitSpecification {
         // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
         // and related to https://github.com/gradle/gradle/issues/6610
         given:
-        buildFile << buildFilePublishingWith(publishingWith, false, require, prefer)
+        buildFile << buildFilePublishingWith(publishingWith, false, require, prefer, requireAndPreferInSameDependencyBlock)
         settingsFile << "rootProject.name = '$first'"
 
         when:
@@ -182,14 +182,25 @@ class RequirePreferSpec extends TestKitSpecification {
         docWriter.addAssertionToDoc("$preferedVersionInMetadata: Published $publishingWith metadata contains prefer version '$prefer")
         assert publishedMetadata.text.contains(prefer) == preferedVersionInMetadata
 
+        if (require != null) {
+            docWriter.addAssertionToDoc("Published $publishingWith metadata contains range '$require")
+            assert publishedMetadata.text.contains(require)
+        }
+
         docWriter.writeFooter('completed assertions')
 
         where:
-        publishingWith | prefer | require      | preferedVersionInMetadata | title
-        'maven'        | '1.5'  | '[1.2, 2.0)' | false                     | 'publishing contains a range'
-        'maven'        | '1.5'  | null         | true                      | 'publishing contains prefer when require is blank'
-        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                     | 'publishing contains a range'
-        'ivy'          | '1.5'  | null         | true                      | 'publishing contains prefer when require is blank'
+        publishingWith | prefer | require      | requireAndPreferInSameDependencyBlock | preferedVersionInMetadata | title
+// defined in the same dependency block
+        'maven'        | '1.5'  | '[1.2, 2.0)' | true                                  | false                     | 'publishing when in same block contains only range'
+        'maven'        | '1.5'  | null         | true                                  | true                      | 'publishing when in same block contains prefer when require is blank'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | true                                  | false                     | 'publishing when in same block contains only range'
+        'ivy'          | '1.5'  | null         | true                                  | true                      | 'publishing when in same block contains prefer when require is blank'
+// not in the same dependency block
+        'maven'        | '1.5'  | '[1.2, 2.0)' | false                                 | true                      | 'publishing when in different blocks contains prefer and range'
+        'maven'        | '1.5'  | null         | false                                 | true                      | 'publishing when in different blocks contains only prefer'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                                 | true                      | 'publishing when in different blocks contains prefer and range'
+        'ivy'          | '1.5'  | null         | false                                 | true                      | 'publishing when in different blocks contains only prefer'
     }
 
     @Unroll
@@ -197,7 +208,7 @@ class RequirePreferSpec extends TestKitSpecification {
         // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
         // and related to https://github.com/gradle/gradle/issues/6610
         given:
-        buildFile << buildFilePublishingWith(publishingWith, true, require, prefer)
+        buildFile << buildFilePublishingWith(publishingWith, true, require, prefer, requireAndPreferInSameDependencyBlock)
         settingsFile << "rootProject.name = '$first'"
 
         settingsFile << """
@@ -229,14 +240,28 @@ class RequirePreferSpec extends TestKitSpecification {
         docWriter.addAssertionToDoc("$preferedVersionInMetadata: Published Gradle metadata contains prefer version '$prefer")
         assert publishedGradleMetadata.text.contains(prefer) == preferedVersionInGradleMetadata
 
+        if (require != null) {
+            docWriter.addAssertionToDoc("Published $publishingWith metadata contains range '$require")
+            assert publishedMetadata.text.contains(require)
+
+            docWriter.addAssertionToDoc("Published Gradle metadata contains range '$require")
+            assert publishedGradleMetadata.text.contains(require)
+        }
+
         docWriter.writeFooter('completed assertions')
 
         where:
-        publishingWith | prefer | require      | preferedVersionInMetadata | preferedVersionInGradleMetadata | title
-        'maven'        | '1.5'  | '[1.2, 2.0)' | false                     | false                           | 'contains a range'
-        'maven'        | '1.5'  | null         | true                      | true                            | 'contains prefer when require is blank'
-        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                     | false                           | 'contains a range'
-        'ivy'          | '1.5'  | null         | true                      | true                            | 'contains prefer when require is blank'
+        publishingWith | prefer | require      | requireAndPreferInSameDependencyBlock | preferedVersionInMetadata | preferedVersionInGradleMetadata | title
+// defined in the same dependency block
+        'maven'        | '1.5'  | '[1.2, 2.0)' | true                                  | false                     | false                           | 'when in same block contains only range'
+        'maven'        | '1.5'  | null         | true                                  | true                      | true                            | 'when in same block contains prefer when require is blank'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | true                                  | false                     | false                           | 'when in same block contains only range'
+        'ivy'          | '1.5'  | null         | true                                  | true                      | true                            | 'when in same block contains prefer when require is blank'
+// not in the same dependency block
+        'maven'        | '1.5'  | '[1.2, 2.0)' | false                                 | true                      | true                            | 'when in different blocks contains prefer and range'
+        'maven'        | '1.5'  | null         | false                                 | true                      | true                            | 'when in different blocks contains only prefer'
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | false                                 | true                      | true                            | 'when in different blocks contains prefer and range'
+        'ivy'          | '1.5'  | null         | false                                 | true                      | true                            | 'when in different blocks contains only prefer'
     }
 
     private static def createBom(String depVersion) {
@@ -297,7 +322,7 @@ repositories {
 """
     }
 
-    private def buildFilePublishingWith(String publishingWith, boolean enableGradleMetadata, String require1, String prefer1) {
+    private def buildFilePublishingWith(String publishingWith, boolean enableGradleMetadata, String require1, String prefer1, boolean sameDependencyBlock) {
         def compConfig = ''
         if (enableGradleMetadata) {
             compConfig = """
@@ -342,16 +367,27 @@ comp.usages.add(new TestUsage(
         def publicationsFrom = enableGradleMetadata ? 'comp' : 'components.java'
 
         if (publishingWith == 'ivy') {
-            return buildFilePublishingWithIvy(compConfig, publicationsFrom, require1, prefer1)
+            return buildFilePublishingWithIvy(compConfig, publicationsFrom, require1, prefer1, sameDependencyBlock)
         }
-        return buildFilePublishingWithMaven(compConfig, publicationsFrom, require1, prefer1)
+        return buildFilePublishingWithMaven(compConfig, publicationsFrom, require1, prefer1, sameDependencyBlock)
     }
 
-    private def buildFilePublishingWithMaven(String compConfig, String publicationsFrom, String require1, String prefer1) {
+    private def buildFilePublishingWithMaven(String compConfig, String publicationsFrom, String require1, String prefer1, boolean sameDependencyBlock) {
         def requireBlock = ''
+        def requireStatement = ''
         if (require1 != null) {
-            requireBlock = "\n            require '${require1}'"
+            if (sameDependencyBlock) {
+                requireStatement = "\n            require '$require1'"
+            } else {
+                requireBlock = """
+    api ('$group:$dep') {
+        version {
+            require '${require1}'
         }
+    }"""
+            }
+        }
+
         """
 plugins {
     id 'java-library'
@@ -364,10 +400,11 @@ $compConfig
 
 dependencies {
     api ('$group:$dep') {
-        version {$requireBlock
-            prefer '${prefer1}'
+        version {
+            prefer '${prefer1}'$requireStatement
         }
     }
+    $requireBlock
 }
 
 repositories {
@@ -391,10 +428,20 @@ publishing {
 """
     }
 
-    private def buildFilePublishingWithIvy(String compConfig, String publicationsFrom, String require1, String prefer1) {
+    private def buildFilePublishingWithIvy(String compConfig, String publicationsFrom, String require1, String prefer1, boolean sameDependencyBlock) {
         def requireBlock = ''
+        def requireStatement = ''
         if (require1 != null) {
-            requireBlock = "\n            require '${require1}'"
+            if (sameDependencyBlock) {
+                requireStatement = "\n            require '$require1'"
+            } else {
+                requireBlock = """
+    api ('$group:$dep') {
+        version {
+            require '${require1}'
+        }
+    }"""
+            }
         }
 
         """
@@ -413,10 +460,11 @@ $compConfig
 
 dependencies {
     api ("$group:$dep") {
-        version {$requireBlock
-            prefer '$prefer1'
+        version {
+            prefer '$prefer1'$requireStatement
         }
     }
+    $requireBlock
 }
 
 repositories {
@@ -612,4 +660,5 @@ repositories {
 
         docWriter.writeFooter('completed assertions')
     }
+
 }

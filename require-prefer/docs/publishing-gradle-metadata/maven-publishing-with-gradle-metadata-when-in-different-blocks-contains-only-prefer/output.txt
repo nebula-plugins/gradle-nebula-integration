@@ -1,0 +1,51 @@
+=== Using Gradle version ===
+5.0-20180930235830+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: maven publishing with gradle metadata when in different blocks contains only prefer
+Preferred version(s): 1.5, null
+
+Publishing maven metadata:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tree</groupId>
+  <artifactId>blue-palo-verde</artifactId>
+  <version>1.0</version>
+  <packaging>pom</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>tree</groupId>
+      <artifactId>acacia</artifactId>
+      <version>1.5</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+</project>
+
+
+Publishing Gradle metadata snippet:
+
+      dependencies ": [
+        {
+          "group": "tree",
+          "module": "acacia",
+          "version": {
+            "prefers": "1.5"
+          }
+        }
+      ]
+    }
+  ]
+}
+
+
+
+=== Asserting on... ===
+- true: Published maven metadata contains prefer version '1.5
+- true: Published Gradle metadata contains prefer version '1.5
+
+completed assertions

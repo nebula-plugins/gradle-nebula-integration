@@ -1,0 +1,3 @@
+rootProject.name = 'blue-palo-verde'
+enableFeaturePreview('GRADLE_METADATA')
+enableFeaturePreview('STABLE_PUBLISHING')
