@@ -264,6 +264,70 @@ class RequirePreferSpec extends TestKitSpecification {
         'ivy'          | '1.5'  | null         | false                                 | true                      | true                            | 'when in different blocks contains only prefer'
     }
 
+    @Unroll
+    def "consuming published dependencies from #publishingWith with prefer"() {
+        given:
+        buildFile << buildFilePublishingWith(publishingWith, false, require, prefer, requireAndPreferInSameDependencyBlock)
+        settingsFile << "rootProject.name = '$first'"
+
+        when:
+        def insightResultForProducer = runTasks('dependencyInsight', '--dependency', dep)
+        runTasks('publish')
+
+        then:
+        !insightResultForProducer.output.contains('FAILED')
+
+        when:
+        buildFile.delete()
+        buildFile.createNewFile()
+        buildFile <<
+                """
+plugins {
+    id 'java-library'
+}
+
+group '$group'
+version '1.0'
+
+dependencies {
+    api '$group:$first:$publishedVersion'
+}
+
+repositories {
+    maven { url '${mavenRepo.absolutePath}' }
+    maven { url { 'maven-repo' } }
+    ivy { url { 'ivy-repo' } }
+}
+"""
+        settingsFile.delete()
+        settingsFile.createNewFile()
+        settingsFile << "rootProject.name = '$second'"
+
+        def insightResultForConsumer = runTasks('dependencyInsight', '--dependency', dep)
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'consuming')
+
+        def outputToWrite = "Dependency insight:\n\n${insightResultForConsumer.output}"
+        writeRelevantOutput(docWriter, outputToWrite, prefer, null)
+
+        File publishedMetadata = publishedMetadata(publishingWith)
+
+        then:
+        !insightResultForConsumer.output.contains('FAILED')
+
+        docWriter.addAssertionToDoc("Published first order dependency $publishingWith metadata contains prefer version '$prefer'")
+        assert publishedMetadata.text.contains(prefer)
+
+        docWriter.addAssertionToDoc("Transitive dependency version resolves to preferred version in first order dependency: '$prefer'")
+        assert insightResultForConsumer.output.contains(prefer)
+
+        docWriter.writeFooter('completed assertions')
+
+        where:
+        publishingWith | prefer | require      | requireAndPreferInSameDependencyBlock
+        'maven'        | '1.5'  | '[1.2, 2.0)' | false
+        'ivy'          | '1.5'  | '[1.2, 2.0)' | false
+    }
+
     private static def createBom(String depVersion) {
         repo.mkdirs()
 
