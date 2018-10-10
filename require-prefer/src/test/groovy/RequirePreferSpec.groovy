@@ -39,6 +39,38 @@ class RequirePreferSpec extends TestKitSpecification {
     }
 
     @Unroll
+    def "dependency insight #title"() {
+        given:
+        buildFile << buildFileWithDependencyVersions(require, prefer)
+
+        when:
+        def result = runTasks(*tasks)
+
+        and:
+        DocWriter docWriter = new DocWriter(methodName, projectDir, 'dependency-insight')
+        writeRelevantOutput(docWriter, result.output, prefer, null)
+
+        then:
+        def selectedVersion = "$group:$dep:$resolvesTo\n"
+        docWriter.addAssertionToDoc("Selected version as: '$selectedVersion'")
+        assert result.output.contains(selectedVersion)
+
+        if (prefer != null) {
+            def firstReasonResultingVersion = "$prefer preferred"
+            docWriter.addAssertionToDoc("Indicates preferred version with '$firstReasonResultingVersion'")
+            assert result.output.contains(firstReasonResultingVersion)
+        }
+
+        docWriter.writeFooter('completed assertions')
+
+        where:
+        prefer | require      | resolvesTo | title
+        '1.5'  | '[1.2, 2.0)' | '1.5'      | 'should show info about prefer'
+        null   | '[1.2, 2.0)' | '1.9'      | 'without prefer resolves to highest in range'
+    }
+
+
+    @Unroll
     def "prefer #doesWhat when #title"() {
         given:
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))

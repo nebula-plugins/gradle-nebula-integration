@@ -1,0 +1,31 @@
+=== Using Gradle version ===
+5.0-20181004235847+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: dependency insight should show info about prefer
+Preferred version(s): 1.5, null
+
+
+> Task :dependencyInsight
+tree:acacia:1.5
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+
+tree:acacia:[1.2, 2.0) -> 1.5
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Selected version as: 'tree:acacia:1.5
+'
+- Indicates preferred version with '1.5 preferred'
