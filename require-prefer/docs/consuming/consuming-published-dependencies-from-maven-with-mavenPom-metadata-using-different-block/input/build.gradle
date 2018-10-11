@@ -1,0 +1,18 @@
+
+plugins {
+    id 'java-library'
+}
+
+group 'tree'
+version '1.0'
+
+dependencies {
+    api 'tree:blue-palo-verde:1.0'
+}
+
+repositories {
+    maven { 
+        url { 'maven-repo' }
+        metadataSources { mavenPom() } 
+    }
+}

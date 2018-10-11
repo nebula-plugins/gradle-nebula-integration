@@ -1,0 +1,38 @@
+
+plugins {
+    id 'java-library'
+    id 'ivy-publish'
+}
+group 'tree'
+version '1.0'
+publishing {
+    repositories {
+        ivy { url 'ivy-repo' }
+    }
+    publications {
+        
+        ivy(IvyPublication) {
+            from components.java
+        }  
+    }
+}
+
+dependencies {
+    api ('tree:acacia') {
+        version {
+            prefer '1.5'
+        }
+    }
+    
+    api ('tree:acacia') {
+        version {
+            require '[1.2, 2.0)'
+        }
+    }
+}
+repositories {
+    ivy { 
+        url { 'ivy-repo' }
+        metadataSources { ivyDescriptor() } 
+    }
+}

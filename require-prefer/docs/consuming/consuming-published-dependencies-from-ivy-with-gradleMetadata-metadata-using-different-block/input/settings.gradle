@@ -1,0 +1,2 @@
+rootProject.name='coast-redwood'
+enableFeaturePreview('GRADLE_METADATA')

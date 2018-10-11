@@ -1,0 +1,38 @@
+=== Using Gradle version ===
+5.0-20181004235847+0000
+
+Tasks: dependencyInsight --dependency acacia
+
+Scenario: consuming published dependencies from maven with gradleMetadata metadata using different block
+Preferred version(s): 1.5, null
+
+Dependency insight:
+
+
+> Task :dependencyInsight
+tree:acacia:1.5
+   variant "api" [
+      org.gradle.usage  = java-api
+      org.gradle.status = release (not requested)
+   ]
+
+tree:acacia:1.5
+\--- tree:blue-palo-verde:1.0
+     \--- compileClasspath
+
+tree:acacia:[1.2, 2.0) -> 1.5
+\--- tree:blue-palo-verde:1.0
+     \--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
+
+=== Asserting on... ===
+- Published first order dependency maven metadata contains prefer version '1.5'
+- Transitive dependency version resolves to preferred version in first order dependency: '1.5'
+
+completed assertions

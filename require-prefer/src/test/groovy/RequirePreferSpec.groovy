@@ -22,19 +22,8 @@ import org.assertj.core.util.Lists
 import org.gradle.testkit.runner.BuildResult
 import spock.lang.Unroll
 
-class RequirePreferSpec extends TestKitSpecification {
-    static final String dep = 'acacia'
-    static final String first = 'blue-palo-verde'
-    static final String second = 'coast-redwood'
-    static final String publishedVersion = '1.0'
-    static final String group = 'tree'
-
-    static File repo
-    static File mavenRepo
-    def tasks = ['dependencyInsight', '--dependency', "$dep"]
-
+class RequirePreferSpec extends AbstractRequirePreferSpec {
     def setupSpec() {
-        repo = new File('repo')
         setupDependenciesInLocalRepo()
     }
 
@@ -68,7 +57,6 @@ class RequirePreferSpec extends TestKitSpecification {
         '1.5'  | '[1.2, 2.0)' | '1.5'      | 'should show info about prefer'
         null   | '[1.2, 2.0)' | '1.9'      | 'without prefer resolves to highest in range'
     }
-
 
     @Unroll
     def "prefer #doesWhat when #title"() {
@@ -203,7 +191,7 @@ class RequirePreferSpec extends TestKitSpecification {
 
         and:
         DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing')
-        File publishedMetadata = publishedMetadata(publishingWith)
+        File publishedMetadata = publishedIvyOrMavenMetadata(projectDir, publishingWith, AbstractRequirePreferSpec.@first, AbstractRequirePreferSpec.@publishedVersion)
 
         def outputToWrite = "Publishing $publishingWith metadata:\n\n${publishedMetadata.text}"
         writeRelevantOutput(docWriter, outputToWrite, prefer, null)
@@ -254,8 +242,8 @@ class RequirePreferSpec extends TestKitSpecification {
 
         and:
         DocWriter docWriter = new DocWriter(methodName, projectDir, 'publishing-gradle-metadata')
-        File publishedMetadata = publishedMetadata(publishingWith)
-        File publishedGradleMetadata = publishedGradleMetadata(publishingWith)
+        File publishedMetadata = publishedIvyOrMavenMetadata(projectDir, publishingWith, first, publishedVersion)
+        File publishedGradleMetadata = publishedGradleMetadata(projectDir, publishingWith, first, publishedVersion)
 
         def outputToWrite = "Publishing $publishingWith metadata:\n\n" +
                 "${publishedMetadata.text}\n\n" +
@@ -296,399 +284,12 @@ class RequirePreferSpec extends TestKitSpecification {
         'ivy'          | '1.5'  | null         | false                                 | true                      | true                            | 'when in different blocks contains only prefer'
     }
 
-    @Unroll
-    def "consuming published dependencies from #publishingWith with prefer"() {
-        given:
-        buildFile << buildFilePublishingWith(publishingWith, false, require, prefer, requireAndPreferInSameDependencyBlock)
-        settingsFile << "rootProject.name = '$first'"
-
-        when:
-        def insightResultForProducer = runTasks('dependencyInsight', '--dependency', dep)
-        runTasks('publish')
-
-        then:
-        !insightResultForProducer.output.contains('FAILED')
-
-        when:
-        buildFile.delete()
-        buildFile.createNewFile()
-        buildFile <<
-                """
-plugins {
-    id 'java-library'
-}
-
-group '$group'
-version '1.0'
-
-dependencies {
-    api '$group:$first:$publishedVersion'
-}
-
-repositories {
-    maven { url '${mavenRepo.absolutePath}' }
-    maven { url { 'maven-repo' } }
-    ivy { url { 'ivy-repo' } }
-}
-"""
-        settingsFile.delete()
-        settingsFile.createNewFile()
-        settingsFile << "rootProject.name = '$second'"
-
-        def insightResultForConsumer = runTasks('dependencyInsight', '--dependency', dep)
-        DocWriter docWriter = new DocWriter(methodName, projectDir, 'consuming')
-
-        def outputToWrite = "Dependency insight:\n\n${insightResultForConsumer.output}"
-        writeRelevantOutput(docWriter, outputToWrite, prefer, null)
-
-        File publishedMetadata = publishedMetadata(publishingWith)
-
-        then:
-        !insightResultForConsumer.output.contains('FAILED')
-
-        docWriter.addAssertionToDoc("Published first order dependency $publishingWith metadata contains prefer version '$prefer'")
-        assert publishedMetadata.text.contains(prefer)
-
-        docWriter.addAssertionToDoc("Transitive dependency version resolves to preferred version in first order dependency: '$prefer'")
-        assert insightResultForConsumer.output.contains(prefer)
-
-        docWriter.writeFooter('completed assertions')
-
-        where:
-        publishingWith | prefer | require      | requireAndPreferInSameDependencyBlock
-        'maven'        | '1.5'  | '[1.2, 2.0)' | false
-        'ivy'          | '1.5'  | '[1.2, 2.0)' | false
-    }
-
     private static def createBom(String depVersion) {
         repo.mkdirs()
 
         def localBom = new Pom('sample', 'bom', '1.0.0', ArtifactType.POM)
         localBom.addManagementDependency(group, dep, depVersion)
         ArtifactHelpers.setupSamplePomWith(mavenRepo, localBom, localBom.generate())
-    }
-
-    private static def simpleParentMultiProjectBuildFile(boolean shouldUseFirstProject) {
-        def firstProject = ''
-        if (shouldUseFirstProject) {
-            firstProject = "compile project(':$first')"
-        }
-
-        """
-apply plugin: 'java'
-
-repositories {
-    maven { url { '${mavenRepo.absolutePath}' } }
-}
-
-dependencies {
-    $firstProject
-    compile project(':$second')
-}"""
-    }
-
-    private static def buildFileWithDependencyVersions(String requireVersion, String preferVersion) {
-        assert requireVersion != null
-
-        def preferConfiguration = ''
-        if (preferVersion != null) {
-            preferConfiguration = "prefer '$preferVersion'"
-        }
-
-        """
-plugins {
-    id 'java-library'
-}
-
-group '$group'
-version '1.0'
-
-dependencies {
-    api ('$group:$dep') {
-        version {
-            require '$requireVersion'
-            $preferConfiguration
-        }
-    }
-}
-
-repositories {
-    maven { url { '${mavenRepo.absolutePath}' } }
-}
-"""
-    }
-
-    private def buildFilePublishingWith(String publishingWith, boolean enableGradleMetadata, String require1, String prefer1, boolean sameDependencyBlock) {
-        def compConfig = ''
-        if (enableGradleMetadata) {
-            compConfig = """
-// TODO - use public APIs when available
-class TestComponent implements org.gradle.api.internal.component.SoftwareComponentInternal, ComponentWithVariants {
-    String name
-    Set usages = []
-    Set variants = []
-}
-
-class TestUsage implements org.gradle.api.internal.component.UsageContext {
-    String name
-    Usage usage
-    Set dependencies = []
-    Set dependencyConstraints = []
-    Set artifacts = []
-    Set capabilities = []
-    Set globalExcludes = []
-    AttributeContainer attributes
-}
-
-class TestVariant implements org.gradle.api.internal.component.SoftwareComponentInternal {
-    String name
-    Set usages = []
-}
-
-class TestCapability implements Capability {
-    String group
-    String name
-    String version
-}
-
-def comp = new TestComponent()
-comp.usages.add(new TestUsage(
-                    name: 'api',
-                    usage: objects.named(Usage, 'api'),
-                    dependencies: configurations.implementation.allDependencies,
-                    attributes: configurations.implementation.attributes))
-"""
-        }
-
-        def publicationsFrom = enableGradleMetadata ? 'comp' : 'components.java'
-
-        if (publishingWith == 'ivy') {
-            return buildFilePublishingWithIvy(compConfig, publicationsFrom, require1, prefer1, sameDependencyBlock)
-        }
-        return buildFilePublishingWithMaven(compConfig, publicationsFrom, require1, prefer1, sameDependencyBlock)
-    }
-
-    private def buildFilePublishingWithMaven(String compConfig, String publicationsFrom, String require1, String prefer1, boolean sameDependencyBlock) {
-        def requireBlock = ''
-        def requireStatement = ''
-        if (require1 != null) {
-            if (sameDependencyBlock) {
-                requireStatement = "\n            require '$require1'"
-            } else {
-                requireBlock = """
-    api ('$group:$dep') {
-        version {
-            require '${require1}'
-        }
-    }"""
-            }
-        }
-
-        """
-plugins {
-    id 'java-library'
-    id 'maven-publish'
-}
-
-group '$group'
-version '$publishedVersion'
-$compConfig
-
-dependencies {
-    api ('$group:$dep') {
-        version {
-            prefer '${prefer1}'$requireStatement
-        }
-    }
-    $requireBlock
-}
-
-repositories {
-    maven { url { '${mavenRepo.absolutePath}' } }
-}
-
-publishing {
-    repositories {
-        maven { url '${projectDir.absolutePath + File.separator + 'maven-repo'}' }
-    }
-    publications {
-        maven(MavenPublication) {
-            groupId = '$group'
-            artifactId = '$first'
-            version = '1.0'
-
-            from ${publicationsFrom}
-        }
-    }
-}
-"""
-    }
-
-    private def buildFilePublishingWithIvy(String compConfig, String publicationsFrom, String require1, String prefer1, boolean sameDependencyBlock) {
-        def requireBlock = ''
-        def requireStatement = ''
-        if (require1 != null) {
-            if (sameDependencyBlock) {
-                requireStatement = "\n            require '$require1'"
-            } else {
-                requireBlock = """
-    api ('$group:$dep') {
-        version {
-            require '${require1}'
-        }
-    }"""
-            }
-        }
-
-        """
-plugins {
-    id 'java-library'
-    id 'ivy-publish'
-}
-
-allprojects {
-    configurations { implementation }
-}
-
-group = '$group'
-version = '$publishedVersion'
-$compConfig
-
-dependencies {
-    api ("$group:$dep") {
-        version {
-            prefer '$prefer1'$requireStatement
-        }
-    }
-    $requireBlock
-}
-
-repositories {
-    maven { url { '${mavenRepo.absolutePath}' } }
-}
-
-publishing {
-    repositories {
-        ivy { url '${projectDir.absolutePath + File.separator + 'ivy-repo'}' }
-    }
-    publications {
-        ivy(IvyPublication) {
-            from ${publicationsFrom}
-        }
-    }
-}
-"""
-    }
-
-    private static void setupDependenciesInLocalRepo() {
-        repo.mkdirs()
-        mavenRepo = new File(repo, 'maven-repo')
-        mavenRepo.mkdirs()
-
-        for (def major in 1..2) {
-            for (def minor in 0..9) {
-                setupLocalDependency(dep, "$major.$minor", Collections.emptyMap())
-            }
-        }
-        def mavenMetadata = new File(mavenRepo, group + File.separator + dep + File.separator + 'maven-metadata.xml')
-        mavenMetadata.mkdirs()
-        mavenMetadata.delete()
-
-        def versions = ''
-        for (def major in 1..2) {
-            for (def minor in 0..9) {
-                versions += "\n            <version>${major}.${minor}</version>"
-            }
-        }
-
-        mavenMetadata << """<?xml version="1.0" encoding="UTF-8"?>
-<metadata>
-    <groupId>tree</groupId>
-    <artifactId>blue-palo-verde</artifactId>
-    <versioning>
-        <release>1.0</release>
-        <versions>$versions
-        </versions>
-        <lastUpdated>20181005164307</lastUpdated>
-    </versioning>
-</metadata>
-"""
-    }
-
-    private static void setupLocalDependency(String artifactName, String version, Map<String, String> dependencies) {
-        def group = 'tree'
-        def pom = new Pom(group, artifactName, version)
-        for (Map.Entry<String, String> entry : dependencies) {
-            pom.addDependency(group, entry.key, entry.value)
-        }
-        ArtifactHelpers.setupSamplePomWith(mavenRepo, pom, pom.generate())
-    }
-
-    private def writeRelevantOutput(DocWriter docWriter, String output, String prefer1, String prefer2) {
-        docWriter.writeProjectFiles()
-        docWriter.writeGradleVersion(project.gradle.gradleVersion)
-        docWriter.writeCleanedUpBuildOutput(
-                "Tasks: ${String.join(' ', tasks)}\n\n" +
-                        "Scenario: ${testName.methodName}\n" +
-                        "Preferred version(s): $prefer1, $prefer2\n\n" +
-                        "${output}\n\n")
-    }
-
-    private def addSubprojectUsingABomAndPreference(String bomVersion, String prefer) {
-        def preferInSubproject = ''
-        if (prefer != '') {
-            preferInSubproject = "prefer '$bomVersion'"
-        }
-        addSubproject(second, """
-plugins {
-    id 'java-library'
-}
-
-group '$group'
-version '1.0'
-
-dependencies {
-    api platform('sample:bom:1.0.0')
-    api '$group:$dep'
-    api ('$group:$dep') {
-        version {
-            $preferInSubproject
-        }
-    }
-}
-
-repositories {
-    maven { url '${mavenRepo.absolutePath}' }
-}
-""")
-    }
-
-    private File publishedGradleMetadata(String publishingWith) {
-        if (publishingWith == 'ivy') {
-            return new File(ivyArtifactPath(), "${first}-${publishedVersion}.module")
-        }
-        return new File(mavenArtifactPath(), "${first}-${publishedVersion}.module")
-    }
-
-    private File publishedMetadata(String publishingWith) {
-        if (publishingWith == 'ivy') {
-            return new File(ivyArtifactPath(), 'ivy' + '-' + publishedVersion + '.xml')
-        }
-        return new File(mavenArtifactPath(), first + '-' + publishedVersion + '.pom')
-    }
-
-    private String ivyArtifactPath() {
-        new File(projectDir, 'ivy-repo' + File.separator +
-                group + File.separator +
-                first + File.separator +
-                publishedVersion + File.separator)
-    }
-
-    private String mavenArtifactPath() {
-        new File(projectDir, 'maven-repo' + File.separator +
-                group + File.separator +
-                first + File.separator +
-                publishedVersion + File.separator)
     }
 
     private static void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {

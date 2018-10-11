@@ -27,7 +27,7 @@ repositories {
 
 publishing {
     repositories {
-        ivy { url 'ivy-repo' }
+        ivy { url { 'ivy-repo' } }
     }
     publications {
         ivy(IvyPublication) {

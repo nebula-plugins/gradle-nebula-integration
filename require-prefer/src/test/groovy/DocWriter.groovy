@@ -60,20 +60,35 @@ class DocWriter {
 """.stripIndent()
     }
 
-    void writeProjectFiles() {
-        def destinationDir = new File(depFolder, 'input')
+    void writeProjectFiles(String optionalFolderDecorator = null, onlyWriteGradleFiles = false) {
+        def childFolderName = optionalFolderDecorator == null ? 'input' : "input-$optionalFolderDecorator"
+        def destinationDir = new File(depFolder, childFolderName)
         destinationDir.deleteDir()
         destinationDir.mkdirs()
 
-        FileFilter notGradleFiles = new NotFileFilter(new NameFileFilter('.gradle'))
-        FileFilter notUserHomeFiles = new NotFileFilter(new NameFileFilter('userHome'))
-        def fileFilters = new ArrayList<IOFileFilter>()
-        fileFilters.add(notGradleFiles)
-        fileFilters.add(notUserHomeFiles)
+        if (onlyWriteGradleFiles) {
+            FileFilter gradleSuffixFilter = new SuffixFileFilter('.gradle')
+            FileFilter notHiddenGradleFiles = new NotFileFilter(new NameFileFilter('.gradle'))
+            def fileFilters = new ArrayList<IOFileFilter>()
+            fileFilters.add(gradleSuffixFilter)
+            fileFilters.add(notHiddenGradleFiles)
 
-        FileFilter combinationFilter = new AndFileFilter(fileFilters)
+            FileFilter combinationFilter = new AndFileFilter(fileFilters)
 
-        FileUtils.copyDirectory(projectDir, destinationDir, combinationFilter)
+            FileUtils.copyDirectory(projectDir, destinationDir, combinationFilter)
+        } else {
+            FileFilter notHiddenGradleFiles = new NotFileFilter(new NameFileFilter('.gradle'))
+            FileFilter notUserHomeFiles = new NotFileFilter(new NameFileFilter('userHome'))
+            FileFilter notBuildFiles = new NotFileFilter(new NameFileFilter('build'))
+            def fileFilters = new ArrayList<IOFileFilter>()
+            fileFilters.add(notHiddenGradleFiles)
+            fileFilters.add(notUserHomeFiles)
+            fileFilters.add(notBuildFiles)
+
+            FileFilter combinationFilter = new AndFileFilter(fileFilters)
+
+            FileUtils.copyDirectory(projectDir, destinationDir, combinationFilter)
+        }
 
         def buildFile = new File(destinationDir, 'build.gradle')
         buildFile.text = buildFile.text.replaceAll("'.*/repo", "'../../../../repo")
@@ -85,7 +100,7 @@ class DocWriter {
             def directory = new File(destinationDir, dirName)
             replacePathForRepo(directory)
             makeLastUpdatedTimestampConsistent(directory)
-            makeBuildIdConsistent(directory)
+            makeBuildIdSha1AndMD5Consistent(directory)
         }
     }
 
@@ -105,10 +120,13 @@ class DocWriter {
         }
     }
 
-    private static void makeBuildIdConsistent(File directory) {
+    private static void makeBuildIdSha1AndMD5Consistent(File directory) {
         def moduleFiles = FileUtils.listFiles(directory, new SuffixFileFilter('.module'), TrueFileFilter.INSTANCE)
         for (File moduleFile : moduleFiles) {
-            moduleFile.text = moduleFile.text.replaceAll("\"buildId\": \".*\"", "\"buildId\": \"aaaaabbbbbcccccdddddeeeeef\"")
+            moduleFile.text = moduleFile.text
+                    .replaceAll("\"buildId\": \".*\"", "\"buildId\": \"aaaaabbbbbcccccdddddeeeeef\"")
+                    .replaceAll("\"sha1\": \".*\"", "\"sha1\": \"0123456789012345678901234567890123456789\"")
+                    .replaceAll("\"md5\": \".*\"", "\"md5\": \"01234567890123456789012345678901\"")
         }
     }
 

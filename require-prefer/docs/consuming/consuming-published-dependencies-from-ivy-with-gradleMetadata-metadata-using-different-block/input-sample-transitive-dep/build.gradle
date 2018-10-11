@@ -1,0 +1,18 @@
+
+plugins {
+    id 'java-library'
+    id 'ivy-publish'
+}
+group 'tree'
+version '1.0'
+publishing {
+    repositories {
+        ivy { url 'ivy-repo' }
+    }
+    publications {
+        
+        ivy(IvyPublication) {
+            from components.java
+        }  
+    }
+}

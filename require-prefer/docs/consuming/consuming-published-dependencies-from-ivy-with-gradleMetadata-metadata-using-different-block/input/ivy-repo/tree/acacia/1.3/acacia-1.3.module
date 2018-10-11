@@ -1,0 +1,49 @@
+{
+  "formatVersion": "0.4",
+  "component": {
+    "group": "tree",
+    "module": "acacia",
+    "version": "1.3",
+    "attributes": {
+      "org.gradle.status": "integration"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "5.0-20181004235847+0000",
+      "buildId": "aaaaabbbbbcccccdddddeeeeef"
+    }
+  },
+  "variants": [
+    {
+      "name": "runtime",
+      "attributes": {
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "acacia-1.3.jar",
+          "url": "acacia-1.3.jar",
+          "size": 261,
+          "sha1": "0123456789012345678901234567890123456789",
+          "md5": "01234567890123456789012345678901"
+        }
+      ]
+    },
+    {
+      "name": "api",
+      "attributes": {
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "acacia-1.3.jar",
+          "url": "acacia-1.3.jar",
+          "size": 261,
+          "sha1": "0123456789012345678901234567890123456789",
+          "md5": "01234567890123456789012345678901"
+        }
+      ]
+    }
+  ]
+}
