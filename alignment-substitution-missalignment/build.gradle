@@ -1,0 +1,28 @@
+apply plugin: "java"
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'repo'
+    }
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution.all {
+        if (it.requested.group.startsWith("com.google.inject") && it.requested.version.startsWith("4.2")) {
+            it.useTarget("${it.requested.group}:${it.requested.module}:4.1.0")
+        }
+    }
+}
+
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.group.startsWith('com.google.inject')) {
+            details.belongsTo("aligned-platform:guice:${details.id.version}")
+        }
+    }
+    //at the time of writing resolves to 4.2.1
+    compile "com.google.inject:guice:4.+"
+    compile "sample:module:1.0"
+}
+
