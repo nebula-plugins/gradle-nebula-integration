@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+configurations.all {
+  resolutionStrategy {
+    force 'com.fasterxml.jackson.core:jackson-databind:2.8.11.1'
+  }
+}
+
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.group.startsWith('com.fasterxml.jackson')) {
+            details.belongsTo("aligned-platform:jackson:${details.id.version}")
+        }
+    }
+    compile 'com.amazonaws:aws-java-sdk:1.11.438'
+}
