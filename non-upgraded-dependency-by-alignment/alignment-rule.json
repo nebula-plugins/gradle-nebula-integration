@@ -1,0 +1,18 @@
+{
+    "align": [
+        {
+            "name": "exampleapp-client-align",
+            "group": "netflix",
+            "includes": [ "exampleapp-.*" ],
+            "excludes": [],
+            "reason": "Library all together",
+            "author": "example@example.com",
+            "date": "2018-03-01"
+        }
+    ],
+    "deny": [],
+    "exclude": [],
+    "reject": [],
+    "replace": [],
+    "substitute": []
+}
