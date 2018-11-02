@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20180930235830+0000
+5.0-20181102000033+0000
 
 === For the dependency under test: slf4j-api as a direct dependency ===
 Tasks: dependencyInsight --dependency slf4j-api --warning-mode all
@@ -14,7 +14,6 @@ org.slf4j:slf4j-api:1.5.0
    ]
    Selection reasons:
       - Forced
-      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.20
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
 
 org.slf4j:slf4j-api:1.5.0
@@ -43,7 +42,6 @@ org.slf4j:slf4j-simple:1.5.0
       org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
-      - By constraint : belongs to platform org.slf4j:slf4j-platform:1.7.20
       - By constraint : belongs to platform org.slf4j:slf4j-platform:1.5.0
       - Forced
 

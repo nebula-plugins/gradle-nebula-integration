@@ -70,7 +70,7 @@ class Main {
     }
 
     void createSettingsFile() {
-        settingsFile << 'enableFeaturePreview(\'IMPROVED_POM_SUPPORT\')\n'
+        settingsFile << '\n'
     }
 
     void createLocksIfNeeded(Boolean lockVersion) {
