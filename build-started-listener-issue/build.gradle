@@ -1,0 +1,15 @@
+plugins {
+    id 'nebula.plugin-plugin' version '9.0.0'
+    id "groovy"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    testImplementation 'com.netflix.nebula:nebula-test:7.+'
+
+}
