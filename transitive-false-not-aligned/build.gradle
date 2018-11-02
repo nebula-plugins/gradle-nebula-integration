@@ -1,0 +1,31 @@
+apply plugin: 'java'
+
+repositories {
+	ivy {
+		url = 'repos/ivy'
+		layout 'pattern', {
+            m2compatible = true
+            ivy '[organisation]/[module]/[revision]/[module]-[revision]-ivy.[ext]'
+            artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+        }
+	}
+    jcenter()
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.netflix.governator:governator-core:1.17.5'
+    }
+}
+
+dependencies {
+    components.all { ComponentMetadataDetails details ->
+        details.statusScheme = ['snapshot', 'integration', 'candidate', 'release']
+    }
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.name.startsWith('governator')) {
+            details.belongsTo("aligned-platform:governator:${details.id.version}")
+        }
+    }
+    compile 'netflix:library:latest.candidate'
+}
