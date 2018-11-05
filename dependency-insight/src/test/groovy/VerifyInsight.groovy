@@ -260,13 +260,20 @@ class VerifyInsight extends AbstractVerifyInsight {
                 w.addAssertionToDoc("contains '$expectedFinalVersion' [substitute & recommended]")
                 assert output.contains(expectedFinalVersion)
 
-                def expectedOutput = 'By conflict resolution : between versions '
-                w.addAssertionToDoc("contains '$expectedOutput' [substitute & recommended]")
-                assert output.contains(expectedOutput)
-
                 def bomDependencyConstraint = '\\--- sample:bom:1.0.0'
                 w.addAssertionToDoc("contains '$bomDependencyConstraint' [bom dependency constraint - recommended]")
                 assert output.contains(bomDependencyConstraint)
+
+                def recommendationIsAppliedOnSubstitutedTowardsDependency = false
+                def conflictResolutionOutput = 'By conflict resolution : between versions '
+                if (recommendationIsAppliedOnSubstitutedTowardsDependency) {
+//                  TODO: write this test case
+                    w.addAssertionToDoc("contains '$conflictResolutionOutput' [substitute & recommended]")
+                    assert output.contains(conflictResolutionOutput)
+                } else {
+                    w.addAssertionToDoc("does not contain '$conflictResolutionOutput' [substitute & recommended]")
+                    assert !output.contains(conflictResolutionOutput)
+                }
 
             } else {
                 def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]}:${dh.dynamicVersion} -> ${expected}"
