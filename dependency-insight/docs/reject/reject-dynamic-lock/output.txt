@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20181102000033+0000
+5.1-20181102000039+0000
 
 === For the dependency under test ===
 Tasks: dependencyInsight --dependency guava --warning-mode all --write-locks
@@ -14,8 +14,8 @@ com.google.guava:guava:16.0
       org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
-      - Was requested : didn't match versions 27.0-jre, 27.0-android, 26.0-jre, 26.0-android, 25.1-jre, 25.1-android, 25.0-jre, 25.0-android, 24.1.1-jre, 24.1.1-android, 24.1-jre, 24.1-android, 24.0-jre, 24.0-android, 23.6.1-jre, 23.6.1-android, 23.6-jre, 23.6-android, 23.5-jre, 23.5-android, 23.4-jre, 23.4-android, 23.3-jre, 23.3-android, 23.2-jre, 23.2-android, 23.1-jre, 23.1-android, 23.0, 23.0-rc1, 23.0-rc1-android, 23.0-android, 22.0, 22.0-rc1, 22.0-rc1-android, 22.0-android, 21.0, 21.0-rc2, 21.0-rc1, 20.0, 20.0-rc1, 19.0, 19.0-rc3, 19.0-rc2, 19.0-rc1, 18.0, 18.0-rc2, 18.0-rc1, 17.0, 17.0-rc2, 17.0-rc1
       - Rejection : 16.0.1 by rule because ✭ rejection of com.google.guava:guava:16.0.1
+      - Was requested : didn't match versions 27.0-jre, 27.0-android, 26.0-jre, 26.0-android, 25.1-jre, 25.1-android, 25.0-jre, 25.0-android, 24.1.1-jre, 24.1.1-android, 24.1-jre, 24.1-android, 24.0-jre, 24.0-android, 23.6.1-jre, 23.6.1-android, 23.6-jre, 23.6-android, 23.5-jre, 23.5-android, 23.4-jre, 23.4-android, 23.3-jre, 23.3-android, 23.2-jre, 23.2-android, 23.1-jre, 23.1-android, 23.0, 23.0-rc1, 23.0-rc1-android, 23.0-android, 22.0, 22.0-rc1, 22.0-rc1-android, 22.0-android, 21.0, 21.0-rc2, 21.0-rc1, 20.0, 20.0-rc1, 19.0, 19.0-rc3, 19.0-rc2, 19.0-rc1, 18.0, 18.0-rc2, 18.0-rc1, 17.0, 17.0-rc2, 17.0-rc1
 
 com.google.guava:guava:16.+ -> 16.0
 \--- compileClasspath

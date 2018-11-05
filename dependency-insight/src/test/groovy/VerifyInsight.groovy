@@ -281,10 +281,15 @@ class VerifyInsight extends AbstractVerifyInsight {
             }
 
             def forceIsAppliedToSubstitutedModule = expected.toString().contains("${lookupRequestedModuleIdentifier[dep]}")
-            if (dh.forceVersion != null && forceIsAppliedToSubstitutedModule) {
-                // TODO: create this example
-                w.addAssertionToDoc("contains 'forced/Forced'")
-                assert output.toLowerCase().contains('forced')
+            if (dh.forceVersion != null) {
+                if (forceIsAppliedToSubstitutedModule) {
+                    // TODO: create this example
+                    w.addAssertionToDoc("contains 'forced/Forced' for substituted-towards module")
+                    assert output.toLowerCase().contains('forced')
+                } else {
+                    w.addAssertionToDoc("contains 'forced/Forced' for substituted-away-from module")
+                    assert output.toLowerCase().contains('forced')
+                }
             }
 
             if (dh.useLocks) {
