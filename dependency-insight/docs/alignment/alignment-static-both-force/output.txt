@@ -40,4 +40,10 @@ BUILD SUCCESSFUL
 
 
 === Asserting on... ===
-- Multiple forces should fail to resolve: task has status SUCCESS
+- Contains 'Failures' section for direct and transitive outputs
+- Contains 'Could not resolve' for direct dependency output
+- Contains 'Could not resolve' for transitive dependency output
+- Contains 'Multiple forces on different versions for virtual platform org.slf4j:slf4j-platform' for direct dependency output
+- Contains 'Multiple forces on different versions for virtual platform org.slf4j:slf4j-platform' for transitive dependency output
+
+completed assertions

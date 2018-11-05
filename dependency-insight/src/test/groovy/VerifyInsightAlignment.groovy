@@ -44,6 +44,9 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
     private String moduleAsTransitive
     private Coordinate expected2
 
+    private def group
+    private def platform
+
     public static
     def lookupRequestedModuleIdentifier = ImmutableMap.of(
             slf4jApi, slf4jApiDependency,
@@ -130,17 +133,19 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         def requestedVersion2 = dhAsTransitive.findRequestedVersion()
         asTransitiveOutput = asTransitiveResult.output
 
+        def depGroupAndArtifact = moduleAsDirect.split(':')
+        group = depGroupAndArtifact[0]
+        platform = group.split('\\.').last() + '-platform'
+
         then:
         assert expected1.version != null || expected1.moduleIdentifierWithVersion != null
         assert expected2.version != null || expected2.moduleIdentifierWithVersion != null
 
-        if (forceAsDirect != null && forceAsTransitive != null) {
-            def taskOutcome = asDirectResult.task(":dependencyInsight").outcome
-            w.addAssertionToDoc("Multiple forces should fail to resolve: task has status ${taskOutcome}")
-            assert taskOutcome == org.gradle.testkit.runner.TaskOutcome.FAILED
-        } else {
-            runAssertions()
-        }
+        def taskOutcome = asDirectResult.task(":dependencyInsight").outcome
+        assert taskOutcome == org.gradle.testkit.runner.TaskOutcome.SUCCESS
+
+
+        runAssertions()
 
         w.writeFooter('completed assertions')
 
@@ -167,6 +172,12 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
     }
 
     void runAssertions() {
+        def multipleForcesAreApplied = dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion != null
+        if (multipleForcesAreApplied) {
+            assertionsForMultipleForces()
+            return // stop assertions here
+        }
+
         assertionsForAll()
         assertionsOnLocks()
         if (assertionsOnForces()) {
@@ -179,22 +190,17 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
     }
 
     private void assertionsForAll() {
-        if (!(dhAsDirect.forceVersion != null && dhAsTransitive.forceVersion != null)) {
-            def headerSearchCriteria1 = dhAsDirect.useLocks ? "> Task :dependencyInsight\n.*\n${moduleAsDirect}:.*" : "> Task :dependencyInsight\n${moduleAsDirect}:.*"
-            def headerAsDirect = asDirectOutput.find(headerSearchCriteria1)
-            def resolvedVersionAsDirect = headerAsDirect.split(':').last()
+        def headerSearchCriteria1 = dhAsDirect.useLocks ? "> Task :dependencyInsight\n.*\n${moduleAsDirect}:.*" : "> Task :dependencyInsight\n${moduleAsDirect}:.*"
+        def headerAsDirect = asDirectOutput.find(headerSearchCriteria1)
+        def resolvedVersionAsDirect = headerAsDirect.split(':').last()
 
-            def headerSearchCriteria2 = dhAsDirect.useLocks ? "> Task :dependencyInsight\n.*\n${moduleAsTransitive}:.*" : "> Task :dependencyInsight\n${moduleAsTransitive}:.*"
-            def headerAsTransitive = asTransitiveOutput.find(headerSearchCriteria2)
-            def resolvedVersionAsTransitive = headerAsTransitive.split(':').last()
+        def headerSearchCriteria2 = dhAsDirect.useLocks ? "> Task :dependencyInsight\n.*\n${moduleAsTransitive}:.*" : "> Task :dependencyInsight\n${moduleAsTransitive}:.*"
+        def headerAsTransitive = asTransitiveOutput.find(headerSearchCriteria2)
+        def resolvedVersionAsTransitive = headerAsTransitive.split(':').last()
 
-            w.addAssertionToDoc("resolved versions should be the same: '$moduleAsDirect:$resolvedVersionAsDirect' and '$moduleAsTransitive:$resolvedVersionAsTransitive' [while both are not forced]")
-            assert resolvedVersionAsDirect == resolvedVersionAsTransitive
-        }
+        w.addAssertionToDoc("resolved versions should be the same: '$moduleAsDirect:$resolvedVersionAsDirect' and '$moduleAsTransitive:$resolvedVersionAsTransitive' [while both are not forced]")
+        assert resolvedVersionAsDirect == resolvedVersionAsTransitive
 
-        def depGroupAndArtifact = moduleAsDirect.split(':')
-        def group = depGroupAndArtifact[0]
-        def platform = group.split('\\.').last() + '-platform'
         def expectedPlatformConstraint = "By constraint : belongs to platform $group:$platform:"
 
         w.addAssertionToDoc("$moduleAsDirect output contains '$expectedPlatformConstraint' [platform constraint]")
@@ -206,6 +212,28 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         def expectedDependencyComesFrom = "--- $moduleAsTransitive:"
         w.addAssertionToDoc("$moduleAsDirect output contains '$expectedDependencyComesFrom' [dependency is brought in by...]")
         assert asDirectOutput.contains(expectedDependencyComesFrom)
+    }
+
+    private void assertionsForMultipleForces() {
+        def failuresSection = 'Failures'
+        w.addAssertionToDoc("Contains '$failuresSection' section for direct and transitive outputs")
+        assert asDirectOutput.contains(failuresSection)
+        assert asTransitiveOutput.contains(failuresSection)
+
+        def couldNotResolveMessage = 'Could not resolve'
+        w.addAssertionToDoc("Contains '$couldNotResolveMessage' for direct dependency output")
+        assert asDirectOutput.contains("$couldNotResolveMessage $moduleAsDirect")
+
+        w.addAssertionToDoc("Contains '$couldNotResolveMessage' for transitive dependency output")
+        assert asDirectOutput.contains("$couldNotResolveMessage $moduleAsDirect")
+
+
+        def multipleForcesError = "Multiple forces on different versions for virtual platform $group:$platform"
+        w.addAssertionToDoc("Contains '$multipleForcesError' for direct dependency output")
+        assert asDirectOutput.contains("$multipleForcesError")
+
+        w.addAssertionToDoc("Contains '$multipleForcesError' for transitive dependency output")
+        assert asTransitiveOutput.contains("$multipleForcesError")
     }
 
     private void assertionsOnLocks() {
@@ -371,4 +399,5 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         w.addAssertionToDoc("$moduleAsDirect output contains '$bomDependencyConstraint' [bom dependency constraint - recommended]")
         assert asDirectOutput.contains(bomDependencyConstraint)
     }
+
 }
