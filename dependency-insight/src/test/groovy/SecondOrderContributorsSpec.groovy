@@ -61,7 +61,7 @@ dependencies {
                 "Mercury\nTasks: ${String.join(' ', mercuryDependencyInsightTasks)}\n\n${mercuryResult.output}\n\n",
                 "Venus\nTasks: ${String.join(' ', venusDependencyInsightTasks)}\n\n${venusResult.output}\n\n")
 
-        def expectedSecondOrderConflictStatement = '\\--- planet:venus:2.0.1 (conflict resolution between versions'
+        def expectedSecondOrderConflictStatement = '--- planet:earth:3.0.0 (requested planet:venus:2.0.0)'
         docWriter.addAssertionToDoc("[mercury dependencyInsight] contains '$expectedSecondOrderConflictStatement'")
         assert mercuryResult.output.contains(expectedSecondOrderConflictStatement)
 

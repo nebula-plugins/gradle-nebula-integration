@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.1-20181102000039+0000
+5.1-20181106000028+0000
 
 === For the dependency under test: slf4j-api as a direct dependency ===
 Tasks: dependencyInsight --dependency slf4j-api --warning-mode all --write-locks
@@ -19,7 +19,7 @@ org.slf4j:slf4j-api:1.5.0
 
 org.slf4j:slf4j-api:1.5.0
 \--- org.slf4j:slf4j-simple:1.5.0
-     +--- compileClasspath
+     +--- compileClasspath (requested org.slf4j:slf4j-simple:1.7.20)
      \--- compileClasspath
 
 org.slf4j:slf4j-api:1.6.0 -> 1.5.0

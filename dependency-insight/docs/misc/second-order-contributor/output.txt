@@ -17,8 +17,8 @@ planet:mercury:1.0.2
      \--- compileClasspath
 
 planet:mercury:1.0.1 -> 1.0.2
-\--- planet:venus:2.0.1 (conflict resolution between versions 2.0.0 and 2.0.1)
-     +--- planet:earth:3.0.0
+\--- planet:venus:2.0.1
+     +--- planet:earth:3.0.0 (requested planet:venus:2.0.0)
      |    \--- compileClasspath
      \--- planet:mars:4.0.0
           \--- compileClasspath
@@ -61,6 +61,6 @@ BUILD SUCCESSFUL
 
 
 === Asserting on... ===
-- [mercury dependencyInsight] contains '\--- planet:venus:2.0.1 (conflict resolution between versions'
+- [mercury dependencyInsight] contains '--- planet:earth:3.0.0 (requested planet:venus:2.0.0)'
 
 completed assertions
