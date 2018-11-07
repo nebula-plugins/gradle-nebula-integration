@@ -1,0 +1,17 @@
+initscript {
+    repositories {
+        ivy {
+            name 'EmbeddedIvy'
+            url "${sourceFile.parent}/repos/ivy"
+            layout 'pattern', {
+                m2compatible = true
+                ivy '[organisation]/[module]/[revision]/[module]-[revision]-ivy.[ext]'
+                artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+            }
+        }
+    }
+    dependencies {
+        classpath 'netflix:some-decrypt:1.187.0'
+    }
+}
+

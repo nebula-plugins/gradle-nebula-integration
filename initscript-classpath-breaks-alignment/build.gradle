@@ -1,0 +1,30 @@
+apply plugin: "java"
+
+repositories {
+    maven {
+        name 'EmbeddedMaven'
+        url "${project.rootProject.projectDir}/repos/mvn"
+    }
+    ivy {
+        name 'EmbeddedIvy'
+        url "${project.rootProject.projectDir}/repos/ivy"
+        layout 'pattern', {
+            m2compatible = true
+            ivy '[organisation]/[module]/[revision]/[module]-[revision]-ivy.[ext]'
+            artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+        }
+    }
+}
+
+dependencies {
+	components.all { ComponentMetadataDetails details ->
+        details.statusScheme = ['snapshot', 'integration', 'candidate', 'release']
+    }
+    components.all { ComponentMetadataDetails details ->
+        if (details.id.name.startsWith('some')) {
+            details.belongsTo("aligned-platform:some:${details.id.version}")
+        }
+    }
+	compile platform('netflix.bom:runtime-platform-recommendations:4.7.15')
+	compile "netflix:common-security:latest.release"
+}

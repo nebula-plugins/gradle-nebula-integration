@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="netflix" module="some-common" revision="1.140.0" status="release" publication="20180213042101">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="runtime,master"/>
+    <conf name="runtime" visibility="public" extends="compile"/>
+    <conf visibility="public" name="javadoc"/>
+    <conf visibility="public" name="master"/>
+    <conf visibility="public" name="sources"/>
+    <conf visibility="public" extends="runtime" name="test"/>
+    <conf name="optional" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="some-common" type="jar" ext="jar" conf="compile"/>
+    <artifact name="some-common" type="sources" ext="jar" conf="sources" m:classifier="sources" xmlns:m="http://ant.apache.org/ivy/maven"/>
+  </publications>
+  <dependencies>
+  </dependencies>
+</ivy-module>
