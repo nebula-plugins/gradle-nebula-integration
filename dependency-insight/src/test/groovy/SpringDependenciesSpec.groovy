@@ -23,7 +23,7 @@ class SpringDependenciesSpec extends TestKitSpecification {
 
     def setup() {
         repo = new File(projectDir, 'repo')
-        tasks = ['dependencyInsight', '--dependency', "cassandra-driver-core"]
+        tasks = ['dependencyInsight', '--dependency', "cassandra-driver-core", '--warning-mode', 'all']
     }
 
     @Unroll
@@ -42,26 +42,26 @@ class SpringDependenciesSpec extends TestKitSpecification {
         docWriter.writeCleanedUpBuildOutput(
                 "Tasks: ${String.join(' ', tasks)}\n\n${result.output}\n\n")
 
-        if(selectedBySpringRule) {
+        if (selectedBySpringRule) {
             def versionOutput = "com.datastax.cassandra:cassandra-driver-core:$cassandraDriverVersion (selected by rule)"
             docWriter.addAssertionToDoc("Contains '$versionOutput'")
-            assert(result.output.contains(versionOutput))
+            assert (result.output.contains(versionOutput))
 
             def selectionReasons = 'Selection reasons:'
             docWriter.addAssertionToDoc("Contains '$selectionReasons'")
-            assert(result.output.contains(selectionReasons))
+            assert (result.output.contains(selectionReasons))
         } else {
             def output = "com.datastax.cassandra:cassandra-driver-core:$cassandraDriverVersion\n"
             docWriter.addAssertionToDoc("Contains '$output'")
-            assert(result.output.contains(output))
+            assert (result.output.contains(output))
         }
 
         docWriter.writeFooter('completed assertions')
 
         where:
         springBootVersionFamily | springBootVersion | cassandraDriverVersion | selectedBySpringRule
-        '1.x.x' | '1.4.7' | '2.1.9' | true
-        '2.x.x'                 | '2.0.5' | '3.3.2' | false
+        '1.x.x'                 | '1.4.7'           | '2.1.9'                | true
+        '2.x.x'                 | '2.0.5'           | '3.3.2'                | false
     }
 
     private static String createBuildFileWithSpringBootGradlePluginV(String version) {

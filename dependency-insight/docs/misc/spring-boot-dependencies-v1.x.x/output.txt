@@ -1,4 +1,4 @@
-Tasks: dependencyInsight --dependency cassandra-driver-core
+Tasks: dependencyInsight --dependency cassandra-driver-core --warning-mode all
 
 
 > Task :dependencyInsight

@@ -22,8 +22,6 @@ import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom
 import org.gradle.util.VersionNumber
 
-import java.time.LocalDateTime
-
 abstract class AbstractVerifyInsight extends TestKitSpecification {
     File repo
 
@@ -32,10 +30,6 @@ abstract class AbstractVerifyInsight extends TestKitSpecification {
     }
 
     def cleanupSpec() {
-        def file = new File("docs", "lastUpdated.txt")
-        file.delete()
-        file.createNewFile()
-        file << "Last updated at: ${LocalDateTime.now()}"
     }
 
     def tasksFor(String dependencyName) {

@@ -9,4 +9,5 @@ dependencies {
     compile 'planet:earth:3.0.0'
     compile 'planet:mars:4.0.0'
     compile 'planet:jupiter:5.0.0'
+    compile 'planet:saturn:6.0.0'
 }

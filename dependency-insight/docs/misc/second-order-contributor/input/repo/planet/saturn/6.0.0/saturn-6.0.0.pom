@@ -2,13 +2,6 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>planet</groupId>
-  <artifactId>mercury</artifactId>
-  <version>1.0.2</version>
-  <dependencies>
-    <dependency>
-      <groupId>planet</groupId>
-      <artifactId>saturn</artifactId>
-      <version>6.0.0</version>
-    </dependency>
-  </dependencies>
+  <artifactId>saturn</artifactId>
+  <version>6.0.0</version>
 </project>

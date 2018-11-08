@@ -1,5 +1,5 @@
 Mercury
-Tasks: dependencyInsight --dependency mercury
+Tasks: dependencyInsight --dependency mercury --warning-mode all
 
 
 > Task :dependencyInsight
@@ -32,7 +32,7 @@ BUILD SUCCESSFUL
 
 
 Venus
-Tasks: dependencyInsight --dependency venus
+Tasks: dependencyInsight --dependency venus --warning-mode all
 
 
 > Task :dependencyInsight
@@ -59,8 +59,41 @@ BUILD SUCCESSFUL
 1 actionable task: 1 executed
 
 
+Saturn
+Tasks: dependencyInsight --dependency saturn --warning-mode all
+
+
+> Task :dependencyInsight
+planet:saturn:6.0.0
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+
+planet:saturn:6.0.0
++--- compileClasspath
+\--- planet:mercury:1.0.2
+     +--- planet:jupiter:5.0.0
+     |    \--- compileClasspath
+     \--- planet:venus:2.0.1 (requested planet:mercury:1.0.1)
+          +--- planet:earth:3.0.0 (requested planet:venus:2.0.0)
+          |    \--- compileClasspath
+          \--- planet:mars:4.0.0
+               \--- compileClasspath
+
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+
 
 === Asserting on... ===
-- [mercury dependencyInsight] contains '--- planet:earth:3.0.0 (requested planet:venus:2.0.0)'
+- [mercury dependencyInsight] contains '--- planet:earth:3.0.0 (requested planet:venus:2.0.0)' as a 2nd order contributor
+- [saturn dependencyInsight] contains '--- planet:earth:3.0.0 (requested planet:venus:2.0.0)' as a 3rd order contributor
+- [saturn dependencyInsight] contains '--- planet:venus:2.0.1 (requested planet:mercury:1.0.1)' as a 2nd order contributor
 
 completed assertions

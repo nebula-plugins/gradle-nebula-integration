@@ -56,10 +56,10 @@ class DocWriter {
 """.stripIndent()
     }
 
-    void writeCleanedUpBuildOutput(String firstOutput, String secondOutput) {
-        outputFile << firstOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
-
-        outputFile << secondOutput.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+    void writeCleanedUpBuildOutput(String... outputs) {
+        outputs.each {
+            outputFile << it.replaceAll('BUILD SUCCESSFUL in .*s', 'BUILD SUCCESSFUL')
+        }
 
         outputFile << """
 === Asserting on... ===
