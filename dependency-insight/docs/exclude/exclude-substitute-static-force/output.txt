@@ -13,5 +13,9 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - contains 'No dependencies matching given input were found in configuration' [exclude]
+- I would like more information here: does not contain '✭ substitution' [exclude > substitute]
+	- https://github.com/nebula-plugins/gradle-nebula-integration/issues/6
+- I would like more information here: does not contain 'Selected by rule : ✭ exclusion' [custom substitute reason]
+	- https://github.com/nebula-plugins/gradle-nebula-integration/issues/6
 
 completed assertions

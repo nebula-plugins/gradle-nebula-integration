@@ -24,5 +24,7 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - contains 'Task.*
 .*guava:18.0' [static end result]
+- I would like more information here: does not contain '✭ rejection' when a dynamic version is in place [custom substitute reason]
+	- https://github.com/nebula-plugins/gradle-nebula-integration/issues/5
 
 completed assertions

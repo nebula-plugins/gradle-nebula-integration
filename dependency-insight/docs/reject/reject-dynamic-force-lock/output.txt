@@ -30,5 +30,6 @@ BUILD SUCCESSFUL
 - contains 'Task.*
 .*
 .*guava:14.0.1' [dynamic end result]
+- I would like more information here: does not contain '✭ rejection' when a force is in place [custom substitute reason]
 
 completed assertions

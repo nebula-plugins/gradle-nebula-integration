@@ -61,6 +61,8 @@ class VerifyInsight extends AbstractVerifyInsight {
     public static
     def lookupSubstitutionFor = ImmutableMap.of(mockito, 'org.mockito:mockito-core')
 
+    def static missingInformation = "I would like more information here"
+
     @Unroll
     def "#title"() {
         given:
@@ -281,16 +283,17 @@ class VerifyInsight extends AbstractVerifyInsight {
             w.addAssertionToDoc("contains '$expectedOutput' [exclude]")
             assert output.contains(expectedOutput)
 
-            // TODO: would prefer the below. See https://github.com/nebula-plugins/gradle-nebula-integration/issues/6
-//            if (dh.substituteWith != null) {
-//                def notFound = '✭ substitution'
-//                w.addAssertionToDoc("does not contain '$notFound' [exclude > substitute]")
-//                assert !output.contains(notFound)
-//            }
-//
-//            def expectedReason = 'Selected by rule : ✭ exclusion'
-//            w.addAssertionToDoc("contains '$expectedReason' [custom substitute reason]")
-//            assert output.contains(expectedReason)
+            if (dh.dependencySubstituteWith != null) {
+                def notFound = '✭ substitution'
+                w.addAssertionToDoc("$missingInformation: does not contain '$notFound' [exclude > substitute]\n" +
+                        "\t- https://github.com/nebula-plugins/gradle-nebula-integration/issues/6")
+                assert !output.contains(notFound)
+            }
+
+            def expectedReason = 'Selected by rule : ✭ exclusion'
+            w.addAssertionToDoc("$missingInformation: does not contain '$expectedReason' [custom substitute reason]\n" +
+                    "\t- https://github.com/nebula-plugins/gradle-nebula-integration/issues/6")
+            assert !output.contains(expectedReason)
 
             return // if exclude occurs, stop checking here
         }
@@ -329,8 +332,14 @@ class VerifyInsight extends AbstractVerifyInsight {
                 if (dh.recommendedVersionForSubstitution != null
                         && dh.dependencySubstituteWith != null
                         && dh.eachDepSubstituteWith == null) {
-                    w.addAssertionToDoc("contains '$conflictResolutionOutput' [substitute & recommended]")
-                    assert output.contains(conflictResolutionOutput)
+                    if (dh.forceVersion == null) { // TODO: why does this not appear with forced versions?
+                        w.addAssertionToDoc("contains '$conflictResolutionOutput' [substitute & recommended]")
+                        assert output.contains(conflictResolutionOutput)
+                    } else {
+                        w.addAssertionToDoc("$missingInformation: does not contain '$conflictResolutionOutput' when a force is in place [substitute & recommended]\n" +
+                                "\t- issue TBD")
+                        assert !output.contains(conflictResolutionOutput)
+                    }
                 } else {
                     w.addAssertionToDoc("does not contain '$conflictResolutionOutput' [substitute & recommended]")
                     assert !output.contains(conflictResolutionOutput)
@@ -449,14 +458,20 @@ class VerifyInsight extends AbstractVerifyInsight {
         }
 
         if (dh.resolveRejectionTo) {
+            def expectedReason = '✭ rejection'
             if (dh.dynamicVersion != null) {
-                // TODO: would prefer this to show for all See https://github.com/nebula-plugins/gradle-nebula-integration/issues/5
                 if (dh.forceVersion == null) {
-                    // TODO: in the same vein, would prefer this to show even though it is overridden
-                    def expectedReason = '✭ rejection'
+                    // TODO: would prefer this to show even though it is overridden
                     w.addAssertionToDoc("contains '$expectedReason' [custom substitute reason]")
                     assert output.contains(expectedReason)
+                } else {
+                    w.addAssertionToDoc("$missingInformation: does not contain '$expectedReason' when a force is in place [custom substitute reason]")
+                    assert !output.contains(expectedReason)
                 }
+            } else {
+                w.addAssertionToDoc("$missingInformation: does not contain '$expectedReason' when a dynamic version is in place [custom substitute reason]\n" +
+                        "\t- https://github.com/nebula-plugins/gradle-nebula-integration/issues/5")
+                assert !output.contains(expectedReason)
             }
         }
     }
