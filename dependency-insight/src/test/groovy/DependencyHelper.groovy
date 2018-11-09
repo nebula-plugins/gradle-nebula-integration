@@ -55,11 +55,6 @@ class DependencyHelper {
             }
         }
 
-//            def compareTo = Coordinate.DEPENDENCY_COMPARATOR.compare(eachDepWithCoordinate.toModuleVersionIdentifier(), dependencySubstituteWithCoordinate.toModuleVersionIdentifier())
-//            if (compareTo < 0) {
-//                return eachDepWithCoordinate
-//            }
-//            return dependencySubstituteWithCoordinate
         if (replaceFrom != null) {
             resolvedModuleIdentifier = lookupRequestedModuleIdentifier[requestedModuleIdentifier]
         } else {

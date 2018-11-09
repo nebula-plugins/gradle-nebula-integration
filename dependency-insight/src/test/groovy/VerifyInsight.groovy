@@ -204,10 +204,10 @@ class VerifyInsight extends AbstractVerifyInsight {
         mockito | null          | null                     | mockitoRec | null               | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-force-lock'
         mockito | null          | null                     | mockitoRec | null               | null         | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-lock'
 //        dependency substitution - with recommendation for substitute-towards dependency
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-for-sub-to'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-for-sub-to-force'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-for-sub-to-force-lock'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-rec-for-sub-to-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-recForSubTo'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-recForSubTo-force'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-recForSubTo-force-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | mockitoDependencySubTo | null                | null    | null                  | 'substitute'  | 'substitute-recForSubTo-lock'
 //        each dependency substitute - static
         mockito | mockitoStatic | null                     | null       | null               | null         | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-static'
         mockito | mockitoStatic | null                     | null       | null               | mockitoForce | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-static-force'
@@ -224,10 +224,10 @@ class VerifyInsight extends AbstractVerifyInsight {
         mockito | null          | null                     | mockitoRec | null               | mockitoForce | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-force-lock'
         mockito | null          | null                     | mockitoRec | null               | null         | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-lock'
 //        each dependency substitute - with recommendation for substitute-towards dependency
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-for-sub-to'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-for-sub-to-force'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-for-sub-to-force-lock'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-rec-for-sub-to-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-recForSubTo'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-recForSubTo-force'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-recForSubTo-force-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | null                   | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-recForSubTo-lock'
 //        each dependency substitute and dependency substitution - static
         mockito | mockitoStatic | null                     | null       | null               | null         | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-static'
         mockito | mockitoStatic | null                     | null       | null               | mockitoForce | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-static-force'
@@ -244,10 +244,10 @@ class VerifyInsight extends AbstractVerifyInsight {
         mockito | null          | null                     | mockitoRec | null               | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-force-lock'
         mockito | null          | null                     | mockitoRec | null               | null         | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-lock'
 //        each dependency substitute and dependency substitution - with recommendation for substitute-towards dependency
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-for-sub-to'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-for-sub-to-force'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-for-sub-to-force-lock'
-        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-rec-for-sub-to-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-recForSubTo'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | null        | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-recForSubTo-force'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | mockitoForce | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-recForSubTo-force-lock'
+        mockito | null          | null                     | mockitoRec | mockitoSubToRec    | null         | mockitoLock | null             | mockitoDependencySubTo | mockitoEachDepSubTo | null    | null                  | 'substitute'  | 'substitute-each-and-dep-sub-recForSubTo-lock'
 //        exclude - static
         netty   | nettyStatic   | null                     | null       | null               | null         | null        | null             | null                   | null                | true    | null                  | 'exclude'     | 'exclude-static'
         netty   | nettyStatic   | null                     | null       | null               | nettyForce   | null        | null             | null                   | null                | true    | null                  | 'exclude'     | 'exclude-static-force'
@@ -302,45 +302,6 @@ class VerifyInsight extends AbstractVerifyInsight {
                 assert output.contains(expectedFinalVersion)
             }
         }
-
-//        if (dh.eachDepSubstituteWith != null) {
-//            def expectedReason = 'Selected by rule : ✭ substitution'
-//            w.addAssertionToDoc("contains '$expectedReason' [custom substitute reason]")
-//            assert output.contains(expectedReason)
-//
-//            if (dh.staticVersion != null) {
-//                def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]}:${dh.staticVersion} -> ${expected.version}"
-//                w.addAssertionToDoc("contains '$expectedFinalVersion' [substitute & static]")
-//                assert output.contains(expectedFinalVersion)
-//
-//            } else if (dh.recommendedVersion != null) {
-//                def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]} -> ${expected.version}"
-//                w.addAssertionToDoc("contains '$expectedFinalVersion' [substitute & recommended]")
-//                assert output.contains(expectedFinalVersion)
-//
-//                def bomDependencyConstraint = '\\--- sample:bom:1.0.0'
-//                w.addAssertionToDoc("contains '$bomDependencyConstraint' [bom dependency constraint - recommended]")
-//                assert output.contains(bomDependencyConstraint)
-//
-//                def recommendationIsAppliedOnSubstitutedTowardsDependency = false
-//                def conflictResolutionOutput = 'By conflict resolution : between versions '
-//                if (recommendationIsAppliedOnSubstitutedTowardsDependency) {
-////                  TODO: write this test case
-//                    w.addAssertionToDoc("contains '$conflictResolutionOutput' [substitute & recommended]")
-//                    assert output.contains(conflictResolutionOutput)
-//                } else {
-//                    w.addAssertionToDoc("does not contain '$conflictResolutionOutput' [substitute & recommended]")
-//                    assert !output.contains(conflictResolutionOutput)
-//                }
-//
-//            } else {
-//                def expectedFinalVersion = "${lookupRequestedModuleIdentifier[dep]}:${dh.dynamicVersion} -> ${expected.version}"
-//                w.addAssertionToDoc("contains '$expectedFinalVersion' [substitute & dynamic]")
-//                assert output.contains(expectedFinalVersion)
-//            }
-//
-//            return // if substitution via each dependency & useVersion/ useTarget occurs, stop checking here
-//        }
 
         if (dh.dependencySubstituteWith != null || dh.eachDepSubstituteWith != null) {
             def expectedReason = 'Selected by rule : ✭ substitution'
