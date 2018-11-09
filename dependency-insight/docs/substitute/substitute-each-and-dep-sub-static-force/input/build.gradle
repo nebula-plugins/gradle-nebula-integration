@@ -1,0 +1,32 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-all:1.8.0'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.mockito:mockito-all:1.10.17'
+    }
+}
+
+def substitutionMessage = '✭ substitution org.mockito:mockito-all -> org.mockito:mockito-core:1.10.19'
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('org.mockito:mockito-all') because (substitutionMessage) with module('org.mockito:mockito-core:1.10.19')
+    }
+}
+
+def substitutionEachDependencyMessage = "✭ substitution for each dependency with group 'org.mockito' to version '1.10.18'"
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.mockito') {
+            details.useVersion '1.10.18'
+            details.because(substitutionEachDependencyMessage) 
+        }
+    }
+}

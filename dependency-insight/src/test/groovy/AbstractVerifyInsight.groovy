@@ -20,7 +20,6 @@
 import com.google.common.collect.ImmutableMap
 import nebula.test.dependencies.maven.ArtifactType
 import nebula.test.dependencies.maven.Pom
-import org.gradle.util.VersionNumber
 
 abstract class AbstractVerifyInsight extends TestKitSpecification {
     File repo
@@ -103,7 +102,7 @@ class Main {
         }
     }
 
-    def createSubstitutionConfigurationIfNeeded(String dep, String substituteTo, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+    def createDependencySubstitutionConfigurationIfNeeded(String dep, String substituteTo, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
         if (substituteTo != null) {
             def substituteFromModuleIdentifier = lookupRequestedModuleIdentifier[dep]
             buildFile << """
@@ -114,6 +113,30 @@ class Main {
                     }
                 }
                 """.stripIndent()
+        }
+    }
+
+    def createEachDepSubstitutionConfigurationIfNeeded(String dep, String eachDepSubstituteTo, ImmutableMap<String, String> lookupRequestedModuleIdentifier) {
+        // based off of https://docs.gradle.org/current/javadoc/org/gradle/api/artifacts/ResolutionStrategy.html#eachDependency-org.gradle.api.Action-
+        // and https://github.com/gradle/gradle/blob/master/subprojects/dependency-management/src/main/java/org/gradle/api/internal/artifacts/ivyservice/dependencysubstitution/DefaultDependencyResolveDetails.java
+
+        if (eachDepSubstituteTo != null) {
+            def substituteFromModuleIdentifier = lookupRequestedModuleIdentifier[dep]
+            def splitModuleIdentifier = substituteFromModuleIdentifier.split(':')
+
+            buildFile << """
+                def substitutionEachDependencyMessage = "✭ substitution for each dependency with group '${splitModuleIdentifier[0]}' to version '${eachDepSubstituteTo}'"
+                configurations.all {
+                    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+                        if (details.requested.group == '${splitModuleIdentifier[0]}') {
+                            details.useVersion '${eachDepSubstituteTo}'
+                            details.because(substitutionEachDependencyMessage) 
+                        }
+                    }
+                }
+                """.stripIndent()
+            // could also use something like
+            // details.useTarget group: '${splitEachDepSubstituteTo[0]}', name: details.requested.name, version: '${splitEachDepSubstituteTo[2]}'
         }
     }
 
@@ -191,13 +214,5 @@ class Main {
                 }
             }
             """.stripIndent()
-    }
-
-    def returnLowerOf(String v1, String v2) {
-        def compareTo = VersionNumber.parse(v1).compareTo(VersionNumber.parse(v2))
-        if (compareTo < 0) {
-            return v1
-        }
-        return v2
     }
 }

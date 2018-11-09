@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-all:1.8.0'
+}
+
+def substitutionEachDependencyMessage = "✭ substitution for each dependency with group 'org.mockito' to version '1.10.18'"
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.mockito') {
+            details.useVersion '1.10.18'
+            details.because(substitutionEachDependencyMessage) 
+        }
+    }
+}

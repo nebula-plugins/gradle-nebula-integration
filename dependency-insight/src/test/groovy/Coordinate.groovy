@@ -1,3 +1,7 @@
+import org.gradle.api.artifacts.ModuleVersionIdentifier
+import org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier
+import org.gradle.util.VersionNumber
+
 /**
  *
  *  Copyright 2018 Netflix, Inc.
@@ -25,10 +29,14 @@ class Coordinate {
     Coordinate(String moduleIdentifier, String version) {
         this.moduleIdentifier = moduleIdentifier
         this.version = version
+        this.moduleIdentifierWithVersion = "$moduleIdentifier:$version"
     }
 
     Coordinate(String moduleIdentifierWithVersion) {
         this.moduleIdentifierWithVersion = moduleIdentifierWithVersion
+        def split = moduleIdentifierWithVersion.split(':')
+        this.moduleIdentifier = "${split[0]}:${split[1]}"
+        this.version = split[2]
     }
 
     @Override
@@ -42,5 +50,36 @@ class Coordinate {
         } else {
             return moduleIdentifier
         }
+    }
+
+    def toModuleVersionIdentifier() {
+        if (moduleIdentifierWithVersion != null) {
+            def split = moduleIdentifierWithVersion.split(':')
+            return new DefaultModuleVersionIdentifier(split[0], split[1], split[2])
+        } else {
+            def split = moduleIdentifier.split(':')
+            return new DefaultModuleVersionIdentifier(split[0], split[1], version)
+        }
+
+    }
+
+    public final static Comparator<ModuleVersionIdentifier> DEPENDENCY_COMPARATOR = new Comparator<ModuleVersionIdentifier>() {
+        @Override
+        int compare(ModuleVersionIdentifier m1, ModuleVersionIdentifier m2) {
+            if (m1.group != m2.group)
+                return m1.group.compareTo(m2.group)
+            else if (m1.name != m2.name)
+                return m1.name.compareTo(m2.name)
+            else
+                return VersionNumber.parse(m2.version).compareTo(VersionNumber.parse(m1.version))
+        }
+    }
+
+    static def returnLowerOf(String v1, String v2) {
+        def compareTo = VersionNumber.parse(v1).compareTo(VersionNumber.parse(v2))
+        if (compareTo < 0) {
+            return v1
+        }
+        return v2
     }
 }

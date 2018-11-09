@@ -30,7 +30,8 @@ class DependencyHelper {
     String versionForDynamicToResolveTo
 
     Coordinate replaceFrom
-    String substituteWith
+    String dependencySubstituteWith
+    String eachDepSubstituteWith
     Boolean exclude
     String resolveRejectionTo
 
@@ -40,9 +41,24 @@ class DependencyHelper {
 
 
     def results() {
-        if (substituteWith != null) {
-            return new Coordinate(substituteWith)
+        if (dependencySubstituteWith != null || eachDepSubstituteWith != null) {
+            if (dependencySubstituteWith != null) {
+                def dependencySubstituteWithCoordinate = new Coordinate(dependencySubstituteWith)
+
+                if (eachDepSubstituteWith != null) {
+                    return new Coordinate(dependencySubstituteWithCoordinate.moduleIdentifier, eachDepSubstituteWith)
+                }
+                return dependencySubstituteWithCoordinate
+            } else {
+                return new Coordinate(lookupRequestedModuleIdentifier[requestedModuleIdentifier] as String, eachDepSubstituteWith)
+            }
         }
+
+//            def compareTo = Coordinate.DEPENDENCY_COMPARATOR.compare(eachDepWithCoordinate.toModuleVersionIdentifier(), dependencySubstituteWithCoordinate.toModuleVersionIdentifier())
+//            if (compareTo < 0) {
+//                return eachDepWithCoordinate
+//            }
+//            return dependencySubstituteWithCoordinate
         if (replaceFrom != null) {
             resolvedModuleIdentifier = lookupRequestedModuleIdentifier[requestedModuleIdentifier]
         } else {

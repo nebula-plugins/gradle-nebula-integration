@@ -57,16 +57,6 @@ class ArtifactHelpers {
         createJar(jar, manifestWithClasspath(sampleJarClasspath))
     }
 
-    protected static setupSampleJarInLibsDir(File projectDir, String jarName) {
-        def libsDir = new File(projectDir, 'libs')
-        libsDir.mkdirs()
-
-        def jarClasspath = libsDir.absolutePath + File.separator + jarName + '.jar'
-        def jar = new File(jarClasspath)
-        jar.createNewFile()
-        createJar(jar, manifestWithClasspath(jarClasspath))
-    }
-
     private static def createJar(File jarFile, Manifest manifest = null) throws IOException {
         def jarOutputStream
 

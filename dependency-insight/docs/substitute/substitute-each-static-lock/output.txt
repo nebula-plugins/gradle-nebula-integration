@@ -1,0 +1,35 @@
+=== Using Gradle version ===
+5.1-20181106000028+0000
+
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency mockito --warning-mode all --write-locks
+
+
+> Task :dependencyInsight
+Persisted dependency lock state for configuration ':compileClasspath'
+org.mockito:mockito-all:1.10.18
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - Selected by rule : ✭ substitution for each dependency with group 'org.mockito' to version '1.10.18'
+
+org.mockito:mockito-all:1.8.0 -> 1.10.18
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'Selected by rule : ✭ substitution' [custom substitute reason]
+- contains 'org.mockito:mockito-all:1.8.0 -> 1.10.18' [substitute & static]
+- contains 'Persisted dependency lock state' [locked & build matches lock version]
+- contains 'Task.*
+.*
+.*org.mockito:mockito-all:1.10.18' [substitute end result]
+
+completed assertions

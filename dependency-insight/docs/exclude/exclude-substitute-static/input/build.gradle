@@ -15,6 +15,16 @@ configurations.all {
     }
 }
 
+def substitutionEachDependencyMessage = "✭ substitution for each dependency with group 'io.netty' to version 'io.netty:netty-common:4.1.23.Final'"
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'io.netty') {
+            details.useVersion 'io.netty:netty-common:4.1.23.Final'
+            details.because(substitutionEachDependencyMessage) 
+        }
+    }
+}
+
 def exclusionMessage = '✭ exclusion io.netty:netty-all'
 configurations.all {
     exclude group: 'io.netty', module: 'netty-all'
