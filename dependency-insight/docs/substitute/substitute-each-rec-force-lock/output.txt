@@ -36,7 +36,7 @@ BUILD SUCCESSFUL
 - contains '\--- sample:bom:1.0.0' [bom dependency constraint - recommended]
 - does not contain 'By conflict resolution : between versions ' [substitute & recommended]
 - contains 'Persisted dependency lock state' [locked & build matches lock version]
-- contains 'forced/Forced' for substituted-towards module
+- contains 'forced/Forced' for the original dependency
 - contains 'Task.*
 .*
 .*org.mockito:mockito-all:1.10.18' [substitute end result]

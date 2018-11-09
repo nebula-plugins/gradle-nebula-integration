@@ -27,7 +27,7 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - contains 'Selected by rule : ✭ substitution' [custom substitute reason]
 - contains 'org.mockito:mockito-all:1.8.0 -> 1.10.18' [substitute & static]
-- contains 'forced/Forced' for substituted-towards module
+- contains 'forced/Forced' for the original dependency
 - contains 'Task.*
 .*org.mockito:mockito-all:1.10.18' [substitute end result]
 

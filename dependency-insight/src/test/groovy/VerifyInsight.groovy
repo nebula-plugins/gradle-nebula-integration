@@ -348,14 +348,14 @@ class VerifyInsight extends AbstractVerifyInsight {
                 assert output.contains(expectedOutput)
             }
 
-            // FIXME: this is not quite right
-            def forceIsAppliedToSubstitutedModule = expected.toString().contains("${lookupRequestedModuleIdentifier[dep]}")
+            def forceIsAppliedToSubstitutedAwayFromModule = output.find("force '${lookupRequestedModuleIdentifier[dep]}") != ''
             if (dh.forceVersion != null) {
-                if (forceIsAppliedToSubstitutedModule) {
-                    w.addAssertionToDoc("contains 'forced/Forced' for substituted-towards module")
+                if (forceIsAppliedToSubstitutedAwayFromModule) {
+                    w.addAssertionToDoc("contains 'forced/Forced' for the original dependency")
                     assert output.toLowerCase().contains('forced')
                 } else {
-                    w.addAssertionToDoc("contains 'forced/Forced' for substituted-away-from module")
+                    // TODO: write this scenario
+                    w.addAssertionToDoc("contains 'forced/Forced' for substituted-towards dependency")
                     assert output.toLowerCase().contains('forced')
                 }
             }
