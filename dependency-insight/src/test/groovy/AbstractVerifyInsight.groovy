@@ -77,15 +77,19 @@ class Main {
         }
     }
 
-    def createBomIfNeeded(String recVersion) {
-        if (recVersion != null) {
+    def createBomIfNeeded(Map<String, String> dependencies) {
+        if (dependencies.size() != 0) {
             repo.mkdirs()
-
             def localBom = new Pom('sample', 'bom', '1.0.0', ArtifactType.POM)
-            localBom.addManagementDependency('com.google.guava', 'guava', '19.0')
-            localBom.addManagementDependency('org.slf4j', 'slf4j-api', '1.7.25')
-            localBom.addManagementDependency('org.mockito', 'mockito-core', '1.9.5')
-            localBom.addManagementDependency('io.netty', 'netty-all', '4.1.22.FINAL')
+
+            dependencies.each { moduleIdentifier, recVersion ->
+                def split = moduleIdentifier.split(':')
+                String group = split[0]
+                String artifact = split[1]
+
+                localBom.addManagementDependency(group, artifact, recVersion)
+            }
+
             ArtifactHelpers.setupSamplePomWith(repo, localBom, localBom.generate())
         }
     }
@@ -125,7 +129,9 @@ class Main {
             def splitModuleIdentifier = substituteFromModuleIdentifier.split(':')
 
             buildFile << """
-                def substitutionEachDependencyMessage = "✭ substitution for each dependency with group '${splitModuleIdentifier[0]}' to version '${eachDepSubstituteTo}'"
+                def substitutionEachDependencyMessage = "✭ substitution for each dependency with group '${
+                splitModuleIdentifier[0]
+            }' to version '${eachDepSubstituteTo}'"
                 configurations.all {
                     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
                         if (details.requested.group == '${splitModuleIdentifier[0]}') {

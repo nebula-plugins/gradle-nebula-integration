@@ -23,6 +23,7 @@ class DependencyHelper {
     String staticVersion
     String dynamicVersion
     String recommendedVersion
+    String recommendedVersionForSubstitution
     String forceVersion
     Boolean useLocks
     String overrideLockFileVersion
@@ -81,7 +82,7 @@ class DependencyHelper {
 
     String findRequestedVersion() {
         def listedVersion
-        if (recommendedVersion != null) {
+        if (recommendedVersion != null || recommendedVersionForSubstitution != null) {
             listedVersion = ''
         } else {
             if (staticVersion != null) {

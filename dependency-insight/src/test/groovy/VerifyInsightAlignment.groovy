@@ -16,7 +16,6 @@
  *
  */
 
-
 import com.google.common.collect.ImmutableMap
 import spock.lang.Unroll
 
@@ -93,7 +92,11 @@ class VerifyInsightAlignment extends AbstractVerifyInsight {
         createAlignmentConfiguration(asDirect, lookupRequestedModuleIdentifier)
 
         // add additional files
-        createBomIfNeeded(recAsDirect)
+        Map<String, String> bomDependencies = new HashMap<>()
+        if (recAsDirect != null) {
+            bomDependencies.put(lookupRequestedModuleIdentifier[asDirect], recAsDirect)
+        }
+        createBomIfNeeded(bomDependencies)
         createLocksIfNeeded(useLocks)
 
         createJavaSourceFile(projectDir, createMainFile())
