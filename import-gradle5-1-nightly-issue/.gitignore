@@ -1,0 +1,11 @@
+.gradle/
+build/
+**/out/
+/subprojects/*/build/
+.idea/
+classes/
+
+*.iml
+
+# redis
+/dump.rdb
