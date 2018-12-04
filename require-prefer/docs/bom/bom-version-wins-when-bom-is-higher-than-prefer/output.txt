@@ -8,12 +8,15 @@ Preferred version(s): 1.2, null
 
 
 > Task :dependencyInsight
-tree:acacia:1.6 (by constraint)
+tree:acacia:1.6
    variant "compile" [
       org.gradle.status             = release (not requested)
       org.gradle.usage              = java-api
       org.gradle.component.category = library (not requested)
    ]
+   Selection reasons:
+      - By constraint
+      - By conflict resolution : between versions 1.2 and 1.6
 
 tree:acacia:1.6
 \--- sample:bom:1.0.0
@@ -24,7 +27,7 @@ tree:acacia -> 1.6
 \--- project :coast-redwood
      \--- compileClasspath
 
-tree:acacia:{prefer 1.6} -> 1.6
+tree:acacia:{prefer 1.2} -> 1.6
 \--- project :coast-redwood
      \--- compileClasspath
 

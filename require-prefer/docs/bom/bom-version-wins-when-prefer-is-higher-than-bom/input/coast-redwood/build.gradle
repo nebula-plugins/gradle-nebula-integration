@@ -8,10 +8,10 @@ version '1.0'
 
 dependencies {
     api platform('sample:bom:1.0.0')
-    api 'tree:acacia'
-    api ('tree:acacia') {
+    api 'tree:acacia' // version from bom
+    api ('tree:acacia') { // preferred version
         version {
-            prefer '1.6'
+            prefer '1.8'
         }
     }
 }

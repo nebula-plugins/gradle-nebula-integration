@@ -300,10 +300,10 @@ publishing {
                         "${output}\n\n")
     }
 
-    def addSubprojectUsingABomAndPreference(String bomVersion, String prefer) {
+    def addSubprojectUsingAPreference(String prefer) {
         def preferInSubproject = ''
-        if (prefer != '') {
-            preferInSubproject = "prefer '$bomVersion'"
+        if (prefer != '' && prefer != null) {
+            preferInSubproject = "prefer '$prefer'"
         }
         addSubproject(second, """
 plugins {
@@ -315,8 +315,8 @@ version '1.0'
 
 dependencies {
     api platform('sample:bom:1.0.0')
-    api '$group:$dep'
-    api ('$group:$dep') {
+    api '$group:$dep' // version from bom
+    api ('$group:$dep') { // preferred version
         version {
             $preferInSubproject
         }

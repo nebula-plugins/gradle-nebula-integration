@@ -159,7 +159,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
     @Unroll
     def "bom version wins when #title"() {
         given:
-        addSubprojectUsingABomAndPreference(bomVersion, prefer)
+        addSubprojectUsingAPreference(prefer)
 
         buildFile << simpleParentMultiProjectBuildFile(false)
         createBom(bomVersion)

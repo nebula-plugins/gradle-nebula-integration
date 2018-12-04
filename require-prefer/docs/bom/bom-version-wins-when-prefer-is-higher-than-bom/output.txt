@@ -24,7 +24,7 @@ tree:acacia -> 1.6
 \--- project :coast-redwood
      \--- compileClasspath
 
-tree:acacia:{prefer 1.6} -> 1.6
+tree:acacia:{prefer 1.8} -> 1.6
 \--- project :coast-redwood
      \--- compileClasspath
 

@@ -24,10 +24,6 @@ tree:acacia -> 1.6
 \--- project :coast-redwood
      \--- compileClasspath
 
-tree:acacia:{prefer 1.6} -> 1.6
-\--- project :coast-redwood
-     \--- compileClasspath
-
 A web-based, searchable dependency report is available by adding the --scan option.
 
 BUILD SUCCESSFUL
