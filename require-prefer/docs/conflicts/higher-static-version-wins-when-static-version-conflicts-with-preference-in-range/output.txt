@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20181010235832+0000
+5.1-20181127213941+0000
 
 Tasks: dependencyInsight --dependency acacia
 
@@ -21,7 +21,7 @@ tree:acacia:2.9
 \--- project :coast-redwood
      \--- compileClasspath
 
-tree:acacia:[1.2, 2.0) -> 2.9
+tree:acacia:{require [1.2, 2.0); prefer 1.5} -> 2.9
 \--- project :blue-palo-verde
      \--- compileClasspath
 
@@ -34,6 +34,6 @@ BUILD SUCCESSFUL
 
 === Asserting on... ===
 - Winning dep resulting version: 'tree:acacia:2.9'
-- Losing dep resulting version: 'tree:acacia:[1.2, 2.0) -> 2.9'
+- Dep resulting version: 'tree:acacia:{require [1.2, 2.0); prefer 1.5} -> 2.9'
 
 completed assertions

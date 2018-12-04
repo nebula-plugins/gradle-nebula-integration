@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20181010235832+0000
+5.1-20181127213941+0000
 
 Tasks: dependencyInsight --dependency acacia
 
@@ -15,7 +15,7 @@ tree:acacia:1.5
       org.gradle.component.category = library (not requested)
    ]
 
-tree:acacia:[1.2, 2.0) -> 1.5
+tree:acacia:{require [1.2, 2.0); prefer 1.5} -> 1.5
 \--- compileClasspath
 
 A web-based, searchable dependency report is available by adding the --scan option.
@@ -28,4 +28,6 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - Selected version as: 'tree:acacia:1.5
 '
-- Indicates preferred version with '1.5 preferred'
+- Indicates preferred version with '{require [1.2, 2.0); prefer 1.5}'
+
+completed assertions

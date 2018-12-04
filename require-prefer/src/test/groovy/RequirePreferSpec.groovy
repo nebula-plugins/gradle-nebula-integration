@@ -45,7 +45,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         assert result.output.contains(selectedVersion)
 
         if (prefer != null) {
-            def firstReasonResultingVersion = "$prefer preferred"
+            def firstReasonResultingVersion = requestedFrom(require, prefer)
             docWriter.addAssertionToDoc("Indicates preferred version with '$firstReasonResultingVersion'")
             assert result.output.contains(firstReasonResultingVersion)
         }
@@ -74,7 +74,9 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        assertWhenAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
+        def requested1 = requestedFrom(require1, prefer1)
+        def requested2 = requestedFrom(require2, prefer2)
+        assertWhenAllDependenciesHaveVersionRanges(docWriter, result, requested1, requested2, finalVersion)
 
         where:
         prefer1 | require1     | prefer2 | require2     | finalVersion | doesWhat       | title
@@ -99,7 +101,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
+        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion, prefer1)
 
         where:
         prefer1 | require1     | prefer2 | require2 | finalVersion | title
@@ -122,7 +124,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion)
+        assertWhenNotAllDependenciesHaveVersionRanges(docWriter, result, require1, require2, finalVersion, prefer1)
 
         where:
         prefer1 | require1 | prefer2 | require2 | finalVersion | title
@@ -130,7 +132,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
     }
 
     @Unroll
-    def "highest dynamic version wins when #title"() {
+    def "#title1 when #title2"() {
         addSubproject(first, buildFileWithDependencyVersions(require1, prefer1))
         addSubproject(second, buildFileWithDependencyVersions(require2, prefer2))
 
@@ -144,12 +146,14 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         writeRelevantOutput(docWriter, result.output, prefer1, prefer2)
 
         then:
-        assertWithDynamicAndStaticAndPreferenceVersions(docWriter, result, require1, require2, finalVersion)
+        def requested1 = requestedFrom(require1, prefer1)
+        def requested2 = requestedFrom(require2, prefer2)
+        assertWithDynamicAndStaticAndPreferenceVersions(docWriter, result, requested1, requested2, finalVersion)
 
         where:
-        prefer1 | require1 | prefer2 | require2 | finalVersion | title
-        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static is higher than preference'
-        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'preference is higher than static'
+        prefer1 | require1 | prefer2 | require2 | finalVersion | title1                         | title2
+        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static version wins'          | 'static is higher than preference'
+        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'highest dynamic version wins' | 'preference is higher than static'
     }
 
     @Unroll
@@ -292,19 +296,19 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         ArtifactHelpers.setupSamplePomWith(mavenRepo, localBom, localBom.generate())
     }
 
-    private static void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
-        def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
+    private static void assertWhenAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String requested1, String requested2, String finalVersion) {
+        def firstReasonResultingVersion = "$group:$dep:$requested1 -> $finalVersion"
         docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
         assert result.output.contains(firstReasonResultingVersion)
 
-        def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
+        def secondReasonResultingVersion = "$group:$dep:$requested2 -> $finalVersion"
         docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
         assert result.output.contains(secondReasonResultingVersion)
 
         docWriter.writeFooter('completed assertions')
     }
 
-    private static void assertWhenNotAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+    private static void assertWhenNotAllDependenciesHaveVersionRanges(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion, String prefer1) {
         def losingVersion = Lists.newArrayList(require1, require2)
         losingVersion.remove(finalVersion)
 
@@ -312,9 +316,15 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
         assert result.output.contains(winningReasonResultingVersion)
 
-        def losingReasonResultingVersion = "$group:$dep:${losingVersion.first()} -> ${finalVersion}"
-        docWriter.addAssertionToDoc("Losing dep resulting version: '$losingReasonResultingVersion'")
-        assert result.output.contains(losingReasonResultingVersion)
+        def firstReasonResultingVersion = "$group:$dep:{require ${losingVersion.first()}; prefer $prefer1} -> ${finalVersion}"
+        docWriter.addAssertionToDoc("Dep resulting version: '$firstReasonResultingVersion'")
+        assert result.output.contains(firstReasonResultingVersion)
+
+        if(finalVersion != require2) {
+            def secondReasonResultingVersion = "$group:$dep:$require2 -> ${finalVersion}"
+            docWriter.addAssertionToDoc("Other dep resulting version: '$secondReasonResultingVersion'")
+            assert result.output.contains(secondReasonResultingVersion)
+        }
 
         docWriter.writeFooter('completed assertions')
     }
@@ -338,24 +348,31 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         docWriter.writeFooter('completed assertions')
     }
 
-    private static void assertWithDynamicAndStaticAndPreferenceVersions(DocWriter docWriter, BuildResult result, String require1, String require2, String finalVersion) {
+    private static void assertWithDynamicAndStaticAndPreferenceVersions(DocWriter docWriter, BuildResult result, String requested1, String requested2, String finalVersion) {
         def winningReasonResultingVersion = "$group:$dep:${finalVersion}"
         docWriter.addAssertionToDoc("Winning dep resulting version: '$winningReasonResultingVersion'")
         assert result.output.contains(winningReasonResultingVersion)
 
-        if (require1 != finalVersion) {
-            def firstReasonResultingVersion = "$group:$dep:$require1 -> $finalVersion"
+        if (requested1 != finalVersion) {
+            def firstReasonResultingVersion = "$group:$dep:$requested1 -> $finalVersion"
             docWriter.addAssertionToDoc("First dep resulting version: '$firstReasonResultingVersion'")
             assert result.output.contains(firstReasonResultingVersion)
         }
 
-        if (require2 != finalVersion) {
-            def secondReasonResultingVersion = "$group:$dep:$require2 -> $finalVersion"
+        if (requested2 != finalVersion) {
+            def secondReasonResultingVersion = "$group:$dep:$requested2 -> $finalVersion"
             docWriter.addAssertionToDoc("Second dep resulting version: '$secondReasonResultingVersion'")
             assert result.output.contains(secondReasonResultingVersion)
         }
 
         docWriter.writeFooter('completed assertions')
+    }
+
+    private static String requestedFrom(require, prefer) {
+        if(prefer != null) {
+            return "{require $require; prefer $prefer}"
+        }
+        return require
     }
 
 }

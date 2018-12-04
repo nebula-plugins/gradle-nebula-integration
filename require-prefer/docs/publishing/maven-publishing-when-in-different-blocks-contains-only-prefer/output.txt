@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20181010235832+0000
+5.1-20181127213941+0000
 
 Tasks: dependencyInsight --dependency acacia
 

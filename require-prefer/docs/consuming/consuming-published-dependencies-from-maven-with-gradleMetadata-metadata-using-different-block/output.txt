@@ -1,5 +1,5 @@
 === Using Gradle version ===
-5.0-20181010235832+0000
+5.1-20181127213941+0000
 
 Tasks: dependencyInsight --dependency acacia
 
@@ -16,7 +16,7 @@ tree:acacia:1.5
       org.gradle.status = release (not requested)
    ]
 
-tree:acacia:1.5
+tree:acacia:{prefer 1.5} -> 1.5
 \--- tree:blue-palo-verde:1.0
      \--- compileClasspath
 
