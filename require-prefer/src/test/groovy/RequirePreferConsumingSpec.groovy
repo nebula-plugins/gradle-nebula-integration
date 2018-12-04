@@ -60,7 +60,7 @@ class RequirePreferConsumingSpec extends AbstractRequirePreferSpec {
         assert publishedMetadata.text.contains(prefer)
 
         docWriter.addAssertionToDoc("Transitive dependency version resolves to preferred version in first order dependency: '$prefer'")
-        assert insightResultForConsumer.output.contains(prefer)
+        assert insightResultForConsumer.output.contains("tree:acacia:$prefer")
 
         docWriter.writeFooter('completed assertions')
 

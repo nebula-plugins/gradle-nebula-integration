@@ -151,9 +151,10 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
         assertWithDynamicAndStaticAndPreferenceVersions(docWriter, result, requested1, requested2, finalVersion)
 
         where:
-        prefer1 | require1 | prefer2 | require2 | finalVersion | title1                         | title2
-        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'static version wins'          | 'static is higher than preference'
-        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'highest dynamic version wins' | 'preference is higher than static'
+        prefer1 | require1 | prefer2 | require2 | finalVersion | title1                       | title2
+        '1.5'   | '1.+'    | null    | '2.9'    | '2.9'        | 'higher static version wins' | 'dynamic version is less than static'
+        '1.5'   | '1.+'    | null    | '1.2'    | '1.9'        | 'highest dynamic wins'       | 'dynamic version includes static'
+        '1.5'   | '1.+'    | null    | '1.+'    | '1.9'        | 'highest dynamic wins'       | 'there is no range'
     }
 
     @Unroll
@@ -183,6 +184,7 @@ class RequirePreferSpec extends AbstractRequirePreferSpec {
 
     @Unroll
     def "#publishingWith #title"() {
+
         // also noted in https://github.com/gradle/dependency-management-samples/tree/master/samples/strict-dependencies
         // and related to https://github.com/gradle/gradle/issues/6610
         given:

@@ -3,25 +3,25 @@
 
 Tasks: dependencyInsight --dependency acacia
 
-Scenario: static version wins when static is higher than preference
+Scenario: highest dynamic wins when dynamic version includes static
 Preferred version(s): 1.5, null
 
 
 > Task :dependencyInsight
-tree:acacia:2.9
+tree:acacia:1.9
    variant "compile" [
       org.gradle.status             = release (not requested)
       org.gradle.usage              = java-api
       org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
-      - By conflict resolution : between versions 1.9 and 2.9
+      - By conflict resolution : between versions 1.9 and 1.2
 
-tree:acacia:2.9
+tree:acacia:1.2 -> 1.9
 \--- project :coast-redwood
      \--- compileClasspath
 
-tree:acacia:{require 1.+; prefer 1.5} -> 2.9
+tree:acacia:{require 1.+; prefer 1.5} -> 1.9
 \--- project :blue-palo-verde
      \--- compileClasspath
 
@@ -33,7 +33,8 @@ BUILD SUCCESSFUL
 
 
 === Asserting on... ===
-- Winning dep resulting version: 'tree:acacia:2.9'
-- First dep resulting version: 'tree:acacia:{require 1.+; prefer 1.5} -> 2.9'
+- Winning dep resulting version: 'tree:acacia:1.9'
+- First dep resulting version: 'tree:acacia:{require 1.+; prefer 1.5} -> 1.9'
+- Second dep resulting version: 'tree:acacia:1.2 -> 1.9'
 
 completed assertions

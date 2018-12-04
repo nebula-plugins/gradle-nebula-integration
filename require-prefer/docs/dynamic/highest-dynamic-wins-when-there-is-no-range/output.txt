@@ -3,7 +3,7 @@
 
 Tasks: dependencyInsight --dependency acacia
 
-Scenario: highest dynamic version wins when preference is higher than static
+Scenario: highest dynamic wins when there is no range
 Preferred version(s): 1.5, null
 
 
@@ -15,14 +15,14 @@ tree:acacia:1.9
       org.gradle.component.category = library (not requested)
    ]
    Selection reasons:
-      - By conflict resolution : between versions 1.9 and 1.2
-
-tree:acacia:1.2 -> 1.9
-\--- project :coast-redwood
-     \--- compileClasspath
+      - Was requested : didn't match versions 2.9, 2.8, 2.7, 2.6, 2.5, 2.4, 2.3, 2.2, 2.1, 2.0
 
 tree:acacia:{require 1.+; prefer 1.5} -> 1.9
 \--- project :blue-palo-verde
+     \--- compileClasspath
+
+tree:acacia:1.+ -> 1.9
+\--- project :coast-redwood
      \--- compileClasspath
 
 A web-based, searchable dependency report is available by adding the --scan option.
@@ -35,6 +35,6 @@ BUILD SUCCESSFUL
 === Asserting on... ===
 - Winning dep resulting version: 'tree:acacia:1.9'
 - First dep resulting version: 'tree:acacia:{require 1.+; prefer 1.5} -> 1.9'
-- Second dep resulting version: 'tree:acacia:1.2 -> 1.9'
+- Second dep resulting version: 'tree:acacia:1.+ -> 1.9'
 
 completed assertions
