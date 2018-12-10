@@ -21,6 +21,7 @@ import spock.lang.Unroll
 class VerifyInsightWithMissingReasons extends AbstractVerifyInsight {
     static def guava = 'guava'
     static def spymemcached = 'spymemcached'
+    static def mockito = 'mockito'
 
     @Unroll
     def "#title"() {
@@ -179,5 +180,102 @@ dependencies {
         spymemcached | true                 | true                     | 'missing-reasons-with-subst' | 'details-and-subst-with-reason'
         spymemcached | true                 | false                    | 'missing-reasons-with-subst' | 'details-with-reason-subst-without'
         spymemcached | false                | true                     | 'missing-reasons-with-subst' | 'subst-with-reason-details-without'
+    }
+
+    @Unroll
+    def "reasons - #title"() {
+        given:
+        createSettingsFile()
+
+        buildFile << """
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-all:1.8.0'
+}
+
+// resolution strategy adapted from https://github.com/gradle/gradle/blob/master/subprojects/diagnostics/src/integTest/groovy/org/gradle/api/tasks/diagnostics/DependencyInsightReportTaskIntegrationTest.groovy#L732-L743
+configurations.all {
+    resolutionStrategy {
+        eachDependency { 
+            if (it.requested.group == 'org.mockito') {
+                it.useVersion('1.9.0')${if(showReasons) {"; it.because('RULE 1')"} else { '' } }
+            }
+        }
+        eachDependency { 
+            if (it.requested.group == 'org.mockito') {
+                it.useVersion('1.8.5')${if(showReasons) {"; it.because('RULE 2')"} else { '' } } 
+            }
+        }
+        dependencySubstitution {
+            substitute module('org.mockito:mockito-all') ${if(showReasons) {"because 'SUBSTITUTION 1' "} else { '' } }with module('org.mockito:mockito-all:1.9.5')
+            substitute module('org.mockito:mockito-all') ${if(showReasons) {"because 'SUBSTITUTION 2' "} else { '' } }with module('org.mockito:mockito-core:1.10.5')
+            all {
+                if (it.requested.group == 'org.mockito') {
+                    it.useTarget('org.mockito:mockito-core:1.8.3'${if(showReasons) {", 'SUBSTITUTION 3'"} else { '' } })
+                }
+            }
+        }
+        force('org.mockito:mockito-all:1.8.4')
+    }
+}
+"""
+        def tasks = tasksFor(dep)
+
+        when:
+        def result = runTasks(*tasks)
+        DocWriter w = new DocWriter("$title", projectDir, grouping)
+
+        then:
+        w.writeGradleVersion(project.gradle.gradleVersion)
+        w.writeCleanedUpBuildOutput('=== For the dependency under test ===\n' +
+                "Tasks: ${tasks.join(' ')}\n\n" +
+                result.output)
+        w.writeProjectFiles()
+
+        def output = result.output
+
+        def selectionReasons = "Selection reasons:"
+        w.addAssertionToDoc("contains '$selectionReasons ' heading")
+        assert output.contains(selectionReasons)
+
+        if(showReasons) {
+            def reasons = [
+                "- Forced",
+                "- Selected by rule : RULE 1",
+                "- Selected by rule : RULE 2",
+                "- Selected by rule : SUBSTITUTION 1",
+                "- Selected by rule : SUBSTITUTION 2",
+                "- Selected by rule : SUBSTITUTION 3"]
+            reasons.each {
+                w.addAssertionToDoc("contains '$it'")
+                assert output.contains(it)
+            }
+        } else {
+            def reasons = [
+                "useVersion('1.9.0')",
+                "useVersion('1.8.5')",
+                "substitute module('org.mockito:mockito-all') with module('org.mockito:mockito-all:1.9.5')",
+                "substitute module('org.mockito:mockito-all') with module('org.mockito:mockito-core:1.10.5')",
+                "useTarget('org.mockito:mockito-core:1.8.3')",
+                "forced"
+            ]
+            w.addAssertionToDoc("would be nice to contain each of:\n${reasons.stream().map{ it -> "    - $it\n"}.collect().join('') }")
+
+            reasons.each {
+                assert output.contains(it)
+            }
+        }
+
+        w.writeFooter('completed assertions')
+
+        where:
+        dep     | showReasons | grouping          | title
+        mockito | false       | 'missing-reasons' | 'complex-would-love-reasons-here'
+        mockito | true        | 'missing-reasons' | 'complex-have-reasons-here'
     }
 }

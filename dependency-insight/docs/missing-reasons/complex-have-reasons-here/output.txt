@@ -1,0 +1,40 @@
+=== Using Gradle version ===
+5.1-20181127213941+0000
+
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency mockito --warning-mode all
+
+
+> Task :dependencyInsight
+org.mockito:mockito-core:1.8.3
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - Forced
+      - Selected by rule : RULE 1
+      - Selected by rule : RULE 2
+      - Selected by rule : SUBSTITUTION 1
+      - Selected by rule : SUBSTITUTION 2
+      - Selected by rule : SUBSTITUTION 3
+
+org.mockito:mockito-all:1.8.0 -> org.mockito:mockito-core:1.8.3
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'Selection reasons: ' heading
+- contains '- Forced'
+- contains '- Selected by rule : RULE 1'
+- contains '- Selected by rule : RULE 2'
+- contains '- Selected by rule : SUBSTITUTION 1'
+- contains '- Selected by rule : SUBSTITUTION 2'
+- contains '- Selected by rule : SUBSTITUTION 3'
+
+completed assertions

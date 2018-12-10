@@ -1,0 +1,36 @@
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.mockito:mockito-all:1.8.0'
+}
+
+// resolution strategy adapted from https://github.com/gradle/gradle/blob/master/subprojects/diagnostics/src/integTest/groovy/org/gradle/api/tasks/diagnostics/DependencyInsightReportTaskIntegrationTest.groovy#L732-L743
+configurations.all {
+    resolutionStrategy {
+        eachDependency { 
+            if (it.requested.group == 'org.mockito') {
+                it.useVersion('1.9.0')
+            }
+        }
+        eachDependency { 
+            if (it.requested.group == 'org.mockito') {
+                it.useVersion('1.8.5') 
+            }
+        }
+        dependencySubstitution {
+            substitute module('org.mockito:mockito-all') with module('org.mockito:mockito-all:1.9.5')
+            substitute module('org.mockito:mockito-all') with module('org.mockito:mockito-core:1.10.5')
+            all {
+                if (it.requested.group == 'org.mockito') {
+                    it.useTarget('org.mockito:mockito-core:1.8.3')
+                }
+            }
+        }
+        force('org.mockito:mockito-all:1.8.4')
+    }
+}
