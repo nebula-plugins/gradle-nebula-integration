@@ -1,0 +1,26 @@
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {DependencyResolveDetails details ->
+            if (details.requested.group == 'net.spy') {
+                details.useVersion '2.11.7'
+                
+            }
+        }
+    }
+    resolutionStrategy.dependencySubstitution {
+       substitute(module('net.spy:spymemcached'))
+         .because('not really 2.11.6 is a good one')
+         .with(module('net.spy:spymemcached:2.11.6'))
+    }
+}
+
+dependencies {
+    compile 'net.spy:spymemcached:2.11.5'
+}

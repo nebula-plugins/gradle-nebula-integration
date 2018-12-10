@@ -1,0 +1,31 @@
+=== Using Gradle version ===
+5.1-20181127213941+0000
+
+=== For the dependency under test ===
+Tasks: dependencyInsight --dependency spymemcached --warning-mode all
+
+
+> Task :dependencyInsight
+net.spy:spymemcached:2.11.6
+   variant "compile" [
+      org.gradle.status             = release (not requested)
+      org.gradle.usage              = java-api
+      org.gradle.component.category = library (not requested)
+   ]
+   Selection reasons:
+      - Selected by rule
+      - Selected by rule
+
+net.spy:spymemcached:2.11.5 -> 2.11.6
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+1 actionable task: 1 executed
+
+=== Asserting on... ===
+- contains 'Selection reasons: ' heading
+- contains '- Selected by rule\n' exactly twice
+
+completed assertions

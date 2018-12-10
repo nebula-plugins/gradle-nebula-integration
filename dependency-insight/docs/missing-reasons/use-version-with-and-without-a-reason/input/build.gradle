@@ -1,0 +1,17 @@
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { it.useVersion('20.0'); it.because('RULE 2') }
+        eachDependency { it.useVersion('19.0') }
+    }
+}
+            
+dependencies {
+    compile 'com.google.guava:guava:18.+'
+}
