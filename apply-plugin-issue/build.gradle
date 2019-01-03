@@ -1,0 +1,14 @@
+plugins {
+    id "groovy"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+    compile group: 'com.netflix.nebula', name: 'nebula-publishing-plugin', version: '9.4.1'
+  //  compile group: 'com.netflix.nebula', name: 'gradle-contacts-plugin', version: '5.0.0'
+    testCompile group: 'com.netflix.nebula', name: 'nebula-test', version: '7.1.6'
+}
