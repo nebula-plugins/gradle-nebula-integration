@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven {
+        url './repo'
+    }
+}
+
+dependencies {
+    compile(platform('example:bom:1.0'))
+    compile "org.springframework:spring-aop"
+    compile "org.springframework:spring-aspects"
+}
