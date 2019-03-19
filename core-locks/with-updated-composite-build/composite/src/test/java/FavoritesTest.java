@@ -23,6 +23,6 @@ public class FavoritesTest {
     public void shouldReturnFavoriteThing() {
         String favoriteThing = new Favorites().favoriteGreeting();
 
-        assertEquals("hello world", favoriteThing);
+        assertEquals("hi world", favoriteThing);
     }
 }

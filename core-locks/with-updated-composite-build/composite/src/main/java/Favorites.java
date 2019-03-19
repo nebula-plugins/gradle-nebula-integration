@@ -16,6 +16,6 @@
 
 public class Favorites {
     public String favoriteGreeting() {
-        return new GreetingHelper().greetingToReturn() + " world";
+        return new GreetingHelper().greeting() + " world";
     }
 }

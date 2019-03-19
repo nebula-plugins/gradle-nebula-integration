@@ -18,4 +18,8 @@ public class GreetingHelper {
     public String greetingToReturn() {
         return "hello";
     }
+
+    public String greeting() {
+        return "hello";
+    }
 }
