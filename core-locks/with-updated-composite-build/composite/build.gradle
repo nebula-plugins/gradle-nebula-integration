@@ -1,0 +1,38 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.netflix.nebula:gradle-dependency-lock-plugin:7.3.0"
+    classpath "com.netflix.nebula:nebula-project-plugin:6.0.0"
+    classpath "com.netflix.nebula:nebula-publishing-plugin:9.5.0"
+  }
+}
+
+apply plugin: "java"
+apply plugin: "nebula.dependency-lock"
+apply plugin: "nebula.ivy-publish"
+
+group = 'gradle.nebula.integration'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+    ivy { url { "${projectDir}/../testrepo" } }
+}
+
+dependencies {
+    compile 'gradle.nebula.integration:dependency-project:0.1.+'
+    testCompile 'junit:junit:4.12'
+}
+
+publishing {
+    repositories {
+        ivy {
+            name = 'testLocal'
+            url = "${projectDir}/../testrepo"
+        }
+    }
+}
