@@ -26,10 +26,9 @@ class StatusSchemePlugin implements Plugin<Project> {
 
     }
 
-    // from the deprecated method
-    static defineStatusesWithScheme(DependencyHandler dependencies, List<String> statusScheme) {
+    static defineStatusesWithScheme(DependencyHandler dependencies) {
         dependencies.components.all { ComponentMetadataDetails details ->
-            StatusSchemeRule.defineStatuses(details, statusScheme)
+            StatusSchemeRule.defineStatuses(details, DEFAULT_STATUS_SCHEME)
         }
     }
 }

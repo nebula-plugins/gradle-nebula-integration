@@ -29,7 +29,7 @@ class StatusSpec extends IntegrationSpec {
             allprojects {
                 configureStatusAttribute(it)
                 buildscript {
-                    defineStatusesWithScheme(dependencies, ['snapshot', 'integration', 'candidate', 'release'])
+                    defineStatusesWithScheme(dependencies)
                 }
             } 
         """
