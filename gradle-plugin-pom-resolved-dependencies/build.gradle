@@ -1,0 +1,48 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.google.guava:guava:latest.release'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            group 'nebula.test.plugin'
+            version '1.0.1'
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
+
+group = 'nebula.test.plugin'
+version = '1.0.1'
+
+
+pluginBundle {
+    website = 'https://nebula-plugins.github.io/'
+    vcsUrl = 'https://nebula-plugins.github.io/'
+    tags = ['testing', 'integrationTesting', 'compatibility']
+    plugins {
+        testNothingPlugin {
+            id = 'nebula.test-nothing-plugin'
+            displayName = 'nebula-test-nothing-plugin'
+            description = 'nebula-test-nothing-plugin'
+            tags = ['nebula', 'plugin']
+
+        }
+    }
+}
