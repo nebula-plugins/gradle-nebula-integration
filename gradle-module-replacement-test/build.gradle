@@ -1,0 +1,47 @@
+import gradle.module.replacement.test.plugin.DependencyPlugin
+
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+    id 'maven-publish'
+    id 'ivy-publish'
+
+}
+
+apply plugin: DependencyPlugin
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+     api 'com.google.truth:truth:0.28'
+     modules {
+         module('com.google.collections:google-collections') {
+             replacedBy('com.google.guava:guava')
+         }
+     }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            versionMapping {
+                allVariants{
+                    fromResolutionResult()
+                }
+            }
+
+        }
+        ivy(IvyPublication) {
+            from components.java
+            versionMapping {
+                allVariants{
+                    fromResolutionResult()
+                }
+            }
+
+        }
+    }
+}
