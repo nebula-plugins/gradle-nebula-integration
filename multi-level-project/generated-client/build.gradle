@@ -3,3 +3,9 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+/*
+build.dependsOn project("multilevelproject-client-codegen").getTasksByName("build", true)
+build.dependsOn project("multilevelproject-client-common").getTasksByName("build", true)
+build.dependsOn project("multilevelproject-client-guice").getTasksByName("build", true)
+build.dependsOn project("multilevelproject-client-spring").getTasksByName("build", true)*/

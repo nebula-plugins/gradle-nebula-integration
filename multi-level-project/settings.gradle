@@ -7,6 +7,6 @@
  * in the user manual at https://docs.gradle.org/5.4/userguide/multi_project_builds.html
  */
 rootProject.name = 'multilevelproject'
-include 'common', 'app', 'client', ':generated-client:codegen', ':generated-client:common', ':generated-client:guice', ':generated-client:spring'
+include 'common', 'app', 'client', 'generated-client:codegen', ':generated-client:common', ':generated-client:guice', ':generated-client:spring'
 rootProject.children.each {if(it.name != "generated-client") { it.name="multilevelproject-${it.name}"} }
 project(':generated-client').children.each {it.name="multilevelproject-client-${it.name}"}
