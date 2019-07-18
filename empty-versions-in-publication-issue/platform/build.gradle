@@ -1,0 +1,24 @@
+plugins {
+    id 'java-platform'
+    id 'maven-publish'
+}
+
+dependencies {
+    constraints {
+        api 'com.google.collections:google-collections:1.0'
+    }
+}
+
+javaPlatform {
+    allowDependencies()
+}
+
+publishing {
+    publications {
+        myPlatform(MavenPublication) {
+            from components.javaPlatform
+        }
+    }
+}
+
+version = '1.0.0'

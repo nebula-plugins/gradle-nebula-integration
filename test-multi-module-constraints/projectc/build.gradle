@@ -1,0 +1,7 @@
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile group: 'io.vavr', name: 'vavr', version: '0.10.0'
+}

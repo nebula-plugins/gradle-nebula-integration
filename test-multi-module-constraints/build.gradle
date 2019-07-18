@@ -1,0 +1,27 @@
+import netflix.nebula.DependencyConstraintsImplementationPlugin
+import netflix.nebula.DependencyConstraintsPlugin
+
+allprojects {
+    group = 'netflix.nebula'
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: DependencyConstraintsPlugin
+   // apply plugin: DependencyConstraintsImplementationPlugin
+    apply plugin: 'maven-publish'
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
+
+                from components.java
+            }
+        }
+    }
+}
