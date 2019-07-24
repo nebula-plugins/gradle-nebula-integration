@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+}
+
+import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.*
+
+def VERSIONED_COMPARATOR = new DefaultVersionComparator()
+def VERSION_SCHEME = new DefaultVersionSelectorScheme(VERSIONED_COMPARATOR)
+
+configurations.all {
+    resolutionStrategy {
+        dependencySubstitution.all {
+            def selector = VERSION_SCHEME.parseSelector("[1.1.0, 1.1.1]")
+            if (it.requested.group.startsWith("test.nebula") && it.requested.module.startsWith("a") && selector.accept(it.requested.version)) {
+                it.useTarget("${it.requested.group}:${it.requested.module}:1.1.2", "bad version")
+            }
+        }
+        force "test.nebula:a:1.0.0"
+    }
+}
+
+repositories {
+    maven { url 'testrepogen/mavenrepo' }
+}
+
+dependencies {
+    compile 'test.nebula:a:1.0.0'
+    compile 'test.nebula:brings-a-transitively:latest.release'
+}
+
