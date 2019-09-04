@@ -1,0 +1,57 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "test.nebula",
+    "module": "moa",
+    "version": "9.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.0-20190901220020+0000",
+      "buildId": "eprrm456x5h3jcv3yrhl6ycnvi"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "moa-9.0.0.jar",
+          "url": "moa-9.0.0.jar",
+          "size": 261,
+          "sha1": "736bea63810cba808d85d15b346560bcfbb26ec4",
+          "md5": "7d7cec1264755255b5e79a3d531bf11e"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "moa-9.0.0.jar",
+          "url": "moa-9.0.0.jar",
+          "size": 261,
+          "sha1": "736bea63810cba808d85d15b346560bcfbb26ec4",
+          "md5": "7d7cec1264755255b5e79a3d531bf11e"
+        }
+      ]
+    }
+  ]
+}

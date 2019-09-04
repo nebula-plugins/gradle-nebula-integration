@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+repositories {
+    maven { url './bomrepo/' }
+    maven { url './mavenrepo/' }
+
+}
+
+dependencies {
+    implementation platform('test.nebula.bom:testbom:latest.release')
+    implementation 'test.nebula:moa'
+}
