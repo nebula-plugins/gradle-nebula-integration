@@ -47,6 +47,7 @@ class UpdateLocksSpec extends IntegrationSpec {
         then:
         def updatedCompileOnlyLockfile = new File(dependencyLockFolder, 'compileOnly.lockfile')
         updatedCompileOnlyLockfile.exists()
+        updatedCompileOnlyLockfile.text.contains("com.netflix.nebula:nebula-bintray-plugin:7.4.1")
         updatedCompileOnlyLockfile.text.contains(GUAVA_FROM_BINTRAY_741)
     }
 
@@ -70,6 +71,7 @@ class UpdateLocksSpec extends IntegrationSpec {
         then:
         def updatedCompileOnlyLockfile = new File(dependencyLockFolder, 'compileOnly.lockfile')
         updatedCompileOnlyLockfile.exists()
+        updatedCompileOnlyLockfile.text.contains("com.netflix.nebula:nebula-bintray-plugin:7.4.1")
         updatedCompileOnlyLockfile.text.contains(GUAVA_FROM_BINTRAY_730)
     }
 
@@ -78,6 +80,10 @@ class UpdateLocksSpec extends IntegrationSpec {
             apply plugin: 'java'
             dependencyLocking {
                 lockAllConfigurations()
+            }
+            repositories {
+                mavenCentral()
+                jcenter()
             }
             dependencies {
                 compileOnly 'com.netflix.nebula:nebula-bintray-plugin:7.4.1'
