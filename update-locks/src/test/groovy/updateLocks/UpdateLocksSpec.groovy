@@ -73,6 +73,15 @@ class UpdateLocksSpec extends IntegrationSpec {
         updatedCompileOnlyLockfile.exists()
         updatedCompileOnlyLockfile.text.contains("com.netflix.nebula:nebula-bintray-plugin:7.4.1")
         updatedCompileOnlyLockfile.text.contains(GUAVA_FROM_BINTRAY_730)
+
+        when:
+        runTasks('dependencies', '--write-locks')
+
+        then:
+        def rewrittenCompileOnlyLockfile = new File(dependencyLockFolder, 'compileOnly.lockfile')
+        rewrittenCompileOnlyLockfile.exists()
+        rewrittenCompileOnlyLockfile.text.contains("com.netflix.nebula:nebula-bintray-plugin:7.4.1")
+        rewrittenCompileOnlyLockfile.text.contains(GUAVA_FROM_BINTRAY_741)
     }
 
     private static String updatedBuildFile() {
