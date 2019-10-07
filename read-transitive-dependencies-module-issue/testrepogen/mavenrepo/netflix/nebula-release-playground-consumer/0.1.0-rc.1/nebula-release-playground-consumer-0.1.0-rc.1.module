@@ -1,0 +1,131 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "netflix",
+    "module": "nebula-release-playground-consumer",
+    "version": "0.1.0-rc.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.1-20191006220021+0000",
+      "buildId": "2pylsxpe3vemvmed26wwzvkaoe"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "foo",
+          "module": "ignore",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "ignoredGroup",
+          "module": "bar",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "foo",
+          "module": "bar",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "fiz",
+          "module": "buz",
+          "version": {
+            "requires": "2.0-rc.1"
+          }
+        },
+        {
+          "group": "netflix",
+          "module": "nebula-release-playground-common",
+          "version": {
+            "requires": "0.1.0-rc.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "nebula-release-playground-consumer-0.1.0-rc.1.jar",
+          "url": "nebula-release-playground-consumer-0.1.0-rc.1.jar",
+          "size": 261,
+          "sha1": "f6755d2ac3eba83ae4c0fa363e7aff938a477805",
+          "md5": "fd770fb2acc656754897796785961f5f"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "foo",
+          "module": "ignore",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "ignoredGroup",
+          "module": "bar",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "foo",
+          "module": "bar",
+          "version": {
+            "requires": "1.0-rc.1"
+          }
+        },
+        {
+          "group": "fiz",
+          "module": "buz",
+          "version": {
+            "requires": "2.0-rc.1"
+          }
+        },
+        {
+          "group": "netflix",
+          "module": "nebula-release-playground-common",
+          "version": {
+            "requires": "0.1.0-rc.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "nebula-release-playground-consumer-0.1.0-rc.1.jar",
+          "url": "nebula-release-playground-consumer-0.1.0-rc.1.jar",
+          "size": 261,
+          "sha1": "f6755d2ac3eba83ae4c0fa363e7aff938a477805",
+          "md5": "fd770fb2acc656754897796785961f5f"
+        }
+      ]
+    }
+  ]
+}

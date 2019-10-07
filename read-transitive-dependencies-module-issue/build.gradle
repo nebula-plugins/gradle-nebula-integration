@@ -1,0 +1,66 @@
+import java.util.concurrent.TimeUnit
+
+plugins {
+    id 'java-library'
+    id 'groovy'
+}
+
+repositories {
+    maven {
+        url 'testrepogen/mavenrepo'
+        metadataSources {
+            mavenPom()
+            artifact()
+            //ignoreGradleMetadataRedirection()
+        }
+    }
+}
+
+
+dependencies {
+    implementation 'netflix:nebula-release-playground-common:0.1.0-rc.1'
+
+}
+
+task printTransitiveDependencies(type: PrintTransitiveDependencies) {
+}
+
+class PrintTransitiveDependencies extends DefaultTask {
+    @TaskAction
+    void walk() {
+        Set<ResolvedDependencyResult> deps = findDependency('netflix', 'nebula-release-playground-common', '0.1.0-rc.1', 'runtime').flatten()
+        deps.each { dep ->
+            println dep.selected.getDependencies()
+        }
+    }
+
+    Set<ResolvedDependencyResult> findDependency(String group, String name, String version, String confName) {
+
+        Dependency defaultDep = dep(group, name, version, confName)
+
+        def confOfJustUs = project.configurations.detachedConfiguration(defaultDep)
+        confOfJustUs.resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS);
+        confOfJustUs.resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS);
+
+        // We might be resolving ourself, and we can't do that.  So, pretend it's Halloween and put on a mask.
+        def savedGroup = project.group
+        try {
+            project.group = 'fake.netflix' // Resolve can't happen on ourself, so pretend to be someone else.
+            def dependencies = confOfJustUs.incoming.resolutionResult.root.dependencies
+            //we need to filter out unresolved fake.netflix
+            return dependencies.findAll { it instanceof ResolvedDependencyResult } as Set<ResolvedDependencyResult>
+        } finally {
+            project.group = savedGroup
+        }
+
+    }
+
+    private Dependency dep(String group, String name, String version, String confName) {
+        def dependencyNotation = [group: group, name: name, version: version, configuration: confName.trim()]
+        def usAsDependency = project.dependencies.create(dependencyNotation)
+        if (usAsDependency instanceof ExternalModuleDependency) {
+            usAsDependency.changing = true
+        }
+        return usAsDependency
+    }
+}

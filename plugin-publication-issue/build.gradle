@@ -1,0 +1,58 @@
+
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    gradleApi()
+    implementation 'org.apache.commons:commons-math3:latest.release'
+
+    implementation 'com.google.guava:guava:latest.release'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
+
+group = 'com.netflix.nebula.test'
+
+version = '1.0'
+
+pluginBundle {
+    website = 'https://github.com/nebula-plugins/gradleTest'
+    vcsUrl = 'https://github.com/nebula-plugins/gradleTest.git'
+    tags = ['testing', 'integrationTesting', 'compatibility']
+    mavenCoordinates {
+        groupId = 'com.netflix.nebula.test'
+        artifactId = 'my-plugin'
+    }
+}
+
+gradlePlugin {
+    plugins {
+        myPlugin {
+            id = 'plugin.publication.issue.my-plugin'
+            implementationClass = 'plugin.publication.issue.MyPlugin'
+            displayName = 'MyPlugin'
+            description = 'MyPlugin'
+        }
+    }
+}
+
+
+publishing {
+    publications {
+        withType(MavenPublication) {
+            versionMapping {
+                allVariants {
+                    fromResolutionResult()
+                }
+            }
+        }
+    }
+}
