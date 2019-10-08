@@ -28,17 +28,20 @@ task printTransitiveDependencies(type: PrintTransitiveDependencies) {
 class PrintTransitiveDependencies extends DefaultTask {
     @TaskAction
     void walk() {
-        Set<ResolvedDependencyResult> deps = findDependency('netflix', 'nebula-release-playground-common', '0.1.0-rc.1', 'runtime').flatten()
+        Set<ResolvedDependencyResult> deps = findDependency('netflix', 'nebula-release-playground-common', '0.1.0-rc.1').flatten()
         deps.each { dep ->
             println dep.selected.getDependencies()
         }
     }
 
-    Set<ResolvedDependencyResult> findDependency(String group, String name, String version, String confName) {
+    Set<ResolvedDependencyResult> findDependency(String group, String name, String version) {
 
-        Dependency defaultDep = dep(group, name, version, confName)
+        Dependency defaultDep = dep(group, name, version)
 
         def confOfJustUs = project.configurations.detachedConfiguration(defaultDep)
+        confOfJustUs.attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage, Usage.JAVA_RUNTIME))
+        }
         confOfJustUs.resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS);
         confOfJustUs.resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS);
 
@@ -55,8 +58,8 @@ class PrintTransitiveDependencies extends DefaultTask {
 
     }
 
-    private Dependency dep(String group, String name, String version, String confName) {
-        def dependencyNotation = [group: group, name: name, version: version, configuration: confName.trim()]
+    private Dependency dep(String group, String name, String version) {
+        def dependencyNotation = [group: group, name: name, version: version]
         def usAsDependency = project.dependencies.create(dependencyNotation)
         if (usAsDependency instanceof ExternalModuleDependency) {
             usAsDependency.changing = true
