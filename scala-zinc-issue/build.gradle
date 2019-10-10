@@ -8,7 +8,7 @@ repositories {
 
 dependencies {
     // Use Scala 2.12 in our library project
-    implementation 'org.scala-lang:scala-library:2.12.8'
+    implementation 'org.scala-lang:scala-library:2.10.6'
 
     // Use Scalatest for testing our library
     testImplementation 'junit:junit:4.12'
