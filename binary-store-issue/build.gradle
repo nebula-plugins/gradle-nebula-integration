@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+configurations {
+    myConfiguration
+    testRuntimeClasspath.extendsFrom(myConfiguration)
+}
+
+repositories {
+    maven { url 'repo' }
+}
+
+dependencies {
+    implementation 'a:a:1.0.0'
+    myConfiguration 'm:m:1.0.0'
+}
+
+project.dependencies.modules.module('from:this') {
+    def details = it as ComponentModuleMetadataDetails
+    def message = "✭ replacement from:this -> to:this"
+    details.replacedBy('to:this', message)
+}
+
+// we thought alignment was involved, but this occurs even without alignment:
+//
+// project.dependencies.components.all(AlignGroup.class)
+//
+//class AlignGroup implements ComponentMetadataRule {
+//    void execute(ComponentMetadataContext ctx) {
+//        ctx.details.with { it ->
+//            if (it.getId().getGroup().startsWith("to")) {
+//                it.belongsTo("to-this:to-this-platform:${it.getId().getVersion()}")
+//            }
+//        }
+//    }
+//}
