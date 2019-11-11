@@ -42,3 +42,25 @@ compileClasspath - Compile classpath for source set 'main'.
 +--- commons-logging:commons-logging:{strictly 1.0} -> 1.0 (c)
 \--- org.apache.commons:commons-lang3:{strictly 3.0} -> 3.0 (c)
 ```
+
+Upon selectively updating one dependency with `--update-locks org.apache.commons:commons-lang3` and also adding the `--write-locks` start parameter:
+
+```
+./gradlew dependencies --update-locks org.apache.commons:commons-lang3 --write-locks
+```
+
+and viewing the resolved configuration:
+
+```
+./gradlew dependencies --configuration compileClasspath
+
+compileClasspath - Compile classpath for source set 'main'.
++--- org.apache.commons:commons-lang3:latest.release -> 3.9
++--- commons-logging:commons-logging:latest.release -> 1.0
++--- commons-logging:commons-logging:{strictly 1.0} -> 1.0 (c)
+\--- org.apache.commons:commons-lang3:{strictly 3.9} -> 3.9 (c)
+```
+
+then one dependency is selectively updated successfully, and the `--write-locks` flag is ignored.
+
+It would be better to inform the user that these flags should not be used together.
