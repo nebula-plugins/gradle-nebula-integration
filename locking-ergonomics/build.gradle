@@ -7,8 +7,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-lang3:3.0'
-    implementation 'commons-logging:commons-logging:1.0'
+    implementation 'org.apache.commons:commons-lang3:latest.release'
+    implementation 'commons-logging:commons-logging:latest.release'
 }
 
 dependencyLocking {
