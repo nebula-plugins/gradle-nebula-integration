@@ -1,0 +1,16 @@
+
+apply plugin: 'java'
+
+repositories {
+    ivy {
+        url = 'ivy-repo'
+        patternLayout {
+            ivy '[organisation]/[module]/[revision]/[module]-[revision]-ivy.[ext]'
+            artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+        }
+    }
+}
+
+dependencies {
+   implementation 'foo:my-client:1.0.0'
+}
