@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    modules {
+        module('io.grpc:grpc-core') {
+            replacedBy("netflix.example:included-producer")
+        }
+    }
+    compile "netflix.example:included-producer:1.0.0"
+}

@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+group = 'netflix.example'
+
+dependencies {
+    compile ("io.grpc:grpc-core:1.20.0") {transitive = false}
+    compile "com.google.code.gson:gson:2.7"
+}
