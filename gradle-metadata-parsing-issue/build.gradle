@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven {
+        name 'repo1'
+        url 'repo'
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+    }
+    maven {
+        name 'repo2'
+        url 'repo'
+        metadataSources {
+            gradleMetadata()
+            mavenPom()
+        }
+    }
+    jcenter()
+}
+
+dependencies {
+    implementation "netflix:platform:1.0.0"
+    implementation 'org.apache.commons:commons-lang3:3.9'
+}

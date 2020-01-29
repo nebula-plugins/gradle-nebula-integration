@@ -1,0 +1,5 @@
+package netflix;
+
+class MyClass {
+
+}
