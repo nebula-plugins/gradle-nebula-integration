@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id "maven-publish"
+	id "ivy-publish"
 }
 
 group = 'com.example'
@@ -26,6 +27,7 @@ test {
 }
 
 
+
 publishing {
 	publications {
 		maven(MavenPublication) {
@@ -34,6 +36,29 @@ publishing {
 			version = '0.0.1-SNAPSHOT'
 			from components.java
 
+			versionMapping {
+				usage('java-api') {
+					fromResolutionOf('runtimeClasspath')
+				}
+				usage('java-runtime') {
+					fromResolutionResult()
+				}
+			}
+		}
+		ivy(IvyPublication) {
+			organisation = 'com.example'
+			module = 'demo'
+			revision = '0.0.1-SNAPSHOT'
+			descriptor.status = 'milestone'
+			descriptor.branch = 'testing'
+			descriptor.extraInfo 'http://my.namespace', 'myElement', 'Some value'
+			repositories {
+				ivy {
+					// change to point to your repo, e.g. http://my.org/repo
+					url = "$buildDir/ivyrepo"
+				}
+			}
+			from components.java
 			versionMapping {
 				usage('java-api') {
 					fromResolutionOf('runtimeClasspath')
