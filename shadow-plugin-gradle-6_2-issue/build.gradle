@@ -19,7 +19,7 @@ dependencies {
 
 
 shadowJar {
-	classifier 'all' // this configuration is used to produce only the shadowed jar
+	classifier null // this configuration is used to produce only the shadowed jar
 	relocate 'com.google', 'com.netflix.shading.google'
 }
 
