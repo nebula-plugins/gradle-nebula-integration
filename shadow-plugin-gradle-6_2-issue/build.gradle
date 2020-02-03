@@ -1,0 +1,56 @@
+plugins {
+	id 'java'
+	id "maven-publish"
+	id "ivy-publish"
+	id "com.github.johnrengelman.shadow" version "5.2.0"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'com.google.guava:guava:19.0'
+}
+
+
+shadowJar {
+	classifier 'all' // this configuration is used to produce only the shadowed jar
+	relocate 'com.google', 'com.netflix.shading.google'
+}
+
+jar {
+	enabled = false // this configuration is used to produce only the shadowed jar
+}
+
+jar.dependsOn shadowJar // this configuration is used to produce only the shadowed jar
+
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'com.example'
+			artifactId = 'demo'
+			version = '0.0.1-SNAPSHOT'
+			from components.java
+		}
+		ivy(IvyPublication) {
+			organisation = 'com.example'
+			module = 'demo'
+			revision = '0.0.1-SNAPSHOT'
+			descriptor.status = 'milestone'
+			descriptor.branch = 'testing'
+			descriptor.extraInfo 'http://my.namespace', 'myElement', 'Some value'
+			repositories {
+				ivy {
+					// change to point to your repo, e.g. http://my.org/repo
+					url = "$buildDir/ivyrepo"
+				}
+			}
+		}
+	}
+}
