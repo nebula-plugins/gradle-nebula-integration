@@ -19,12 +19,19 @@ dependencies {
 
 
 shadowJar {
-	classifier 'all' // this configuration is used to produce only the shadowed jar
+	classifier 'all'// this configuration is used to produce only the shadowed jar
 	relocate 'com.google', 'com.netflix.shading.google'
 }
 
+configurations {
+	[apiElements, runtimeElements].each {
+		it.outgoing.artifacts.removeIf { it.buildDependencies.getDependencies(null).contains(jar) }
+		it.outgoing.artifact(shadowJar)
+	}
+}
+
 jar {
-	enabled = false // this configuration is used to produce only the shadowed jar
+	enabled = true // this configuration is used to produce only the shadowed jar
 }
 
 jar.dependsOn shadowJar // this configuration is used to produce only the shadowed jar
@@ -32,6 +39,10 @@ jar.dependsOn shadowJar // this configuration is used to produce only the shadow
 
 publishing {
 	publications {
+		myShadowJar(IvyPublication) {
+			artifact shadowJar
+			module = "sample-shaded"
+		}
 		maven(MavenPublication) {
 			groupId = 'com.example'
 			artifactId = 'demo'
@@ -42,6 +53,7 @@ publishing {
 			organisation = 'com.example'
 			module = 'demo'
 			revision = '0.0.1-SNAPSHOT'
+			from components.java
 			descriptor.status = 'milestone'
 			descriptor.branch = 'testing'
 			descriptor.extraInfo 'http://my.namespace', 'myElement', 'Some value'
@@ -49,6 +61,38 @@ publishing {
 				ivy {
 					// change to point to your repo, e.g. http://my.org/repo
 					url = "$buildDir/ivyrepo"
+				}
+			}
+		}
+	}
+}
+
+
+afterEvaluate {
+	publishing {
+		publications {
+			// to remove shaded dependency from ivy.xml
+			withType(IvyPublication) {
+				descriptor.withXml {
+					asNode()
+							.dependencies
+							.dependency
+							.findAll {
+								it.@name == "guava"
+							}
+							.each { it.parent().remove(it) }
+				}
+			}
+			// to remove shaded dependency from pom.xml
+			withType(MavenPublication) {
+				pom.withXml {
+					asNode()
+							.dependencies
+							.dependency
+							.findAll {
+								it.artifactId.text() == "guava"
+							}
+							.each { it.parent().remove(it) }
 				}
 			}
 		}
