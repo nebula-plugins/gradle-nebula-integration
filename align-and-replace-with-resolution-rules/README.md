@@ -1,4 +1,4 @@
-# Aligned group with replacement
+# Aligned group with replacement and Nebula resolution rules
 
 When using a replacement group and alignment rule, then the replaced group should be aligned as well.
 
