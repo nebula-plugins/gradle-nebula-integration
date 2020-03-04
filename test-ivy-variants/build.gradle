@@ -1,0 +1,27 @@
+import myplugin.MyPlugin
+
+plugins {
+    id 'java-library'
+}
+
+apply plugin: MyPlugin
+String repoPattern = '[organisation]/[module]/[revision]'
+String ivyPattern = "${repoPattern}/[module]-[revision]-ivy.[ext]"
+String artiPattern = "${repoPattern}/[artifact]-[revision](-[classifier]).[ext]"
+
+repositories {
+    jcenter()
+    ivy {
+        url 'ivyRepo'
+        patternLayout {
+            artifact artiPattern
+            ivy ivyPattern
+            m2compatible = true
+        }
+    }
+}
+
+dependencies {
+    implementation 'foo:my-core:1.0.0'
+}
+

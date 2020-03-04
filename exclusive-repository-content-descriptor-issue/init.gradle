@@ -1,0 +1,22 @@
+rootProject {
+    buildscript {
+        repositories {
+            jcenter()
+            exclusiveContent {
+                forRepository {
+                    maven {
+                        name = "myMavenGradleMetadataRepo"
+                        url "https://repo.mycompany.com/maven2"
+                        metadataSources {
+                            gradleMetadata()
+                        }
+                    }
+                }
+                filter {
+                    // this repository *only* contains artifacts with group "my.company"
+                    includeGroup "my.company"
+                }
+            }
+        }
+    }
+}
