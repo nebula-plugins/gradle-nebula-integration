@@ -35,7 +35,7 @@ class MyPlugin implements Plugin<Project> {
         ObjectFactory getObjects() { }
 
         void execute(ComponentMetadataContext context) {
-            context.details.maybeAddVariant('runtimeElements', 'default', new Action<VariantMetadata>() {
+            context.details.maybeAddVariant('runtimeElements', 'runtime', new Action<VariantMetadata>() {
                 @Override
                 void execute(VariantMetadata variantMetadata) {
                     variantMetadata.attributes {
