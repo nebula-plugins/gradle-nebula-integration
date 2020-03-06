@@ -22,6 +22,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'foo:my-core:1.0.0'
+    implementation('foo:my-core:1.0.0')
 }
 
