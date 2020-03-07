@@ -1,5 +1,5 @@
 <ivy-module xmlns:e="http://ant.apache.org/ivy/extra" version="2.0">
-    <info organisation="foo" module="my-core" revision="1.0.0" status="integration" publication="20200110224423">
+    <info organisation="foo" module="my-core-direct-exclude" revision="1.0.0" status="integration" publication="20200110224423">
         <description>my core</description>
     </info>
     <configurations>
@@ -16,11 +16,11 @@
         <conf name="optional" visibility="public"/>
     </configurations>
     <publications>
-        <artifact name="my-core" type="jar" ext="jar" conf="compile,runtime"/>
+        <artifact name="my-core-direct-exclude" type="jar" ext="jar" conf="compile,runtime"/>
     </publications>
     <dependencies>
-        <dependency org="foo" name="my-dependency" rev="1.0.0" conf="compile->default"/>
-        <exclude org="foo" module="my-excluded-dependency" conf="compile"/>
-        <exclude org="foo" module="my-excluded-dependency" conf="runtime"/>
+        <dependency org="foo" name="my-dependency" rev="1.0.0" conf="compile->default">
+            <exclude org="foo" module="my-excluded-dependency"/>
+        </dependency>
     </dependencies>
 </ivy-module>
