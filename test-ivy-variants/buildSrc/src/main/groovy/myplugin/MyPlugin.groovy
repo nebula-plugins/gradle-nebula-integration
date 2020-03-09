@@ -33,7 +33,7 @@ class MyPlugin implements Plugin<Project> {
                 return
             }
 
-            context.details.maybeAddVariant('runtimeElements', 'runtime', new Action<VariantMetadata>() {
+            context.details.maybeAddVariant('runtimeElements', 'default', new Action<VariantMetadata>() {
                 @Override
                 void execute(VariantMetadata variantMetadata) {
                     variantMetadata.attributes {

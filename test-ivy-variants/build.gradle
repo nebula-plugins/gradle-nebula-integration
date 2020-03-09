@@ -1,10 +1,13 @@
+import groovy.transform.CompileDynamic
 import myplugin.MyPlugin
+
+import javax.inject.Inject
 
 plugins {
     id 'java-library'
 }
 
-apply plugin: MyPlugin
+//apply plugin: MyPlugin
 String repoPattern = '[organisation]/[module]/[revision]'
 String ivyPattern = "${repoPattern}/[module]-[revision]-ivy.[ext]"
 String artiPattern = "${repoPattern}/[artifact]-[revision](-[classifier]).[ext]"
@@ -23,6 +26,41 @@ repositories {
 
 dependencies {
     implementation('foo:my-core:1.0.0')
-    implementation('foo:my-core-direct-exclude:1.0.0')
 }
 
+project.dependencies.components.all(IvyVariantDerivationRule)
+
+@CompileDynamic
+@CacheableRule
+class IvyVariantDerivationRule implements ComponentMetadataRule {
+    @Inject
+    ObjectFactory getObjects() { }
+
+    void execute(ComponentMetadataContext context) {
+        if(context.getDescriptor(IvyModuleDescriptor) == null) {
+            return
+        }
+
+        context.details.maybeAddVariant('runtimeElements', 'default', new Action<VariantMetadata>() {
+            @Override
+            void execute(VariantMetadata variantMetadata) {
+                variantMetadata.attributes {
+                    it.attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                    it.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                    it.attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+                }
+            }
+        })
+
+        context.details.maybeAddVariant('apiElements', 'compile', new Action<VariantMetadata>() {
+            @Override
+            void execute(VariantMetadata variantMetadata) {
+                variantMetadata.attributes {
+                    attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, getObjects().named(LibraryElements, LibraryElements.JAR))
+                    attribute(Category.CATEGORY_ATTRIBUTE, getObjects().named(Category, Category.LIBRARY))
+                    attribute(Usage.USAGE_ATTRIBUTE, getObjects().named(Usage, Usage.JAVA_API))
+                }
+            }
+        })
+    }
+}

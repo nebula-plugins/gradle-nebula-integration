@@ -3,11 +3,11 @@
         <description>my core</description>
     </info>
     <configurations>
-        <conf name="apiElements" visibility="public"/>
+        <conf name="apiElements" visibility="public" extends="compile"/>
         <conf name="compile" visibility="public"/>
         <conf name="default" visibility="public" extends="runtime,master"/>
         <conf name="runtime" visibility="public" extends="compile"/>
-        <conf name="compile" visibility="public" extends="apiElements"/>
+        <conf name="runtimeElements" visibility="public" extends="runtime"/>
         <conf visibility="public" name="javadoc"/>
         <conf visibility="public" name="master"/>
         <conf visibility="public" name="sources"/>
