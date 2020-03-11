@@ -11,4 +11,9 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:3.0.2'
     testImplementation "cglib:cglib-nodep:3.3.+"
     testImplementation 'org.spockframework:spock-core:2.0-M2-groovy-3.0'
+
+    //This works
+    //implementation 'org.codehaus.groovy:groovy-all:2.4.15'
+    //implementation 'org.spockframework:spock-core:1.1-groovy-2.4'
+
 }
