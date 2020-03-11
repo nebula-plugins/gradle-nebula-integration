@@ -1,0 +1,15 @@
+subprojects {
+    apply plugin: 'java'
+}
+
+task myTask {
+    doLast {
+        project.subprojects.each { subProject ->
+            println subProject.name
+            subProject.configurations.each {
+                println "${it.name }: Can be resolvable (${it.canBeResolved}) - Can be consumable (${it.canBeConsumed})"
+
+            }
+        }
+    }
+}
