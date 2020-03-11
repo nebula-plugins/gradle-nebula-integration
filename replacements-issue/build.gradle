@@ -1,0 +1,27 @@
+plugins {
+    id 'java-library'
+}
+repositories {
+    jcenter()
+    maven {
+        url = 'mavenRepo'
+    }
+}
+
+dependencies {
+    implementation('foo:my-maven-library:1.0.0')
+    implementation('com.google.guava:guava:19.0')
+    implementation('org.apache.commons:commons-collections4:4.4')
+    implementation('io.vavr:vavr:0.10.2')
+    modules {
+        module("foo:my-maven-dependency") {
+            replacedBy("com.google.guava:guava", "my-maven-dependency is bad")
+        }
+        module("com.google.guava:guava") {
+            replacedBy("org.apache.commons:commons-collections4", "Please don't use guava")
+        }
+        module("org.apache.commons:commons-collections4") {
+            replacedBy("io.vavr:vavr", "use vavr, I know it's different")
+        }
+    }
+}
