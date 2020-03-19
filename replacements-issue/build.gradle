@@ -1,27 +1,75 @@
+import groovy.transform.CompileDynamic
+import javax.inject.Inject
+
 plugins {
     id 'java-library'
 }
+
+String repoPattern = '[organisation]/[module]/[revision]'
+String ivyPattern = "${repoPattern}/[module]-[revision]-ivy.[ext]"
+String artiPattern = "${repoPattern}/[artifact]-[revision](-[classifier]).[ext]"
+
+
 repositories {
     jcenter()
     maven {
         url = 'mavenRepo'
     }
+    ivy {
+        url 'ivyRepo'
+        patternLayout {
+            artifact artiPattern
+            ivy ivyPattern
+            m2compatible = true
+        }
+    }
 }
 
 dependencies {
-    implementation('foo:my-maven-library:1.0.0')
-    implementation('com.google.guava:guava:19.0')
-    implementation('org.apache.commons:commons-collections4:4.4')
-    implementation('io.vavr:vavr:0.10.2')
+    implementation('foo:my-core:1.0.0')
+
     modules {
-        module("foo:my-maven-dependency") {
-            replacedBy("com.google.guava:guava", "my-maven-dependency is bad")
+        module("foo:my-core") {
+            replacedBy("foo:my-dependency", "my-maven-dependency is bad")
         }
-        module("com.google.guava:guava") {
-            replacedBy("org.apache.commons:commons-collections4", "Please don't use guava")
+
+    }
+}
+
+
+project.dependencies.components.all(IvyVariantDerivationRule)
+
+@CompileDynamic
+@CacheableRule
+class IvyVariantDerivationRule implements ComponentMetadataRule {
+    @Inject
+    ObjectFactory getObjects() {}
+
+    void execute(ComponentMetadataContext context) {
+        if (context.getDescriptor(IvyModuleDescriptor) == null) {
+            return
         }
-        module("org.apache.commons:commons-collections4") {
-            replacedBy("io.vavr:vavr", "use vavr, I know it's different")
-        }
+
+        context.details.maybeAddVariant('runtimeElements', 'default', new Action<VariantMetadata>() {
+            @Override
+            void execute(VariantMetadata variantMetadata) {
+                variantMetadata.attributes {
+                    it.attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                    it.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                    it.attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+                }
+            }
+        })
+
+        context.details.maybeAddVariant('apiElements', 'compile', new Action<VariantMetadata>() {
+            @Override
+            void execute(VariantMetadata variantMetadata) {
+                variantMetadata.attributes {
+                    attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, getObjects().named(LibraryElements, LibraryElements.JAR))
+                    attribute(Category.CATEGORY_ATTRIBUTE, getObjects().named(Category, Category.LIBRARY))
+                    attribute(Usage.USAGE_ATTRIBUTE, getObjects().named(Usage, Usage.JAVA_API))
+                }
+            }
+        })
     }
 }
