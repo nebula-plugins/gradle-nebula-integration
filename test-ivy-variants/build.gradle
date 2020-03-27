@@ -24,14 +24,45 @@ repositories {
     }
 }
 
+configurations.create('conf')
+
+
 dependencies {
-    implementation('foo:my-core:1.0.0')
+    conf('foo:my-core:1.0.0')
+    conf('foo:my-excluded-dependency:1.0.0')
+    components {
+          withModule('foo:my-core', IvyVariantDerivation)
+          withModule('foo:my-dependency', IvyVariantDerivation)
+    }
 }
 
-project.dependencies.components.all(IvyVariantDerivationRule)
+class IvyVariantDerivation implements ComponentMetadataRule {
+               @javax.inject.Inject
+               ObjectFactory getObjects() { }
+
+               void execute(ComponentMetadataContext context) {
+                   context.details.addVariant('runtimeElements', 'default') { // the way it is published, the ivy 'default' configuration is the runtime variant
+                       attributes {
+                           attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                           attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                           attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+                           attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
+                       }
+                   }
+                   context.details.addVariant('apiElements', 'compile') {
+                       attributes {
+                           attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, LibraryElements.JAR))
+                           attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                           attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
+                           attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
+                       }
+                   }
+               }
+           }
+
+
 
 @CompileDynamic
-@CacheableRule
 class IvyVariantDerivationRule implements ComponentMetadataRule {
     @Inject
     ObjectFactory getObjects() { }
