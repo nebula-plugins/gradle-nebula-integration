@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.netflix.nebula:gradle-resolution-rules-plugin:7.5.0"
+    }
+}
+
+plugins {
+    id 'java'
+}
+if(Boolean.valueOf(System.properties.getProperty('useNebulaAlignment').toString())) {
+    println "Using Nebula resolution rules"
+    apply plugin: "nebula.resolution-rules"
+    dependencies {
+        resolutionRules files('local-rules.json')
+    }
+}
+
+repositories {
+    maven { url 'testrepogen/mavenrepo' }
+}
+configurations {
+    configA
+    configB
+    configC
+    configD
+    configE
+
+    compile.extendsFrom configA
+    compile.extendsFrom configB
+    compile.extendsFrom configC
+    compile.extendsFrom configD
+    compile.extendsFrom configE
+}
+
+dependencies {
+    configA 'apricot:apricot:2.2.2.RELEASE'
+    configB 'berry:raspberry-impl:1.89.0'
+    configC 'com.berry.foo:blueberry-governator:2.9.2'
+    configD 'berry.bar.metrics:metrics-core:0.17.0'
+    configE 'berry:raspberry-impl:1.87.4'
+}
+
+if(!Boolean.valueOf(System.properties.getProperty('useNebulaAlignment').toString())) {
+    println "Using core Gradle alignment"
+    project.dependencies.components.all(AlignGroup.class)
+}
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("io.cherry")) {
+                it.belongsTo("io.cherry:io.cherry:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("com.berry.ribbon")) {
+                it.belongsTo("com.berry.ribbon:com.berry.ribbon:${it.getId().getVersion()}")
+            }
+        }
+    }
+}

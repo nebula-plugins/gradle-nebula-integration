@@ -1,0 +1,25 @@
+{
+  "align": [
+    {
+      "group": "io.cherry",
+      "includes": [],
+      "excludes": [],
+      "reason": "Align io.cherry",
+      "author": "test transitives and excludes",
+      "date": "2020-03-26"
+    },
+    {
+      "group": "com.berry.ribbon",
+      "includes": [],
+      "excludes": [],
+      "reason": "Align com.berry.ribbon",
+      "author": "test transitives and excludes",
+      "date": "2020-03-26"
+    }
+  ],
+  "replace": [],
+  "substitute": [],
+  "deny": [],
+  "exclude": [],
+  "reject": []
+}

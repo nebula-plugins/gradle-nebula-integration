@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>io.cherry</groupId>
+  <artifactId>cherry-transport-native-epoll</artifactId>
+  <versioning>
+    <latest>4.0.27.Final</latest>
+    <release>4.0.27.Final</release>
+    <versions>
+      <version>4.0.27.Final</version>
+      <version>4.0.25.Final</version>
+    </versions>
+    <lastUpdated>20191007213650</lastUpdated>
+  </versioning>
+</metadata>
