@@ -1,7 +1,4 @@
-import groovy.transform.CompileDynamic
 import myplugin.MyPlugin
-
-import javax.inject.Inject
 
 plugins {
     id 'java-library'
@@ -24,10 +21,7 @@ repositories {
     }
 }
 
-configurations.create('conf')
-
 
 dependencies {
-    conf('foo:my-core:1.0.0')
-    conf('foo:my-excluded-dependency:1.0.0')
+    implementation('foo:my-core:1.0.0')
 }

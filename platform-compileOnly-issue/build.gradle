@@ -1,0 +1,53 @@
+apply plugin: 'netflix.nebula'
+apply plugin: 'groovy'
+apply plugin: MyPlugin
+
+repositories {
+    jcenter()
+    maven {
+        name 'jenkins'
+        url 'https://repo.jenkins-ci.org/releases'
+        metadataSources {
+            mavenPom()
+        }
+    }
+}
+
+configurations {
+    testImplementation {
+        extendsFrom compileOnly
+    }
+}
+
+dependencies {
+    compileOnly platform('com.github.sghill.jenkins:jenkins-bom:latest.release')
+    compileOnly 'org.jenkins-ci.main:jenkins-core'
+}
+
+import static org.gradle.api.attributes.Category.CATEGORY_ATTRIBUTE
+
+class MyPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project project) {
+        project.afterEvaluate {
+            project.dependencies.attributesSchema(new Action<AttributesSchema>() {
+                @Override
+                void execute(AttributesSchema s) {
+                    s.getMatchingStrategy(CATEGORY_ATTRIBUTE).ordered(new Comparator<Category>() {
+                        @Override
+                        int compare(Category o1, Category o2) {
+                            if (o1.name == o2.name) {
+                                return 0
+                            }
+                            if (o1.name == 'platform') {
+                                return 1
+                            }
+                            return -1
+                        }
+                    })
+                }
+            })
+        }
+    }
+}
