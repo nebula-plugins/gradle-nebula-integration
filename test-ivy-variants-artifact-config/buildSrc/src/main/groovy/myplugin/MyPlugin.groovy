@@ -15,6 +15,7 @@ import org.gradle.api.attributes.LibraryElements
 import org.gradle.api.attributes.Usage
 import org.gradle.api.capabilities.MutableCapabilitiesMetadata
 import org.gradle.api.model.ObjectFactory
+import org.gradle.internal.component.external.model.ivy.IvyModuleResolveMetadata
 
 import javax.inject.Inject
 
@@ -32,6 +33,11 @@ class MyPlugin implements Plugin<Project> {
 
         void execute(ComponentMetadataContext context) {
             if(context.getDescriptor(IvyModuleDescriptor) == null) {
+                return
+            }
+
+            boolean shouldRegisterIvyVariants = hasCompileArtifacts(context)
+            if(!shouldRegisterIvyVariants) {
                 return
             }
 
@@ -74,6 +80,14 @@ class MyPlugin implements Plugin<Project> {
                     })
                 }
             })
+
+        }
+
+        private static boolean hasCompileArtifacts(ComponentMetadataContext context) {
+            IvyModuleResolveMetadata ivyModuleResolveMetadata = context.metadata
+            return ivyModuleResolveMetadata.artifactDefinitions.any {
+                it.configurations.contains('compile')
+            }
         }
     }
 }

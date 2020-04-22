@@ -1,0 +1,19 @@
+import myplugin.MyPlugin
+
+plugins {
+    id 'java-library'
+}
+
+apply plugin: MyPlugin
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+
+dependencies {
+    implementation 'com.github.zafarkhaja:java-semver:0.10.0-SNAPSHOT'
+    implementation 'com.github.jknack:handlebars:4.1.3-SNAPSHOT'
+}

@@ -10,7 +10,6 @@ String ivyPattern = "${repoPattern}/[module]-[revision]-ivy.[ext]"
 String artiPattern = "${repoPattern}/[artifact]-[revision](-[classifier]).[ext]"
 
 repositories {
-    jcenter()
     ivy {
         url 'ivyRepo'
         patternLayout {
