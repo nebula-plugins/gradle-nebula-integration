@@ -17,6 +17,8 @@
         <artifact name="my-core" type="jar" ext="jar" conf="compile,runtime"/>
     </publications>
     <dependencies>
+       <dependency org="com.google.guava" name="guava" rev="19.0" conf="runtime->default"/>
+
         <dependency org="foo" name="my-dependency" rev="1.0.0" conf="compile->default"/>
         <exclude org="foo" module="my-excluded-dependency" conf="compile"/>
         <exclude org="foo" module="my-excluded-dependency" conf="runtime"/>

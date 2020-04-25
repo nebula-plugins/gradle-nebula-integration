@@ -17,6 +17,7 @@
         <artifact name="my-dependency" type="jar" ext="jar" conf="compile,runtime"/>
     </publications>
     <dependencies>
-        <dependency org="foo" name="my-excluded-dependency" rev="1.0.0" conf="compile->default"/>
+      <dependency org="com.google.guava" name="guava" rev="19.0" conf="runtime->default"/>
+  <dependency org="foo" name="my-excluded-dependency" rev="1.0.0" conf="compile->default"/>
     </dependencies>
 </ivy-module>

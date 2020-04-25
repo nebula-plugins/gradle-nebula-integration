@@ -24,10 +24,8 @@ repositories {
     }
 }
 
-configurations.create('conf')
 
 
 dependencies {
-    conf('foo:my-core:1.0.0')
-    conf('foo:my-excluded-dependency:1.0.0')
+    implementation('foo:my-core:1.0.0')
 }
