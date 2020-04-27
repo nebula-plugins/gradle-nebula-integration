@@ -1,0 +1,30 @@
+import javax.inject.Inject
+
+plugins {
+    id 'java'
+}
+
+project.dependencies.components.all(DummyRule)
+
+@CacheableRule
+class DummyRule implements ComponentMetadataRule {
+    @Inject
+    ObjectFactory getObjects() {}
+    void execute(ComponentMetadataContext context) {
+       //do nothing
+    }
+}
+
+repositories {
+    maven {
+        url 'testrepogen/mavenrepo'
+        metadataSources {
+            artifact()
+        }
+    }
+}
+
+dependencies {
+    compile group: 'org.swift.jira.cli', name: 'jira-cli', version: '1.0.0'
+    compile group: 'org.swift.common', name: 'cli', version:'1.0.0'
+}
