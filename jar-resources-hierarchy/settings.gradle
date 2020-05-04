@@ -1,0 +1,4 @@
+
+rootProject.name = 'jar-resources-hierarchy'
+
+include 'common', 'core'
