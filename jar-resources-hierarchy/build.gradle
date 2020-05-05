@@ -1,0 +1,5 @@
+import myplugin.MyPlugin
+
+allprojects {
+    apply plugin: MyPlugin
+}
