@@ -4,6 +4,10 @@ Here is an example dependency graph. The graph has been highly truncated for ill
 
 This is using Gradle 6.3
 
+### Update
+
+**This example is fixed in Gradle 6.4-rc-1**
+
 ### Issue seen
 
 Dependencies are dropped when there are exclusions for transitive dependencies, and the dependencies are also brought in from another source.
@@ -105,7 +109,7 @@ runtimeClasspath - Runtime classpath of source set 'main'.
 \--- berry:raspberry-impl:1.87.4 -> 1.89.0
 ```
 
-What is the difference? These two dependencies are not in the runtime classpath when using core Gradle alignment: 
+What is the difference? These two dependencies are not in the runtime classpath when using core Gradle alignment:
 
 ```
 io.cherry:cherry-transport-native-epoll:4.0.27.Final
@@ -248,7 +252,7 @@ io.cherry:cherry-transport-native-epoll:4.0.27.Final
                     \--- runtimeClasspath
 ```
 
-and folks can see where `io.reactivex:rxcherry` came from via 
+and folks can see where `io.reactivex:rxcherry` came from via
 
 ```
 ./gradlew dependencyInsight --dependency rxcherry --configuration runtimeClasspath
