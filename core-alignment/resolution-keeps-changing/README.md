@@ -10,3 +10,63 @@ If you see `nothing to commit, working tree clean`, then the current dependency 
   && ./resolveAndStoreDependencies.sh && git commit -am "run resolveAndStoreDependencies and see a different resolution." \
   && ./resolveAndStoreDependencies.sh && git commit -am "run resolveAndStoreDependencies and see a different resolution."
 ```
+
+When running `dependencyInsight`, I also see the following outputs:
+
+Output 1:
+```
+./gradlew dependencyInsight --dependency interesting-plugin
+
+> Configure project :
+Using core Gradle alignment
+
+> Task :dependencyInsight
+berry:interesting-plugin:1.54.0
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      Requested attributes not found in the selected variant:
+         org.gradle.usage               = java-api
+         org.gradle.category            = library
+         org.gradle.dependency.bundling = external
+         org.gradle.libraryelements     = classes
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By conflict resolution : between versions 1.54.0 and 1.26.0
+
+berry:interesting-plugin:1.26.0 -> 1.54.0
+\--- berry:data-util:1.61.0
+     \--- berry:customer-model:1.797.0
+          \--- berry:skiing-core:2.1121.0
+               \--- berry:vmd-client:69.11.4
+                    \--- compileClasspath
+```
+
+Output 2:
+```
+./gradlew dependencyInsight --dependency interesting-plugin
+
+> Configure project :
+Using core Gradle alignment
+
+> Task :dependencyInsight
+berry:interesting-plugin:1.26.0
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      Requested attributes not found in the selected variant:
+         org.gradle.usage               = java-api
+         org.gradle.category            = library
+         org.gradle.dependency.bundling = external
+         org.gradle.libraryelements     = classes
+         org.gradle.jvm.version         = 8
+   ]
+
+berry:interesting-plugin:1.26.0
+\--- berry:data-util:1.61.0
+     \--- berry:customer-model:1.797.0
+          \--- berry:skiing-core:2.1121.0
+               \--- berry:vmd-client:69.11.4
+                    \--- compileClasspath
+```
+
+These should also show the same results when I run this command repeatedly.
