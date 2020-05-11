@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry.io.grpc" module="grpc-protobuf-internal" revision="1.20.2" status="release" publication="20200302175215">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="grpc-protobuf-internal" type="jar" ext="jar" conf="compile,runtime"/>
+  </publications>
+  <dependencies>
+  </dependencies>
+</ivy-module>

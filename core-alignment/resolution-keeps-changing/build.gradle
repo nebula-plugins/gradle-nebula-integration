@@ -1,0 +1,161 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.netflix.nebula:gradle-resolution-rules-plugin:7.6.0"
+    }
+}
+
+apply plugin: 'java'
+
+if(Boolean.valueOf(System.properties.getProperty('useNebulaAlignment').toString())) {
+    println "Using Nebula resolution rules"
+    apply plugin: "nebula.resolution-rules"
+    def rulesFiles = new File('rules').listFiles()
+
+    dependencies {
+        rulesFiles.each { file ->
+            resolutionRules files(file.toString())
+        }
+    }
+}
+
+if(!Boolean.valueOf(System.properties.getProperty('useNebulaAlignment').toString())) {
+    println "Using core Gradle alignment"
+    project.dependencies.components.all(AlignGroup.class)
+
+    def substitutionMessage = '✭ substitution - The com.amazon group id changed'
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('com.amazon:aws-java-sdk:1.3.11') because (substitutionMessage) with module('com.amazonaws:aws-java-sdk:1.3.11')
+        }
+    }
+
+    def replacementMessage = "✭ replacement - Use berry.io.grpc instead of io.grpc"
+    project.dependencies.modules.module('io.grpc:grpc-protobuf-internal') {
+        def details = it as ComponentModuleMetadataDetails
+        details.replacedBy('berry.io.grpc:grpc-protobuf-internal', replacementMessage)
+    }
+}
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("com.amazonaws")) {
+                it.belongsTo("aligned-platform:com.amazonaws:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("berry.garlic")) {
+                it.belongsTo("aligned-platform:berry.garlic:${it.getId().getVersion()}")
+            }
+            def includes = [
+                    "base-service",
+                    "library-junit-util",
+                    "base-abvr",
+                    "base-commons"
+            ]
+            if (it.getId().getGroup().startsWith("berry") && includes.contains(it.getId().getName())) {
+                it.belongsTo("aligned-platform:berry:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("berry.io.grpc")) {
+                it.belongsTo("aligned-platform:berry.io.grpc:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
+
+repositories {
+    ivy {
+        url = 'repos/ivy'
+        layout 'pattern', {
+            m2compatible = true
+            ivy '[organisation]/[module]/[revision]/ivy-[revision].[ext]'
+        }
+    }
+    maven { url 'repos/maven' }
+    mavenCentral()
+}
+
+task 'writeOutSelectedConfigurations' {
+    doLast {
+        def baseConfigurations = ['compileClasspath', 'runtimeClasspath', 'testCompileClasspath', 'testRuntimeClasspath']
+        configurations.matching { it.name.contains('conf') || baseConfigurations.contains(it.name) }.each { conf ->
+            def resolvedDependencies = conf.incoming.resolutionResult.getAllDependencies();
+            def destinationDir = new File(project.buildDir.toString() + '/' + 'dependencies-dump')
+            destinationDir.mkdirs()
+            def output = new File(project.buildDir.toString() + '/' + 'dependencies-dump' + '/' + project.name + '-' + conf.name + '.txt');
+            output.createNewFile()
+            resolvedDependencies.collect { it.selected.toString() }.unique().sort().forEach {
+                output << it + System.getProperty('line.separator')
+            }
+        }
+    }
+}
+
+def resolvedDepsTask = project.tasks.create("resolveDependencies", DependencyReportTask)
+resolvedDepsTask.outputFile = new File(project.buildDir, "resolvedDependencies.txt")
+
+configurations {
+    confA
+    confB
+    confC
+    confD
+    confE
+    confF
+    confG
+    confH
+    confI
+    confJ
+    confABeforeMerging1
+    confABeforeMerging2
+    confA.extendsFrom(confABeforeMerging1, confABeforeMerging2)
+    compile.extendsFrom(confA, confB, confC, confD, confE, confF, confG, confH, confI, confJ)
+}
+
+dependencies {
+    confABeforeMerging1('berry:vmd-client:69.11.4') {
+        exclude group: 'berry', module: 'platform'
+        exclude group: 'berry', module: 'library-junit-util'
+        exclude group: 'berry', module: 'usage-policy'
+        exclude group: 'berry', module: 'base-commons'
+    }
+    confABeforeMerging2 'berry:usage-policy:3.12'
+
+    confB('io.grpc:grpc-protobuf:1.10.0') { transitive = false }
+    confC('berry.garlic:berry-garlic-runtime:1.10.70') {
+        exclude group: 'berry.garlic', module: 'berry-garlic-options'
+    }
+    confD('berry.garlic:berry-garlic-options:1.10.70') { transitive = false }
+
+    confE('berry.garlic:berry-garlic-options:1.20.2') { transitive = false }
+    confF('berry.io.grpc:grpc-protobuf-internal:1.20.2') { transitive = false }
+
+    confG('com.google.code.gson:gson:2.8.2') { transitive = false }
+
+    confH 'berry:base-abvr:4.7.107'
+    confI 'berry:library-junit-util:4.7.96'
+    confJ 'berry:base-commons:3.2.3'
+}
+
+configurations.all {
+    exclude group: 'com.fasterxml.jackson.core', module: '*'
+    exclude group: 'com.fasterxml.jackson.dataformat', module: '*'
+    exclude group: 'commons-codec', module: '*'
+    exclude group: 'commons-logging', module: '*'
+    exclude group: 'com.google.api.grpc', module: '*'
+    exclude group: 'com.google.code.findbugs', module: '*'
+    exclude group: 'com.google.errorprone', module: '*'
+    exclude group: 'com.google.guava', module: '*'
+    exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    exclude group: 'joda-time', module: '*'
+    exclude group: 'io.opencensus', module: '*'
+    exclude group: 'io.grpc', module: 'grpc-context'
+    exclude group: 'io.grpc', module: 'grpc-core'
+    exclude group: 'io.grpc', module: 'grpc-library-lite'
+    exclude group: 'org.apache.httpcomponents', module: '*'
+    exclude group: 'org.codehaus.jackson', module: '*'
+    exclude group: 'software.amazon.ion', module: '*'
+}

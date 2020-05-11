@@ -1,0 +1,2 @@
+berry:base-commons:3.2.3
+com.amazonaws:aws-java-sdk-core:1.11.9

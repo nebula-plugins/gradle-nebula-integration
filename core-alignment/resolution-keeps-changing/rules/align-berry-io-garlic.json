@@ -1,0 +1,18 @@
+{
+  "align": [
+    {
+      "name": "berry-io-grpc-align",
+      "group": "berry\\.io\\.grpc",
+      "includes" : [],
+      "excludes" : [],
+      "reason": "Align berry.io.grpc",
+      "author": "Example Person <person@example.org>",
+      "date": "2016-03-17T20:21:20.368Z"
+    }
+  ],
+  "deny": [],
+  "exclude": [],
+  "reject": [],
+  "replace" : [],
+  "substitute": []
+}

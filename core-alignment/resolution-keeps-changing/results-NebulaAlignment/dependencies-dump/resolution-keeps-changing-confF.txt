@@ -1,0 +1,1 @@
+berry.io.grpc:grpc-protobuf-internal:1.20.2

@@ -1,0 +1,16 @@
+{
+  "replace" : [
+    {
+      "module" : "io.grpc:grpc-protobuf-internal",
+      "with" : "berry.io.grpc:grpc-protobuf-internal",
+      "reason" : "Use berry.io.grpc instead of io.grpc",
+      "author": "Example Person <person@example.org>",
+      "date": "2016-03-17T20:21:20.368Z"
+    }
+  ],
+  "align": [],
+  "substitute": [],
+  "deny": [],
+  "exclude": [],
+  "reject": []
+}

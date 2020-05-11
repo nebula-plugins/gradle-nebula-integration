@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><ivy-module version="2.0">
+  <info module="skiing-core" organisation="berry" publication="20200306174335" revision="2.1121.0" status="release">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact conf="compile,runtime" ext="jar" name="skiing-core" type="jar"/>
+  </publications>
+  <dependencies>
+    <dependency conf="compile-&gt;default" name="customer-model" org="berry" rev="1.797.0" revConstraint="latest.release"/>
+    <dependency conf="compile-&gt;default" name="library-junit-util" org="berry" rev="4.7.96"/>
+  </dependencies>
+</ivy-module>

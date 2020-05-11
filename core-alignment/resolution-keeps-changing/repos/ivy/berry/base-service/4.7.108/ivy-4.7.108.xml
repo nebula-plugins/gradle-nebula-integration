@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry" module="base-service" revision="4.7.108" status="release" publication="20200318175349">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+
+
+    <artifact name="base-service" type="jar" ext="jar" conf="compile"/>
+  </publications>
+  <dependencies>
+    <dependency org="berry" name="base-abvr" rev="4.7.108" conf="compile-&gt;default"/>
+  </dependencies>
+</ivy-module>

@@ -1,0 +1,33 @@
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Logs and databases #
+######################
+*.log
+**/log
+
+# Gradle Files #
+################
+.gradle
+.m2
+
+# Build output directies #
+##########################
+**/target
+**/build
+**/src/generated
+*/bin
+*/integrationTest/bin
+**/classes
+
+# IntelliJ specific files/directories #
+#######################################
+out
+.idea
+*.ipr
+*.iws
+*.iml

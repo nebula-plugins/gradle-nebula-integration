@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry" module="library-junit-util" revision="4.7.107" status="release" publication="20200311181623">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="library-junit-util" type="jar" ext="jar" conf="compile"/>
+  </publications>
+  <dependencies>
+  </dependencies>
+</ivy-module>

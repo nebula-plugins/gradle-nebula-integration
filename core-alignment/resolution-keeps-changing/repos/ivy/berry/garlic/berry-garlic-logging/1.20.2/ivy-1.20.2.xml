@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry.garlic" module="berry-garlic-logging" revision="1.20.2" status="release" publication="20200318215753">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="berry-garlic-logging" type="jar" ext="jar" conf="compile,runtime"/>
+  </publications>
+  <dependencies>
+    <dependency org="berry.garlic" name="berry-garlic-options" rev="1.20.2" conf="compile-&gt;default"/>
+    <dependency org="berry" name="base-commons" rev="4.7.108" conf="compile-&gt;default" revConstraint="latest.release"/>
+  </dependencies>
+</ivy-module>

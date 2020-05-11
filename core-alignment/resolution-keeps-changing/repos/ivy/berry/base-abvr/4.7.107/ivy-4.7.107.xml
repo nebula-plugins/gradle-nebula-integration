@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry" module="base-abvr" revision="4.7.107" status="release" publication="20200311181629">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="base-abvr" type="jar" ext="jar" conf="compile"/>
+  </publications>
+  <dependencies>
+    <dependency org="berry" name="base-commons" rev="4.7.107" conf="compile-&gt;default"/>
+  </dependencies>
+</ivy-module>

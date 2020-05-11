@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="berry" module="vmd-client" revision="69.11.4" status="release" publication="20200427214655">
+  </info>
+  <configurations>
+    <conf name="compile" visibility="public"/>
+    <conf name="default" visibility="public" extends="compile,runtime"/>
+    <conf name="runtime" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="vmd-client" type="jar" ext="jar" conf="compile,runtime"/>
+  </publications>
+  <dependencies>
+    <dependency org="berry" name="base-abvr" rev="4.7.107" conf="compile-&gt;default"/>
+    <dependency org="berry" name="skiing-core" rev="2.1121.0" conf="compile-&gt;default" revConstraint="latest.release"/>
+    <dependency org="berry" name="usage-policy" rev="3.12" conf="compile-&gt;default"/>
+  </dependencies>
+</ivy-module>

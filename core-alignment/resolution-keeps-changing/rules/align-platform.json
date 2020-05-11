@@ -1,0 +1,19 @@
+{
+  "deny": [], "reject": [], "substitute": [], "replace": [],
+  "align": [
+    {
+      "name": "platform-align",
+      "group": "berry",
+      "includes": [
+        "base-service",
+        "library-junit-util",
+        "base-abvr",
+        "base-commons"
+      ],
+      "excludes": [],
+      "reason": "Align platform",
+      "author": "Example Person <person@example.org>",
+      "date": "2016-03-17T20:21:20.368Z"
+    }
+  ]
+}
