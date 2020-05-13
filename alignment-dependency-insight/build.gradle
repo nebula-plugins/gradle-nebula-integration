@@ -1,0 +1,25 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.14.RELEASE'
+	id 'java'
+	id "nebula.resolution-rules" version "7.6.0"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+	maven { url 'testrepogen/mavenrepo' }
+}
+
+String springBootVersion = '2.1.14.RELEASE'
+
+dependencies {
+	resolutionRules files('align-spring.json')
+	implementation "org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-starter-integration:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-starter-webflux:$springBootVersion"
+	implementation "test.nebula:a:1.0.0"
+}
