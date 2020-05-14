@@ -1,0 +1,6 @@
+apply plugin: 'groovy'
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    testCompile 'com.netflix.nebula:nebula-test:7.3.+'
+}

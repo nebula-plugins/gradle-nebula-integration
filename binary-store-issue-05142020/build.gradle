@@ -1,0 +1,59 @@
+import nebula.plugin.resolutionrules.ResolutionRulesPlugin
+import netflix.nebula.dependency.recommender.DependencyRecommendationsPlugin
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-netflixoss-project-plugin:8.8.1'
+        classpath 'com.netflix.nebula:nebula-dependency-recommender:latest.release'
+        classpath 'com.netflix.nebula:gradle-resolution-rules-plugin:latest.release'
+    }
+}
+
+ext {
+    springBootVersion = "2.3.0.BUILD-SNAPSHOT"
+}
+
+allprojects {
+    group = 'mygroup'
+    apply plugin: DependencyPlugins
+    apply plugin: 'nebula.netflixoss'
+
+    repositories {
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/release" }
+        jcenter()
+    }
+}
+
+dependencyRecommendations {
+    mavenBom module: "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+}
+
+subprojects { sub ->
+    apply plugin: 'java'
+    apply plugin: 'nebula.integtest'
+
+    dependencies {
+        testCompile 'org.awaitility:awaitility:3.0.0'
+        testCompile "org.springframework.boot:spring-boot-starter-log4j2:${springBootVersion}"
+        testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    }
+}
+
+class DependencyPlugins implements Plugin<Project> {
+
+    @Override
+    void apply(Project project) {
+        project.plugins.apply(DependencyRecommendationsPlugin.class)
+        project.plugins.apply(ResolutionRulesPlugin.class)
+        if (project.rootProject == project) {
+            project.dependencies.add("resolutionRules", "com.netflix.nebula:gradle-resolution-rules:latest.release")
+        }
+    }
+}
