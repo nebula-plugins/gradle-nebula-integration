@@ -44,3 +44,27 @@ Caused by: java.lang.IllegalStateException: Corrupt serialized resolution result
         ... 197 more
 
 ```
+
+
+# my-submodule-3
+
+`./gradlew :my-submodule-3:dI --dependency spring-expression --configuration testCompileClasspath -s`
+
+results in
+
+```
+Execution failed for task ':my-submodule-3:dependencyInsight'.
+> Failed to notify dependency resolution listener.
+   > Could not resolve all dependencies for configuration ':my-submodule-3:testCompileClasspathCopy'.
+      > Problems reading data from Binary store in /private/var/folders/hb/c0ghc68d7vn26h4ny84kzv0r0000gn/T/gradle1707861726770070894.bin offset 12425 exists? true
+   > Could not resolve all dependencies for configuration ':my-submodule-3:testCompileClasspathCopy'.
+      > Problems reading data from Binary store in /private/var/folders/hb/c0ghc68d7vn26h4ny84kzv0r0000gn/T/gradle1707861726770070894.bin offset 12425 exists? true
+
+Caused by: java.lang.IllegalStateException: Corrupt serialized resolution result. Cannot find selected module (625) for constraint platform-compile -> org.springframework:spring-expression:5.2.5.RELEASE
+        at org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.DefaultResolutionResultBuilder.visitOutgoingEdges(DefaultResolutionResultBuilder.java:82)
+        at org.gradle.api.internal.artifacts.ivyservice.resolveengine.result.StreamingResolutionResultBuilder$RootFactory.deserialize(StreamingResolutionResultBuilder.java:237)
+        at org.gradle.api.internal.artifacts.ivyservice.resolveengine.store.DefaultBinaryStore$SimpleBinaryData.read(DefaultBinaryStore.java:130)
+        ... 196 more
+
+
+```
