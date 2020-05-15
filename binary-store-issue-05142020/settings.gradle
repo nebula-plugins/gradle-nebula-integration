@@ -9,4 +9,4 @@
 
 rootProject.name = 'binary-store-issue-05142020'
 
-include 'my-submodule'
+include 'my-submodule', 'my-submodule-2'

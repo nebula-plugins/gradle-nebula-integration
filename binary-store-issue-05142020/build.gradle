@@ -15,6 +15,7 @@ buildscript {
 }
 
 ext {
+    springVersion = "5.2.4.RELEASE"
     springBootVersion = "2.3.0.BUILD-SNAPSHOT"
 }
 
@@ -40,7 +41,9 @@ subprojects { sub ->
     apply plugin: 'nebula.integtest'
 
     dependencies {
+
         testCompile 'org.awaitility:awaitility:3.0.0'
+        testCompile "org.springframework:spring-web:${springVersion}"
         testCompile "org.springframework.boot:spring-boot-starter-log4j2:${springBootVersion}"
         testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
     }
