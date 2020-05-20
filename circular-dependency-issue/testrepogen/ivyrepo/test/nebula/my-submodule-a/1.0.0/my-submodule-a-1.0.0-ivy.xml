@@ -1,0 +1,21 @@
+<ivy-module version="2.0">
+<info module="my-submodule-a" organisation="test.nebula" publication="20200514011447" revision="1.0.0" status="release">
+  <description xmlns:nebula="http://netflix.com/build">
+    <nebula:Manifest_Version>1.0</nebula:Manifest_Version>
+  </description>
+</info>
+<configurations>
+  <conf name="compile" visibility="public"/>
+  <conf extends="runtime,master" name="default" visibility="public"/>
+  <conf extends="compile" name="runtime" visibility="public"/>
+  <conf name="javadoc" visibility="public"/>
+  <conf name="master" visibility="public"/>
+  <conf name="sources" visibility="public"/>
+  <conf extends="runtime" name="test" visibility="public"/>
+  <conf name="optional" visibility="public"/>
+</configurations>
+<publications>
+  <artifact xmlns:m="http://ant.apache.org/ivy/maven" conf="sources" ext="jar" m:classifier="sources" name="a" type="sources"/>
+  <artifact conf="compile" ext="jar" name="my-submodule-a" type="jar"/>
+</publications>
+</ivy-module>

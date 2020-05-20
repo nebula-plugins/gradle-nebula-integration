@@ -1,0 +1,16 @@
+
+dependencies {
+    api 'test.nebula:my-submodule-a:1.0.0'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'test.nebula'
+            artifactId = 'my-submodule-a'
+            version = '1.0.0'
+
+            from components.java
+        }
+    }
+}
