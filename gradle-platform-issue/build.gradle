@@ -1,0 +1,26 @@
+plugins {
+    id 'java-platform'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    constraints {
+        api('commons-httpclient:commons-httpclient') {
+            version {
+                prefer '3.1'
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        myPlatform(MavenPublication) {
+            from components.javaPlatform
+        }
+    }
+}

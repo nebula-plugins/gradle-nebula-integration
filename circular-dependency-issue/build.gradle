@@ -1,0 +1,17 @@
+subprojects {
+    version = '1.0.0'
+    group = 'test.nebula'
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    repositories {
+        ivy {
+            url "../testrepogen/ivyrepo"
+            patternLayout {
+                ivy '[organisation]/[module]/[revision]/[module]-[revision]-ivy.[ext]'
+                artifact '[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]'
+                m2compatible = true
+            }
+        }
+    }
+}
