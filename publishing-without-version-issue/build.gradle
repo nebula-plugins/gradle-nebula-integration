@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'ivy-publish'
+}
+
+apply plugin: DistIvyPublishPlugin
+
+version = '1.0.0'
+group = 'test.nebula'
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:28.2-jre'
+    testImplementation 'junit:junit:4.12'
+}
+
+application {
+    mainClassName = 'publishing.without.version.issue.App'
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+}
+
+publishing {
+    publications {
+        ivy(IvyPublication) {
+            artifact source: buildZip, type: 'zip', name: 'publishing-without-version-issue'
+            artifact source: file('function.yml'), type: 'config', name: 'function'
+        }
+    }
+}
+
+class DistIvyPublishPlugin implements Plugin<Project> {
+    static final String IVY_REPO_NAME = 'distIvy'
+    static final String IVY_REPO_NAME_TASK = 'publishDistIvy'
+
+    @Override
+    void apply(Project project) {
+        project.plugins.withType(IvyPublishPlugin).configureEach {
+            project.extensions.configure(PublishingExtension) { PublishingExtension publishing ->
+                publishing.repositories { RepositoryHandler repositories ->
+                    repositories.ivy { IvyArtifactRepository i ->
+                        i.name = IVY_REPO_NAME
+                        i.url = project.file("${project.buildDir}/${IVY_REPO_NAME}").toURI()
+                    }
+                }
+            }
+
+            project.tasks.register(IVY_REPO_NAME_TASK) {
+                it.group = 'publishing'
+                it.description = "Publishes Ivy publications to Ivy repository <buildDir>/$IVY_REPO_NAME."
+            }
+        }
+    }
+}
