@@ -1,0 +1,6 @@
+task printMyHost {
+    doFirst {
+        def myHost = System.getProperty('myhost', findProperty('myhost'))
+        println "MY HOST: " + myHost
+    }
+}

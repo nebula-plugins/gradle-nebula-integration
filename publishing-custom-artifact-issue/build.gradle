@@ -31,6 +31,11 @@ task buildZip(type: Zip) {
     from compileGroovy
 }
 
+def functionYmlFile = file('function.yml')
+PublishArtifact functionYmlArtifact = artifacts.add('archives', functionYmlFile) {
+    name = 'function'
+}
+
 publishing {
     publications {
         testingIvy(IvyPublication) {
@@ -39,10 +44,11 @@ publishing {
         }
         testingMaven(MavenPublication) {
             artifact source: buildZip
-            artifact source: file('function.yml')
+            artifact source: functionYmlArtifact
         }
     }
 }
+
 
 class DistIvyPublishPlugin implements Plugin<Project> {
     static final String IVY_REPO_NAME = 'distIvy'
