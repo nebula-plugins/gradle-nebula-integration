@@ -1,0 +1,15 @@
+apply plugin: "java"
+
+repositories {
+    maven {
+        url 'repo'
+        mavenCentral()
+    }
+}
+
+dependencies {
+    implementation('com.google.guava:guava:19.0') {
+        version { strictly '19.0' }
+    }
+    implementation('test.nebula:brings-guava:1.0.0')
+}
