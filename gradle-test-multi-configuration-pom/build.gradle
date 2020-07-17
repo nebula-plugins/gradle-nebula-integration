@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+    maven {
+        url = 'mavenRepo'
+    }
+}
+
+dependencies {
+    implementation 'netflix:mymodule:1.0.0'
+}
