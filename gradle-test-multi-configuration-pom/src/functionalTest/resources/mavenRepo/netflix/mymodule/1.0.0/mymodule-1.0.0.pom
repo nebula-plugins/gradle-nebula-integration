@@ -8,16 +8,16 @@
     <version>1.0.0</version>
     <dependencies>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
+            <groupId>netflix</groupId>
+            <artifactId>mymodule2</artifactId>
+            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-            <scope>test</scope>
+            <groupId>netflix</groupId>
+            <artifactId>mymodule2</artifactId>
+            <version>1.0.0</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

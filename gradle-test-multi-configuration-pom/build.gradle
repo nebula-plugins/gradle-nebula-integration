@@ -1,14 +1,30 @@
 plugins {
-    id 'java'
+    id 'java-gradle-plugin'
+    id 'groovy'
 }
 
 repositories {
     jcenter()
-    maven {
-        url = 'mavenRepo'
-    }
 }
 
 dependencies {
-    implementation 'netflix:mymodule:1.0.0'
+    testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+}
+
+
+sourceSets {
+    functionalTest {
+    }
+}
+
+gradlePlugin.testSourceSets(sourceSets.functionalTest)
+configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
+
+tasks.register('functionalTest', Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+check {
+    dependsOn(tasks.functionalTest)
 }

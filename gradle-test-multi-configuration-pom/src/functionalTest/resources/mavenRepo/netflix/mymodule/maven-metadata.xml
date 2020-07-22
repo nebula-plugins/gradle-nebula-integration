@@ -1,0 +1,13 @@
+<metadata modelVersion="1.1.0">
+    <groupId>netflix</groupId>
+    <artifactId>mymodule</artifactId>
+    <version>1.0.0</version>
+    <versioning>
+        <latest>1.0.0</latest>
+        <release>1.0.0</release>
+        <versions>
+            <version>1.0.0</version>
+        </versions>
+        <lastUpdated>20200708184803</lastUpdated>
+    </versioning>
+</metadata>
