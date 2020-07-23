@@ -1,0 +1,33 @@
+{
+    "align": [
+      {
+          "name": "align-to",
+          "group": "to",
+          "includes": ["new-apricot", "new-berry"],
+          "excludes": [],
+          "reason": "They're better together",
+          "author": "Example Person <person@example.org>",
+          "date": "2016-03-17T20:21:20.368Z"
+      }
+    ],
+    "replace": [
+      {
+        "module" : "from:apricot",
+        "with" : "to:new-apricot",
+        "reason" : "The group & id changed",
+        "author": "Example Person <person@example.org>",
+        "date": "2016-03-17T20:21:20.368Z"
+      },
+      {
+        "module" : "from:berry",
+        "with" : "to:new-berry",
+        "reason" : "The group & id changed",
+        "author": "Example Person <person@example.org>",
+        "date": "2016-03-17T20:21:20.368Z"
+      }
+    ],
+    "substitute": [],
+    "deny": [],
+    "exclude": [],
+    "reject": []
+}

@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven { url 'testrepogen/mavenrepo' }
+}
+
+if(Boolean.valueOf(System.properties.getProperty('alternateOrdering').toString())) {
+    dependencies {
+        implementation 'to:new-apricot:1.1.0'
+        implementation 'to:new-berry:1.0.0'
+
+        implementation 'from:apricot:1.0.0'
+        implementation 'from:berry:1.0.0'
+    }
+} else {
+    dependencies {
+        implementation 'to:new-apricot:1.0.0'
+        implementation 'to:new-berry:1.1.0'
+
+        implementation 'from:apricot:1.0.0'
+        implementation 'from:berry:1.0.0'
+    }
+}
+
+project.dependencies.components.all(AlignGroup.class)
+
+def replacementMessage = "✭ replacement - The group & id changed"
+project.dependencies.modules.module('from:apricot') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('to:new-apricot', replacementMessage)
+}
+project.dependencies.modules.module('from:berry') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('to:new-berry', replacementMessage)
+}
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("to")) {
+                it.belongsTo("aligned-group:to:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
