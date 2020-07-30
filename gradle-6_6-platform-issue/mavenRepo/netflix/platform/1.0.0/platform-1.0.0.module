@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "netflix",
+    "module": "platform",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.5.1",
+      "buildId": "qoqnswinavcedi4t6b5indbevi"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.fasterxml.jackson",
+          "module": "jackson-bom",
+          "version": {
+            "requires": "2.10.1"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-bom",
+          "version": {
+            "requires": "2.13.3"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "org.junit",
+          "module": "junit-bom",
+          "version": {
+            "requires": "5.6.0"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        }
+      ],
+       "dependencyConstraints": [
+              {
+                "group": "com.squareup.okhttp3",
+                "module": "okhttp-testing-support",
+                "version": {
+                  "requires": "3.14.9"
+                }
+              },
+              {
+                "group": "com.google.guava",
+                "module": "guava",
+                "version": {
+                  "requires": "19.0"
+                },
+                "reason": "never recommend higher than x"
+              },
+              {
+                "group": "javax.servlet",
+                "module": "servlet-api",
+                "version": {
+                  "requires": "2.5"
+                },
+                "reason": "supporting tomcat 8.5"
+              }
+            ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.fasterxml.jackson",
+          "module": "jackson-bom",
+          "version": {
+            "requires": "2.10.1"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-bom",
+          "version": {
+            "requires": "2.13.3"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "org.junit",
+          "module": "junit-bom",
+          "version": {
+            "requires": "5.6.0"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        }
+      ],
+      "dependencyConstraints": [
+        {
+          "group": "com.squareup.okhttp3",
+          "module": "okhttp-testing-support",
+          "version": {
+            "requires": "3.14.9"
+          }
+        },
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "19.0"
+          },
+          "reason": "never recommend higher than x"
+        },
+        {
+          "group": "javax.servlet",
+          "module": "servlet-api",
+          "version": {
+            "requires": "2.5"
+          },
+          "reason": "supporting tomcat 8.5"
+        }
+      ]
+    }
+  ]
+}

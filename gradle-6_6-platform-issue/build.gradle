@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id "nebula.dependency-lock" version "9.4.0"
+}
+
+repositories {
+    jcenter()
+    maven {
+        url = 'mavenRepo'
+        metadataSources {
+            gradleMetadata()
+        }
+    }
+}
+
+dependencies {
+    implementation platform('netflix:platform:1.0.0')
+    implementation 'com.google.guava:guava'
+}

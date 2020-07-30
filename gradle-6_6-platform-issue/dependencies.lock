@@ -1,0 +1,38 @@
+{
+    "compileClasspath": {
+        "com.google.guava:guava": {
+            "locked": "19.0"
+        },
+        "netflix:platform": {
+            "locked": "1.0.0",
+            "requested": "1.0.0"
+        }
+    },
+    "runtimeClasspath": {
+        "com.google.guava:guava": {
+            "locked": "19.0"
+        },
+        "netflix:platform": {
+            "locked": "1.0.0",
+            "requested": "1.0.0"
+        }
+    },
+    "testCompileClasspath": {
+        "com.google.guava:guava": {
+            "locked": "19.0"
+        },
+        "netflix:platform": {
+            "locked": "1.0.0",
+            "requested": "1.0.0"
+        }
+    },
+    "testRuntimeClasspath": {
+        "com.google.guava:guava": {
+            "locked": "19.0"
+        },
+        "netflix:platform": {
+            "locked": "1.0.0",
+            "requested": "1.0.0"
+        }
+    }
+}
