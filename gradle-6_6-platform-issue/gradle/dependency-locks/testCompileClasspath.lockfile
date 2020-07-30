@@ -1,0 +1,8 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fasterxml.jackson:jackson-bom:2.10.1
+com.google.guava:guava:19.0
+netflix:platform:1.0.0
+org.apache.logging.log4j:log4j-bom:2.13.3
+org.junit:junit-bom:5.6.0

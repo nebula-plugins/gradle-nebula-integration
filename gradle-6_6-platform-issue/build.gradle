@@ -8,6 +8,8 @@ repositories {
     maven {
         url = 'mavenRepo'
         metadataSources {
+           /* mavenPom()
+            ignoreGradleMetadataRedirection()*/
             gradleMetadata()
         }
     }
