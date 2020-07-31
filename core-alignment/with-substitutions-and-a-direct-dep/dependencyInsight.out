@@ -1,0 +1,116 @@
+
+> Task :dependencyInsight
+com.google.inject:guice:4.2.3
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By constraint : belongs to platform aligned-platform:com.google.inject-or-com.google.inject.extensions:4.2.3
+      - Selected by rule : substitution from 'com.google.inject:guice:[4.2.0,)' to 'com.google.inject:guice:4.1.0'
+      - By conflict resolution : between versions 4.1.0 and 4.2.3
+
+com.google.inject:guice:4.2.3
++--- com.google.inject.extensions:guice-grapher:4.2.3
+|    \--- example:brings-guice:1.0.0 (requested com.google.inject.extensions:guice-grapher:4.1.0)
+|         \--- compileClasspath
+\--- com.google.inject.extensions:guice-multibindings:4.2.3
+     \--- example:brings-guice:1.0.0 (requested com.google.inject.extensions:guice-multibindings:4.1.0) (*)
+
+com.google.inject:guice:4.1.0 -> 4.2.3
++--- com.google.inject.extensions:guice-assistedinject:4.1.0
+|    \--- com.google.inject.extensions:guice-grapher:4.2.3 (requested com.google.inject.extensions:guice-assistedinject:4.2.3)
+|         \--- example:brings-guice:1.0.0 (requested com.google.inject.extensions:guice-grapher:4.1.0)
+|              \--- compileClasspath
+\--- example:brings-guice:1.0.0 (*)
+
+com.google.inject:guice:4.+ -> 4.2.3
+\--- compileClasspath
+
+com.google.inject.extensions:guice-assistedinject:4.1.0
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : substitution from 'com.google.inject.extensions:guice-assistedinject:[4.2.0,)' to 'com.google.inject.extensions:guice-assistedinject:4.1.0'
+      - By constraint : belongs to platform aligned-platform:com.google.inject-or-com.google.inject.extensions:4.2.3
+
+com.google.inject.extensions:guice-assistedinject:4.2.3 -> 4.1.0
+\--- com.google.inject.extensions:guice-grapher:4.2.3
+     \--- example:brings-guice:1.0.0 (requested com.google.inject.extensions:guice-grapher:4.1.0)
+          \--- compileClasspath
+
+com.google.inject.extensions:guice-grapher:4.2.3
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By constraint : belongs to platform aligned-platform:com.google.inject-or-com.google.inject.extensions:4.2.3
+      - Selected by rule : substitution from 'com.google.inject.extensions:guice-grapher:[4.2.0,)' to 'com.google.inject.extensions:guice-grapher:4.1.0'
+      - By conflict resolution : between versions 4.2.3 and 4.1.0
+
+com.google.inject.extensions:guice-grapher:4.1.0 -> 4.2.3
+\--- example:brings-guice:1.0.0
+     \--- compileClasspath
+
+com.google.inject.extensions:guice-multibindings:4.2.3
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By constraint : belongs to platform aligned-platform:com.google.inject-or-com.google.inject.extensions:4.2.3
+      - Selected by rule : substitution from 'com.google.inject.extensions:guice-multibindings:[4.2.0,)' to 'com.google.inject.extensions:guice-multibindings:4.1.0'
+      - By conflict resolution : between versions 4.2.3 and 4.1.0
+
+com.google.inject.extensions:guice-multibindings:4.1.0 -> 4.2.3
+\--- example:brings-guice:1.0.0
+     \--- compileClasspath
+
+example:brings-guice:1.0.0
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+
+example:brings-guice:1.0.0
+\--- compileClasspath
+
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 516ms
+1 actionable task: 1 executed

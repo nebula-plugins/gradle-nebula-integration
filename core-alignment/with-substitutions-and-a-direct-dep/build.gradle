@@ -1,0 +1,44 @@
+import org.gradle.api.internal.artifacts.ivyservice.ivyresolve.strategy.*
+
+def VERSIONED_COMPARATOR = new DefaultVersionComparator()
+def VERSION_COMPARATOR = VERSIONED_COMPARATOR.asVersionComparator()
+def VERSION_SCHEME = new DefaultVersionSelectorScheme(VERSIONED_COMPARATOR)
+
+apply plugin: "java"
+
+repositories {
+    maven { url 'testrepogen/mavenrepo' }
+    mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution.all {
+        def substituteFromVersion = "[4.2.0,)"
+        def substituteToVersion = "4.1.0"
+        def substitutionReason = "substitution from '${it.requested.group}:${it.requested.module}:$substituteFromVersion' to '${it.requested.group}:${it.requested.module}:$substituteToVersion'"
+        def selector = VERSION_SCHEME.parseSelector(substituteFromVersion)
+        if (it.requested.group.startsWith("com.google.inject") && selector.accept(it.requested.version)) {
+            it.useTarget("${it.requested.group}:${it.requested.module}:${substituteToVersion}", substitutionReason)
+        }
+        if (it.requested.group.startsWith("com.google.inject.extensions") && selector.accept(it.requested.version)) {
+            it.useTarget("${it.requested.group}:${it.requested.module}:${substituteToVersion}", substitutionReason)
+        }
+    }
+}
+
+project.dependencies.components.all(AlignGroup.class)
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("com.google.inject") || it.getId().getGroup().startsWith("com.google.inject.extensions")) {
+              it.belongsTo("aligned-platform:com.google.inject-or-com.google.inject.extensions:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'example:brings-guice:1.0.0'
+    implementation 'com.google.inject:guice:4.+'
+}
