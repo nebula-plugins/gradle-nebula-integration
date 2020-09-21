@@ -1,5 +1,11 @@
 # Core alignment with substitutions and a direct dependency
 
+> *_Update: this issue was seen with Gradle 6.5.1 and is fixed in Gradle 6.7-rc-1_*
+>
+> Issue: <https://github.com/gradle/gradle/issues/14172>
+>
+> Fix: <https://github.com/gradle/gradle/pull/14173>
+
 When a project brings in in the following dependencies that are part of an aligned group, so they should resolve to the same version, such as:
 
 ```groovy
