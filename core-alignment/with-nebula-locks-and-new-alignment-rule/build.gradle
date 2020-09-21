@@ -1,0 +1,33 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-dependency-lock-plugin:10.1.0'
+    }
+}
+
+apply plugin: "java"
+apply plugin: 'nebula.dependency-lock'
+
+repositories {
+    maven {
+        url 'repo'
+    }
+}
+
+dependencies {
+    implementation 'test.nebula:a:1.0.0'
+    implementation 'test.nebula:b:1.2.0'
+}
+
+// uncomment to see resolution interaction with locks and this new alignment rule
+//project.dependencies.components.all(AlignGroup.class)
+//
+//class AlignGroup implements ComponentMetadataRule {
+//    void execute(ComponentMetadataContext ctx) {
+//        ctx.details.with { it ->
+//            if (it.getId().getGroup().startsWith("test.nebula")) {
+//                it.belongsTo("test.nebula:test.nebula:${it.getId().getVersion()}")
+//            }
+//        }
+//    }
+//}
