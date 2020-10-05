@@ -1,0 +1,208 @@
+
+> Configure project :
+with-single-downgrade-on-better-aligned-dependency: coreAlignmentSupport feature enabled
+
+> Task :dependencyInsight
+com.fasterxml.jackson.core:jackson-annotations:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.core:jackson-annotations locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.core:jackson-annotations:2.9.10
++--- com.fasterxml.jackson.core:jackson-databind:2.9.10
+|    +--- compileClasspath (requested com.fasterxml.jackson.core:jackson-databind:2.10.5)
+|    +--- com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.10
+|    |    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5)
+|    +--- com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10
+|    |    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5)
+|    \--- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10
+|         \--- compileClasspath (requested com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5)
++--- com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10 (*)
+\--- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10 (*)
+
+com.fasterxml.jackson.core:jackson-annotations:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.core:jackson-core:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Forced
+      - Selected by rule : com.fasterxml.jackson.core:jackson-core locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+
+com.fasterxml.jackson.core:jackson-core:2.9.10
++--- com.fasterxml.jackson.core:jackson-databind:2.9.10
+|    +--- compileClasspath (requested com.fasterxml.jackson.core:jackson-databind:2.10.5)
+|    +--- com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.10
+|    |    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5)
+|    +--- com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10
+|    |    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5)
+|    \--- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10
+|         \--- compileClasspath (requested com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5)
++--- com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.9.10
+|    \--- compileClasspath (requested com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5)
++--- com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.9.10
+|    \--- compileClasspath (requested com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5)
++--- com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.10 (*)
++--- com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10 (*)
+\--- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10 (*)
+
+com.fasterxml.jackson.core:jackson-core:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.core:jackson-databind:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.core:jackson-databind locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.core:jackson-databind:2.9.10
++--- com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.10
+|    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5)
++--- com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10
+|    \--- compileClasspath (requested com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5)
+\--- com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10
+     \--- compileClasspath (requested com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5)
+
+com.fasterxml.jackson.core:jackson-databind:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.dataformat:jackson-dataformat-cbor locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.dataformat:jackson-dataformat-smile locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.datatype:jackson-datatype-guava locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.datatype:jackson-datatype-joda locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.10
+   variant "compile" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-api
+      org.gradle.libraryelements     = jar (compatible with: classes)
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.module:jackson-module-jaxb-annotations locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+      - By constraint : belongs to platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module:2.9.10
+      - Forced
+
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5 -> 2.9.10
+\--- compileClasspath
+
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 655ms
+1 actionable task: 1 executed

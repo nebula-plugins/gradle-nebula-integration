@@ -1,0 +1,80 @@
+
+> Configure project :
+with-single-downgrade-on-aligned-dependency: coreAlignmentSupport feature enabled
+
+> Task :dependencyInsight
+com.fasterxml.jackson.core:jackson-annotations:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.core:jackson-annotations locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.core:jackson-annotations:2.10.5.
+          - Multiple forces on different versions for virtual platform aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module
+
+com.fasterxml.jackson.core:jackson-annotations:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.core:jackson-databind:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.core:jackson-databind locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.core:jackson-databind:2.10.5. (already reported)
+
+com.fasterxml.jackson.core:jackson-databind:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.dataformat:jackson-dataformat-cbor locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5. (already reported)
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.dataformat:jackson-dataformat-smile locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5. (already reported)
+
+com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.datatype:jackson-datatype-guava locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5. (already reported)
+
+com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.datatype:jackson-datatype-joda locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5. (already reported)
+
+com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5 FAILED
+\--- compileClasspath
+
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5 FAILED
+   Selection reasons:
+      - Selected by rule : com.fasterxml.jackson.module:jackson-module-jaxb-annotations locked to 2.9.10
+        	with reasons: nebula.dependency-lock locked with: dependencies.lock
+   Failures:
+      - Could not resolve com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5. (already reported)
+
+com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5 FAILED
+\--- compileClasspath
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL in 654ms
+1 actionable task: 1 executed

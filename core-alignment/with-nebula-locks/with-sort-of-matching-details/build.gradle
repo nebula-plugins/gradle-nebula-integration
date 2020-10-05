@@ -1,0 +1,29 @@
+plugins {
+    id "nebula.resolution-rules" version "7.8.0"
+    id 'java'
+    id "nebula.dependency-lock" version "10.2.0"
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    resolutionRules files('rules.json')
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5'
+}
+
+// this part changes between examples
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group.startsWith('com.fasterxml.jackson')) {
+                details.useVersion "2.9.+"
+            }
+        }
+    }
+}

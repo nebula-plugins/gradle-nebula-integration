@@ -1,0 +1,106 @@
+{
+    "compileClasspath": {
+        "com.fasterxml.jackson.core:jackson-annotations": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-core": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-databind": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-smile": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-guava": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-joda": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.module:jackson-module-jaxb-annotations": {
+            "locked": "2.9.10"
+        }
+    },
+    "runtimeClasspath": {
+        "com.fasterxml.jackson.core:jackson-annotations": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-core": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-databind": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-smile": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-guava": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-joda": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.module:jackson-module-jaxb-annotations": {
+            "locked": "2.9.10"
+        }
+    },
+    "testCompileClasspath": {
+        "com.fasterxml.jackson.core:jackson-annotations": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-core": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-databind": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-smile": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-guava": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-joda": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.module:jackson-module-jaxb-annotations": {
+            "locked": "2.9.10"
+        }
+    },
+    "testRuntimeClasspath": {
+        "com.fasterxml.jackson.core:jackson-annotations": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-core": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.core:jackson-databind": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-smile": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-guava": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.datatype:jackson-datatype-joda": {
+            "locked": "2.9.10"
+        },
+        "com.fasterxml.jackson.module:jackson-module-jaxb-annotations": {
+            "locked": "2.9.10"
+        }
+    }
+}
