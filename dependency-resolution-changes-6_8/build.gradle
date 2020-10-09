@@ -1,0 +1,16 @@
+
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    jcenter()
+    maven {
+        url = 'repo'
+    }
+}
+
+dependencies {
+    api 'net.spy:spymemcached:2.11.4'
+    implementation 'netflix:foo-client:1.0.0'
+}

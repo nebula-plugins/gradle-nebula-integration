@@ -1,6 +1,17 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.netflix.nebula:gradle-dependency-lock-plugin:9.4.0"
+    }
+}
+
+apply plugin: "nebula.dependency-lock"
 plugins {
     id 'java'
-    id "nebula.dependency-lock" version "9.4.0"
 }
 
 repositories {

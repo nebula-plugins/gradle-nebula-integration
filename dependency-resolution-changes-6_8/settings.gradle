@@ -1,0 +1,3 @@
+
+rootProject.name = 'dependency-resolution-changes-6_8'
+enableFeaturePreview("VERSION_ORDERING_V2")
