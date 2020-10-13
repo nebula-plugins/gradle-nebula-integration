@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:27.1-jre'
+}
+
+application {
+    mainClassName = 'test.gradle.shared.cache.App'
+}
