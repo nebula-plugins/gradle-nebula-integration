@@ -1,0 +1,26 @@
+plugins {
+    id "nebula.resolution-rules" version "7.8.0"
+    id 'java'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    resolutionRules files('rules.json')
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.10.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-guava:2.10.5'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.10.5'
+    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.5'
+}
+
+dependencies {
+    constraints {
+        implementation ("aligned-platform:rules-0-for-com.fasterxml.jackson.core-or-dataformat-or-datatype-or-jaxrs-or-jr-or-module") {
+            version { strictly ("2.9.9.3") }
+            because("this version is required for compatibility")
+        }
+    }
+}
