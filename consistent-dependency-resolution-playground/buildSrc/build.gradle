@@ -1,0 +1,10 @@
+repositories {
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+dependencies {
+    implementation "com.netflix.nebula:nebula-project-plugin:7.0.9"
+}
+
+apply plugin: 'groovy'

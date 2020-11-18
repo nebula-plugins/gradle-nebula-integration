@@ -1,0 +1,40 @@
+{
+    "compileClasspath": {
+        "org.codehaus.groovy:groovy-all": {
+            "locked": "2.5.11",
+            "requested": "2.5.11"
+        }
+    },
+    "default": {
+        "org.codehaus.groovy:groovy-all": {
+            "locked": "2.5.11",
+            "requested": "2.5.11"
+        }
+    },
+    "runtimeClasspath": {
+        "org.codehaus.groovy:groovy-all": {
+            "locked": "2.5.11",
+            "requested": "2.5.11"
+        }
+    },
+    "testCompileClasspath": {
+        "org.codehaus.groovy:groovy-all": {
+            "locked": "2.5.11",
+            "requested": "2.5.11"
+        },
+        "org.spockframework:spock-core": {
+            "locked": "1.3-groovy-2.5",
+            "requested": "1.3-groovy-2.5"
+        }
+    },
+    "testRuntimeClasspath": {
+        "org.codehaus.groovy:groovy-all": {
+            "locked": "2.5.11",
+            "requested": "2.5.11"
+        },
+        "org.spockframework:spock-core": {
+            "locked": "1.3-groovy-2.5",
+            "requested": "1.3-groovy-2.5"
+        }
+    }
+}
