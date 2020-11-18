@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>nebula</groupId>
+<artifactId>my-client</artifactId>
+<version>1.0.0</version>
+<packaging>jar</packaging>
+<name>my client</name>
+<description>some description for my client</description>
+<url>http://go/nebula</url>
+<inceptionYear>2020</inceptionYear>
+<developers>
+    <developer>
+        <name>Nebula</name>
+        <id>neubla</id>
+        <url>http://go/nebula</url>
+        <roles>
+            <role>Developer</role>
+        </roles>
+    </developer>
+</developers>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+            <scope>invalidscope</scope>
+        </dependency>
+    </dependencies>
+</project>
