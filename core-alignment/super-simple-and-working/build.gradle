@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+repositories {
+    maven { url 'repo' }
+}
+dependencies {
+    implementation 'test.nebula:a:1.0.0'
+    implementation 'test.nebula:b:1.2.0'
+    implementation 'test.nebula:c:0.42.0'
+}
+
+project.dependencies.components.all(AlignGroup.class)
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("test.nebula")) {
+                it.belongsTo("test.nebula:test.nebula:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
