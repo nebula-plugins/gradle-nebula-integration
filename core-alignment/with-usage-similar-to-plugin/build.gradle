@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+apply plugin: AlignPlugin
+
+repositories {
+    maven { url 'repo' }
+    mavenCentral()
+}
+dependencies {
+    resolutionRules files('rules.json')
+    implementation 'test.nebula:a:1.0.0'
+    implementation 'test.nebula:b:1.2.0'
+    implementation 'test.nebula:c:0.42.0'
+}
