@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+       url = 'repo'
+    }
+}
+
+dependencies {
+    compileOnlyApi('org.springframework:spring-web') {
+        version {
+            strictly '5.3.0'
+        }
+    }
+    runtimeOnly 'netflix:foo-client:1.0.0'
+}
+
+java {
+    consistentResolution {
+        useRuntimeClasspathVersions()
+    }
+}
