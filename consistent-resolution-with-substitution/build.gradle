@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("org.mockito:mockito-all") using module("org.mockito:mockito-core:1.10.19") because "its fun"
+    }
+}
+
+dependencies {
+    implementation 'org.mockito:mockito-core:1.9.5'
+    testImplementation 'org.mockito:mockito-all:1.+'
+}
+
+java {
+    consistentResolution {
+        useRuntimeClasspathVersions()
+    }
+}
