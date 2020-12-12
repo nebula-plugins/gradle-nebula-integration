@@ -10,7 +10,6 @@ repositories {
 dependencies {
     resolutionRules files('local-rules.json')
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-    runtimeOnly 'com.squareup.okhttp3:okhttp:3.12.4'
     testImplementation( 'com.squareup.okhttp3:mockwebserver:4.9.0')
 }
 
