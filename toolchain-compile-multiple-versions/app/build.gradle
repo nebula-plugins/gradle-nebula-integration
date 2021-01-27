@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+dependencies {
+    implementation project(':utilities')
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'compile.multiple.versions.app.App'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+        vendor = JvmVendorSpec.AZUL
+    }
+}
