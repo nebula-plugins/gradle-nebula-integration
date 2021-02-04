@@ -1,0 +1,34 @@
+import example.MyPluginWithForces
+
+apply plugin: 'groovy'
+apply plugin: MyPluginWithForces
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'repo'
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.inject:guice:4.0'
+    }
+}
+
+project.dependencies.components.all(AlignGroup.class)
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("com.google.inject")) {
+                it.belongsTo("aligned-platform:com.google.inject:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'test.nebula:a:1.0.0' // brings com.google.inject:guice:3.0
+    implementation 'test.nebula:b:1.0.0' // brings com.google.inject.extensions:guice-assistedinject:4.1.0
+    implementation 'test.nebula:c:1.0.0' // brings com.google.inject.extensions:guice-grapher:4.1.0
+}
