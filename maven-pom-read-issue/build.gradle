@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven {
+        url = 'repo'
+    }
+}
+
+dependencies {
+    implementation 'netflix:test:1.0.0'
+}

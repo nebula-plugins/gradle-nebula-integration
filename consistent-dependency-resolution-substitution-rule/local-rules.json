@@ -1,0 +1,33 @@
+{
+  "align": [
+    {
+      "name": "guice-align",
+      "group": "(com\\.google\\.inject|com\\.google\\.inject\\.extensions)",
+      "excludes": ["guice-(struts2-plugin|throwing-providers|assisted-inject|dagger-adapter)"],
+      "includes": [],
+      "reason": "Misaligned Guice jars cause strange runtime errors.",
+      "author": "taylor.wicksell+github.com@gmail.com",
+      "date": "2016-05-06"
+    }
+  ],
+  "replace": [],
+  "substitute": [
+    {
+      "module": "com.google.inject.extensions:guice-assistedinject:[4.2.0,)",
+      "with": "com.google.inject.extensions:guice-assistedinject:4.1.0",
+      "reason": "versions after 4.1.+ pull in guava version that's incompatible with existing code",
+      "author": "Noel Yap <nyap@netflix.com>",
+      "date": "2018-03-06"
+    },
+    {
+      "module": "com.google.inject.extensions:guice-multibindings:[4.2.0,)",
+      "with": "com.google.inject.extensions:guice-multibindings:4.1.0",
+      "reason": "versions after 4.1.+ pull in guava version that's incompatible with existing code",
+      "author": "Noel Yap <nyap@netflix.com>",
+      "date": "2018-03-06"
+    }
+  ],
+  "deny": [],
+  "exclude": [],
+  "reject": []
+}
