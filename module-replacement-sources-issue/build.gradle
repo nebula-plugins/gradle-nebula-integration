@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'jakarta.validation:jakarta.validation-api:2.0.2'
+    implementation 'com.google.gwt:gwt-user:2.8.2'
+    modules {
+        module("javax.validation:validation-api") {
+            replacedBy("jakarta.validation:jakarta.validation-api", "jakarta is the new")
+        }
+    }
+}
