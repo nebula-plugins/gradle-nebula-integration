@@ -34,7 +34,19 @@ Here I have reproduced a binary store exception (as checked into this repo) and 
 
 ## Binary Store Exception
 
-To reproduce the binary store exception, we can run the following:
+To reproduce the binary store exception, we can reset the dependencies to the following & ensure there are no locks in place:
+```
+dependencies {
+    configA 'com.nebula.gen:p:4.0.0-SNAPSHOT'
+    configB("nebula.z.c:s-c:4.7.188")
+    configC("nebula.com.proto:p-j-n:3.11.1")
+    configD("com.nebula.spring:c-m:2.3.54") {
+      exclude group: 'nebula.z.a', module: 'm-d'
+    }
+    configE("nebula.z.a:m-c:1.256.0")
+}
+```
+and then run
 ```
 ./gradlew dependencies
 ```
@@ -189,7 +201,7 @@ Caused by: java.lang.IllegalStateException: Corrupt serialized resolution result
 
 ## InvalidUserCodeException
 
-Setting the dependencies back to 
+Setting the dependencies to 
 ```
 dependencies {
     configA 'com.nebula.gen:p:4.0.0-SNAPSHOT'
