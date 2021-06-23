@@ -1,4 +1,4 @@
-# Issue with replacement rule
+# Issue with replacement rule causing a binary store exception/ InvalidUserCodeException/ lock out of date
 
 Initially, I was seeing following error in the `runtimeClasspath` when the dependencies were locked using core Gradle locking:
 ```
@@ -28,7 +28,7 @@ I believe the key dependency in this graph is `com.nebula.jax:j-e-p:1.7` which h
 </dependency>
 ```
 
-Here I have reproduced a binary store exception (as checked into this repo) and the `InvalidUserCodeException` (with a small modification to the dependencies)
+Here I have reproduced a binary store exception (as checked into this repo) and the `InvalidUserCodeException` (with a small modification to the dependencies) that then ends with a lock out of date issue once the dependencies are locked
 
 -------
 
@@ -413,4 +413,123 @@ org.gradle.api.InvalidUserCodeException: Variant 'runtime' doesn't belong to res
         at com.gradle.scan.plugin.internal.q.a$a.a(SourceFile:20)
         at com.gradle.scan.plugin.internal.q.a.c(SourceFile:67)
 ----------
+```
+
+--------
+
+## Dependency lock state out of date
+
+Finally, we can run
+
+```
+./gradlew dependencies --write-locks
+ ```
+which locks the dependencies and also shows
+```
+BUILD SUCCESSFUL in 906ms
+1 actionable task: 1 executed
+
+A build scan cannot be produced as an error occurred gathering build data.
+Please report this problem via https://gradle.com/help/plugin and include the following via copy/paste:
+
+----------
+Gradle version: 7.1
+Plugin version: 3.6.3
+
+org.gradle.api.InvalidUserCodeException: Variant 'runtime' doesn't belong to resolved component 'nebula.com.proto:p-j-n:3.11.1'. A variant with the same name exists but is not the same instance. Most likely you are using a variant from another component to get the dependencies of this component.
+```
+
+When we use `dependencyInsight`, then we can see the lock of out date issue:
+
+```
+./gradlew dependencyInsight --dependency com.google.protobuf --configuration runtimeClasspath
+ ```
+
+```
+> Task :dependencyInsight
+com.google.protobuf:protobuf-java:3.11.1 FAILED
+   Selection reasons:
+      - By constraint : Dependency locking
+   Failures:
+      - Dependency lock state out of date:
+          - Did not resolve 'com.google.protobuf:protobuf-java:3.11.1' which is part of the dependency lock state
+
+com.google.protobuf:protobuf-java:3.11.1 FAILED
+\--- runtimeClasspath
+
+nebula.com.proto:p-j-n:3.11.1
+   variant "runtime" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-runtime
+      org.gradle.libraryelements     = jar
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.environment     = standard-jvm
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By constraint : dependency was locked to version '3.11.1'
+      - By ancestor
+      - By constraint : belongs to platform aligned-group:nebula.com.proto:3.11.1
+      - Forced
+      - Selected by rule : ✭ replacement
+
+com.google.protobuf:protobuf-java:2.6.1 -> nebula.com.proto:p-j-n:3.11.1
+\--- com.nebula.jax:j-e-p:1.7
+     +--- runtimeClasspath (requested com.nebula.jax:j-e-p:{strictly 1.7})
+     \--- nebula.z.c:p-i:4.7.188
+          +--- runtimeClasspath (requested nebula.z.c:p-i:{strictly 4.7.188})
+          \--- nebula.z.a:m-i:1.256.0 (requested nebula.z.c:p-i:4.7.102)
+               +--- runtimeClasspath (requested nebula.z.a:m-i:{strictly 1.256.0})
+               \--- nebula.z.b:p-j-c:0.49.0
+                    +--- runtimeClasspath (requested nebula.z.b:p-j-c:{strictly 0.49.0})
+                    \--- com.nebula.spring:c-m:2.3.54
+                         \--- runtimeClasspath
+
+com.google.protobuf:protobuf-java:3.7.1 -> nebula.com.proto:p-j-n:3.11.1
+\--- com.nebula.gen:p:4.0.0-SNAPSHOT
+     \--- runtimeClasspath
+
+com.google.protobuf:protobuf-java:{strictly 3.11.1} -> nebula.com.proto:p-j-n:3.11.1
+\--- runtimeClasspath
+
+nebula.com.proto:p-j-u-n:3.11.1
+   variant "runtime" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-runtime
+      org.gradle.libraryelements     = jar
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.environment     = standard-jvm
+         org.gradle.jvm.version         = 8
+   ]
+   Selection reasons:
+      - By constraint : dependency was locked to version '3.11.1'
+      - By constraint : belongs to platform aligned-group:nebula.com.proto:3.11.1
+      - Forced
+      - By ancestor
+      - Selected by rule : ✭ replacement
+
+com.google.protobuf:protobuf-java-util:3.7.1 -> nebula.com.proto:p-j-u-n:3.11.1
+\--- com.nebula.gen:p:4.0.0-SNAPSHOT
+     \--- runtimeClasspath
+
+(*) - dependencies omitted (listed previously)
+
+A web-based, searchable dependency report is available by adding the --scan option.
+
+BUILD SUCCESSFUL
+```
+where the most relevant part is the failure to replace a dependency
+```
+com.google.protobuf:protobuf-java:3.11.1 FAILED
+   Selection reasons:
+      - By constraint : Dependency locking
+   Failures:
+      - Dependency lock state out of date:
+          - Did not resolve 'com.google.protobuf:protobuf-java:3.11.1' which is part of the dependency lock state
 ```
