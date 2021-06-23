@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>nebula.z.c</groupId>
+  <artifactId>p-i</artifactId>
+  <version>4.7.188</version>
+  <dependencies>
+    <dependency>
+      <groupId>nebula.z.c</groupId>
+      <artifactId>p-t-z</artifactId>
+      <version>4.7.188</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>nebula.z.c</groupId>
+      <artifactId>s-c</artifactId>
+      <version>4.7.102</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.nebula.jax</groupId>
+      <artifactId>j-e-p</artifactId>
+      <version>1.7</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

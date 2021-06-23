@@ -1,0 +1,89 @@
+apply plugin: "java"
+
+repositories {
+    maven {
+        url 'repo'
+    }
+    mavenCentral()
+}
+
+configurations {
+    configA
+    implementation.extendsFrom(configA)
+    configB
+    implementation.extendsFrom(configB)
+    configC
+    implementation.extendsFrom(configC)
+    configD
+    implementation.extendsFrom(configD)
+    configE
+    implementation.extendsFrom(configE)
+}
+
+dependencies {
+    configA 'com.nebula.gen:p:4.0.0-SNAPSHOT'
+    configB("nebula.z.c:s-c:4.7.188")
+    configC("nebula.com.proto:p-j-n:3.11.1")
+    configD("com.nebula.spring:c-m:2.3.54") {
+      exclude group: 'nebula.z.a', module: 'm-d'
+    }
+    configE("nebula.z.a:m-c:1.256.0")
+}
+
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+project.dependencies.components.all(AlignGroup.class)
+
+def replacementMessage = "✭ replacement"
+project.dependencies.modules.module('com.google.protobuf:protobuf-java') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('nebula.com.proto:p-j-n', replacementMessage)
+}
+
+project.dependencies.modules.module('com.google.protobuf:protobuf-java-util') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('nebula.com.proto:p-j-u-n', replacementMessage)
+}
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("com.nebula.jax")) {
+                it.belongsTo("aligned-group:com.nebula.jax:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("nebula.com.proto")) {
+                it.belongsTo("aligned-group:nebula.com.proto:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("com.google.protobuf")) {
+                it.belongsTo("aligned-group:com.google.protobuf:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("com.nebula.spring")) {
+                it.belongsTo("aligned-group:com.nebula.spring:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("nebula.grpc")) {
+                it.belongsTo("aligned-group:nebula.grpc:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("nebula.z.a")) {
+                it.belongsTo("aligned-group:nebula.z.a:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("nebula.z.b")) {
+                it.belongsTo("aligned-group:nebula.z.b:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("nebula.z.c")) {
+                it.belongsTo("aligned-group:nebula.z.c:${it.getId().getVersion()}")
+            }
+            if (it.getId().getGroup().startsWith("com.nebula.gen")) {
+                it.belongsTo("aligned-group:com.nebula.gen:${it.getId().getVersion()}")
+            }
+
+        }
+    }
+}
+
+configurations.all {
+    exclude group: 'com.google.code.gson', module: 'gson'
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'com.google.guava', module: 'guava'
+}
