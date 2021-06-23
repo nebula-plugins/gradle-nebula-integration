@@ -1,0 +1,63 @@
+apply plugin: 'java-library'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    // This dependency will bring log4:log4j transitively
+    implementation 'org.apache.zookeeper:zookeeper:3.4.9'
+
+    // We use log4j over slf4j
+    implementation 'org.slf4j:log4j-over-slf4j:1.7.10'
+}
+
+// Declaring capabilities https://docs.gradle.org/7.1/userguide/component_capabilities.html#sec:declaring-capabilities-external-modules
+dependencies {
+    // Activate the "LoggingCapability" rule
+    components.all(LoggingCapability)
+}
+
+class LoggingCapability implements ComponentMetadataRule {
+    final static Set<String> LOGGING_MODULES = ["log4j:log4j", "org.slf4j:log4j-over-slf4j"] as Set<String>
+
+    void execute(ComponentMetadataContext context) {
+        context.details.with {details ->
+            if (LOGGING_MODULES.contains(details.id.module.toString())) {
+                details.allVariants { variantMetadata ->
+                    variantMetadata.withCapabilities { mutableCapabilitiesMetadata ->
+                        // Declare that both log4j and log4j-over-slf4j provide the same capability
+                        mutableCapabilitiesMetadata.addCapability("log4j-capability", "log4j-capability", id.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Selecting between capabilities https://docs.gradle.org/current/userguide/dependency_capability_conflict.html#sub:selecting-between-candidates
+configurations.all {
+    resolutionStrategy.capabilitiesResolution.withCapability("log4j-capability:log4j-capability") {
+        def toBeSelected = candidates.find { it.id instanceof ModuleComponentIdentifier && it.id.getModuleIdentifier().toString() == 'org.slf4j:log4j-over-slf4j' }
+        if (toBeSelected != null) {
+            select(toBeSelected)
+        }
+        because 'use slf4j in place of log4j'
+    }
+}
+
+// Locking dependencies https://docs.gradle.org/current/userguide/dependency_locking.html
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+// Aligning dependencies
+dependencies.components.all(AlignGroup.class)
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("org.slf4j")) {
+                it.belongsTo("aligned-group:org.slf4j:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
