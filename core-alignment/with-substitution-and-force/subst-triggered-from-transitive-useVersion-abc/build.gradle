@@ -1,0 +1,19 @@
+apply from: '../common-setup.gradle'
+
+def versionToUse = "1.1.0"
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group.startsWith('test.nebula')) {
+                details.useVersion "$versionToUse"
+                details.because "using useVersion to set this dependency version to ${versionToUse}"
+            }
+        }
+    }
+}
+dependencies {
+    implementation 'test.nebula:a:1.1.0'
+    implementation 'test.nebula:b:1.0.0' // added for alignment
+    implementation 'test.nebula:c:1.0.0' // added for alignment
+    implementation 'test.other:z:1.0.0' // brings in bad version
+}
