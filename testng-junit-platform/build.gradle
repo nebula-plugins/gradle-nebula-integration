@@ -11,7 +11,11 @@ dependencies {
 }
 
 tasks.withType(Test) {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeTags("included")
+        excludeTags("excluded")
+    }
+    systemProperty("testng.useDefaultListeners", "true")
     testLogging {
         displayGranularity = 0
         events('PASSED', 'FAILED', 'SKIPPED')

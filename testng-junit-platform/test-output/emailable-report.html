@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>TestNG Report</title>
+<style type="text/css">table {margin-bottom:10px;border-collapse:collapse;empty-cells:show}th,td {border:1px solid #009;padding:.25em .5em}th {vertical-align:bottom}td {vertical-align:top}table a {font-weight:bold}.stripe td {background-color: #E6EBF9}.num {text-align:right}.passedodd td {background-color: #3F3}.passedeven td {background-color: #0A0}.skippedodd td {background-color: #DDD}.skippedeven td {background-color: #CCC}.failedodd td,.attn {background-color: #F33}.failedeven td,.stripe .attn {background-color: #D00}.stacktrace {white-space:pre;font-family:monospace}.totop {font-size:85%;text-align:center;border-bottom:2px solid #000}.invisible {display:none}</style>
+</head>
+<body>
+<table>
+<tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
+<tr><th colspan="7">Command line suite</th></tr>
+<tr><td><a href="#t0">Command line test</a></td><td class="num">16</td><td class="num">0</td><td class="num attn">1</td><td class="num">63</td><td></td><td></td></tr>
+</table>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Command line suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Command line test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">nebula.test.testng.ParallelParameterizationTest</td><td><a href="#m0">isOdd_ShouldReturnTrueForOddNumbers</a></td><td rowspan="1">1625789589008</td><td rowspan="1">9</td></tr><tr><th colspan="4">Command line test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="13">nebula.test.testng.NonParallelParameterizationTest</td><td><a href="#m1">isOdd_ShouldReturnTrueForOddNumbers</a></td><td rowspan="11">1625789589057</td><td rowspan="11">1</td></tr><tr class="passedeven"><td><a href="#m2">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m3">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m4">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m5">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m6">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m7">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m8">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m9">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m10">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m11">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedeven"><td><a href="#m12">isOdd_ShouldReturnTrueForOddNumbersSubset</a></td><td rowspan="2">1625789589065</td><td rowspan="2">1</td></tr><tr class="passedeven"><td><a href="#m13">isOdd_ShouldReturnTrueForOddNumbersSubset</a></td></tr><tr class="passedodd"><td rowspan="3">nebula.test.testng.ParallelParameterizationTest</td><td><a href="#m14">isOdd_ShouldReturnTrueForOddNumbers</a></td><td rowspan="3">1625789589011</td><td rowspan="3">5</td></tr><tr class="passedodd"><td><a href="#m15">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr><tr class="passedodd"><td><a href="#m16">isOdd_ShouldReturnTrueForOddNumbers</a></td></tr></tbody>
+</table>
+<h2>Command line test</h2><h3 id="m0">nebula.test.testng.ParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">org.testng.TestNGException: java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at org.junit.support.testng.engine.TestNGTestEngine.configureAndRun(TestNGTestEngine.java:152)
+	at org.junit.support.testng.engine.TestNGTestEngine.execute(TestNGTestEngine.java:137)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:96)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:75)
+	at com.sun.proxy.$Proxy2.stop(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: java.util.concurrent.ExecutionException: java.lang.NullPointerException
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191)
+	... 53 more
+Caused by: java.lang.NullPointerException
+	at org.junit.support.testng.engine.ExecutionListener.reportFinished(ExecutionListener.java:169)
+	at org.junit.support.testng.engine.ExecutionListener.onTestSuccess(ExecutionListener.java:106)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	... 1 more
+... Removed 48 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m1">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>7</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m2">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>13</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m3">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>-3</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m4">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>3</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m5">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>9</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m6">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>11</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m7">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>1</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m8">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>15</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m9">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>5</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m10">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>-5</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m11">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>2147483647</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m12">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbersSubset</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>5</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m13">nebula.test.testng.NonParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbersSubset</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>11</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m14">nebula.test.testng.ParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>13</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m15">nebula.test.testng.ParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>15</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m16">nebula.test.testng.ParallelParameterizationTest#isOdd_ShouldReturnTrueForOddNumbers</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>-5</td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+</body>
+</html>
