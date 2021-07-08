@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    testImplementation 'org.testng:testng:6.+'
+    testRuntimeOnly 'org.junit.support:testng-engine:1.0.0-M1'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        displayGranularity = 0
+        events('PASSED', 'FAILED', 'SKIPPED')
+    }
+}

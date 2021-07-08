@@ -1,0 +1,15 @@
+apply from: '../common-setup.gradle'
+
+configurations.all {
+    resolutionStrategy {
+        force 'test.nebula:a:1.1.0'
+        force 'test.nebula:b:1.1.0'
+        force 'test.nebula:c:1.1.0'
+    }
+}
+dependencies {
+    implementation 'test.nebula:a:1.1.0'
+    implementation 'test.nebula:b:1.0.0' // added for alignment
+    implementation 'test.nebula:c:1.0.0' // added for alignment
+    implementation 'test.other:z:1.0.0' // brings in bad version
+}

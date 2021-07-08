@@ -1,0 +1,36 @@
+apply plugin: 'java-library'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    // This dependency will bring log4:log4j transitively
+    implementation 'org.apache.zookeeper:zookeeper:3.4.9'
+
+    // We use log4j over slf4j
+    implementation 'org.slf4j:log4j-over-slf4j:1.7.10'
+}
+
+// Replacing logging library
+def replacementMessage = "✭ replacement - use slf4j in place of log4j"
+project.dependencies.modules.module('log4j:log4j') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('org.slf4j:log4j-over-slf4j', replacementMessage)
+}
+
+// Locking dependencies https://docs.gradle.org/current/userguide/dependency_locking.html
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+// Aligning dependencies
+dependencies.components.all(AlignGroup.class)
+
+class AlignGroup implements ComponentMetadataRule {
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("org.slf4j")) {
+                it.belongsTo("aligned-group:org.slf4j:${it.getId().getVersion()}")
+            }
+        }
+    }
+}
