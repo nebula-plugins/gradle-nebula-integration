@@ -2,29 +2,25 @@
 <testng-results ignored="0" total="17" passed="16" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2021-07-09T00:13:09Z" name="Command line suite" finished-at="2021-07-09T00:13:09Z" duration-ms="63">
+  <suite started-at="2021-07-09T00:15:17Z" name="Command line suite" finished-at="2021-07-09T00:15:17Z" duration-ms="60">
     <groups>
       <group name="included">
-        <method signature="NonParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" name="isOdd_ShouldReturnTrueForOddNumbers" class="nebula.test.testng.NonParallelParameterizationTest"/>
-        <method signature="NonParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" name="isOdd_ShouldReturnTrueForOddNumbersSubset" class="nebula.test.testng.NonParallelParameterizationTest"/>
-        <method signature="ParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@711ecdde]" name="isOdd_ShouldReturnTrueForOddNumbers" class="nebula.test.testng.ParallelParameterizationTest"/>
+        <method signature="NonParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" name="isOdd_ShouldReturnTrueForOddNumbers" class="nebula.test.testng.NonParallelParameterizationTest"/>
+        <method signature="NonParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" name="isOdd_ShouldReturnTrueForOddNumbersSubset" class="nebula.test.testng.NonParallelParameterizationTest"/>
+        <method signature="ParallelParameterizationTest.isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@7bb251bd]" name="isOdd_ShouldReturnTrueForOddNumbers" class="nebula.test.testng.ParallelParameterizationTest"/>
       </group> <!-- included -->
     </groups>
-    <test started-at="2021-07-09T00:13:09Z" name="Command line test" finished-at="2021-07-09T00:13:09Z" duration-ms="63">
+    <test started-at="2021-07-09T00:15:17Z" name="Command line test" finished-at="2021-07-09T00:15:17Z" duration-ms="60">
       <class name="nebula.test.testng.NonParallelParameterizationTest">
-        <test-method is-config="true" signature="test()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="test" finished-at="2021-07-09T00:13:09Z" duration-ms="2" status="PASS">
+        <test-method is-config="true" signature="test()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="test" finished-at="2021-07-09T00:15:17Z" duration-ms="2" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- test -->
-        <test-method is-config="true" signature="setUpClass()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpClass" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="setUpClass()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpClass" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpClass -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="2" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -35,7 +31,15 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -46,19 +50,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -69,7 +65,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -80,11 +80,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -95,11 +91,15 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -110,11 +110,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -125,11 +125,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -140,7 +140,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -151,11 +151,15 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -166,15 +170,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -185,7 +185,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbersSubset" description="Test for odd numbers subset" data-provider="numbersSubset" finished-at="2021-07-09T00:13:09Z" duration-ms="1" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbersSubset" description="Test for odd numbers subset" data-provider="numbersSubset" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -196,15 +196,11 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbersSubset -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUpMethod -->
-        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="setUpMethod" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpMethod -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@5ba6f3e3]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbersSubset" description="Test for odd numbers subset" data-provider="numbersSubset" finished-at="2021-07-09T00:13:09Z" duration-ms="0" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbersSubset(java.lang.Integer)[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbersSubset" description="Test for odd numbers subset" data-provider="numbersSubset" finished-at="2021-07-09T00:15:17Z" duration-ms="1" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -215,9 +211,13 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbersSubset -->
+        <test-method is-config="true" signature="setUpMethod()[pri:0, instance:nebula.test.testng.NonParallelParameterizationTest@4b20db15]" started-at="2021-07-09T00:15:17Z" name="setUpMethod" finished-at="2021-07-09T00:15:17Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpMethod -->
       </class> <!-- nebula.test.testng.NonParallelParameterizationTest -->
       <class name="nebula.test.testng.ParallelParameterizationTest">
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@711ecdde]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="9" status="FAIL">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@7bb251bd]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="14" status="FAIL">
           <exception class="org.testng.TestNGException">
             <message>
               <![CDATA[java.util.concurrent.ExecutionException: java.lang.NullPointerException]]>
@@ -284,7 +284,11 @@ at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:191)
 at org.testng.internal.PoolService.submitTasksAndWait(PoolService.java:51)
 ... 53 more
 Caused by: java.lang.NullPointerException
-at org.junit.support.testng.engine.ExecutionListener.reportFinished(ExecutionListener.java:169)
+at org.junit.platform.launcher.core.ExecutionListenerAdapter.getTestIdentifier(ExecutionListenerAdapter.java:65)
+at org.junit.platform.launcher.core.ExecutionListenerAdapter.executionFinished(ExecutionListenerAdapter.java:56)
+at org.junit.platform.launcher.core.DelegatingEngineExecutionListener.executionFinished(DelegatingEngineExecutionListener.java:46)
+at org.junit.platform.launcher.core.OutcomeDelayingEngineExecutionListener.executionFinished(OutcomeDelayingEngineExecutionListener.java:63)
+at org.junit.support.testng.engine.ExecutionListener.reportFinished(ExecutionListener.java:172)
 at org.junit.support.testng.engine.ExecutionListener.onTestSuccess(ExecutionListener.java:106)
 at org.testng.internal.TestListenerHelper.runTestListeners(TestListenerHelper.java:70)
 at org.testng.internal.Invoker.runTestListeners(Invoker.java:1389)
@@ -304,18 +308,18 @@ at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecut
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@711ecdde]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="6" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@7bb251bd]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="9" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[-5]]>
+                <![CDATA[7]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@711ecdde]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="5" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@7bb251bd]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="6" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -326,11 +330,11 @@ at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecut
           <reporter-output>
           </reporter-output>
         </test-method> <!-- isOdd_ShouldReturnTrueForOddNumbers -->
-        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@711ecdde]" started-at="2021-07-09T00:13:09Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:13:09Z" duration-ms="5" status="PASS">
+        <test-method signature="isOdd_ShouldReturnTrueForOddNumbers(java.lang.Integer)[pri:0, instance:nebula.test.testng.ParallelParameterizationTest@7bb251bd]" started-at="2021-07-09T00:15:17Z" name="isOdd_ShouldReturnTrueForOddNumbers" description="Test for odd numbers" data-provider="numbers" finished-at="2021-07-09T00:15:17Z" duration-ms="5" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[13]]>
+                <![CDATA[-5]]>
               </value>
             </param>
           </params>
