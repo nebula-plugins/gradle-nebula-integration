@@ -1,0 +1,59 @@
+apply plugin: 'java'
+
+repositories {
+    maven { url 'repo' }
+    mavenCentral()
+}
+
+configurations {
+    configA
+    configB
+    configC
+    implementation.extendsFrom(configA)
+    implementation.extendsFrom(configB)
+    implementation.extendsFrom(configC)
+}
+
+dependencies {
+    configA 'com.google.guava:guava:19.0'
+    configB('berry.grpc:n-g-m-n:1.33.3') {
+        exclude group: 'com.google.guava'
+    }
+    configC('io.grpc:grpc-services:1.34.0') {
+        exclude group: 'io.grpc', module: 'grpc-core'
+        exclude group: 'io.grpc', module: 'grpc-protobuf'
+        exclude group: 'io.grpc', module: 'grpc-stub'
+    }
+}
+
+
+project.dependencies.components.all(AlignGroup.class)
+
+import org.gradle.api.artifacts.CacheableRule
+
+@CacheableRule
+class AlignGroup implements ComponentMetadataRule {
+    private def logger = Logging.getLogger(AlignGroup.class)
+    void execute(ComponentMetadataContext ctx) {
+        ctx.details.with { it ->
+            if (it.getId().getGroup().startsWith("berry.io.grpc")) {
+                it.belongsTo("aligned-platform:align-berry.io.grpc:${it.getId().getVersion()}")
+                logger.debug("Aligning platform based on '${it.id.group}:${it.id.name}:${it.id.version}' from align rule AlignGroup'")
+            }
+            if (it.getId().getGroup().startsWith("berry.grpc")) {
+                it.belongsTo("aligned-platform:align-berry.grpc:${it.getId().getVersion()}")
+                logger.debug("Aligning platform based on '${it.id.group}:${it.id.name}:${it.id.version}' from align rule AlignGroup'")
+            }
+            if (it.getId().getGroup().startsWith("io.grpc")) {
+                it.belongsTo("aligned-platform:align-io.grpc:${it.getId().getVersion()}")
+                logger.debug("Aligning platform based on '${it.id.group}:${it.id.name}:${it.id.version}' from align rule AlignGroup'")
+            }
+        }
+    }
+}
+
+def replacementMessage = "✭ replacement - Use berry.io.grpc instead of io.grpc"
+project.dependencies.modules.module('io.grpc:grpc-services') {
+    def details = it as ComponentModuleMetadataDetails
+    details.replacedBy('berry.io.grpc:g-s-n', replacementMessage)
+}
