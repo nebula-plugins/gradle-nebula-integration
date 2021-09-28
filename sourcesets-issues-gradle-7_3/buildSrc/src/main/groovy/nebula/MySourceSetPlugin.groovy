@@ -5,11 +5,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.file.UnionFileCollection
 import org.gradle.api.plugins.JavaBasePlugin
-import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -18,6 +18,9 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.testing.Test
 
 class MySourceSetPlugin implements Plugin<Project> {
+
+    private static final String IMPLEMENTATION_CONFIG_NAME = 'implementation'
+    private static final String MAIN_SOURCE_SET_NAME = 'main'
     Project project
 
     @Override
@@ -27,21 +30,40 @@ class MySourceSetPlugin implements Plugin<Project> {
         project.plugins.withType(JavaBasePlugin) {
             JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
             SourceSetContainer sourceSets = javaConvention.sourceSets
+            ConfigurationContainer configurations = project.configurations
             sourceSets.matching { SourceSet sourceSet -> sourceSet.name == 'test' }.all { SourceSet parentSourceSet ->
 
-                // Since we're using NamedContainerProperOrder, we're configured already.
-                SourceSet sourceSet = createSourceSet(parentSourceSet)
+                // sourceSets.create('integrationTest')
+                SourceSet sourceSet = sourceSets.create('integrationTest')  { SourceSet sourceSet ->
+                    //our new source set needs to see compiled classes from its parent
+                    //the parent can be also inheriting so we need to extract all the output from previous parents
+                    //e.g smokeTest inherits from test which inherits from main and we need to see classes from main
+                    Set<Object> compileClasspath = new LinkedHashSet<Object>()
+                    compileClasspath.add(sourceSet.compileClasspath)
+                    addParentSourceSetOutputs(compileClasspath, parentSourceSet, sourceSets)
 
-                Configuration parentCompile = project.configurations.getByName(parentSourceSet.compileClasspathConfigurationName)
-                project.configurations.getByName(sourceSet.compileClasspathConfigurationName).extendsFrom(parentCompile)
+                    //we are using from to create ConfigurableFileCollection so if we keep inhering from created facets we can
+                    //still extract chain of output from all parents
+                    sourceSet.compileClasspath = project.objects.fileCollection().from(compileClasspath as Object[])
+                    //runtime classpath of parent already has parent output so we don't need to explicitly add it
+                    Set<Object> runtimeClasspath = new LinkedHashSet<Object>()
+                    runtimeClasspath.add(sourceSet.runtimeClasspath)
+                    addParentSourceSetOutputs(runtimeClasspath, parentSourceSet, sourceSets)
 
-                Configuration parentRuntime = project.configurations.getByName(parentSourceSet.runtimeClasspathConfigurationName)
-                project.configurations.getByName(sourceSet.runtimeClasspathConfigurationName).extendsFrom(parentRuntime)
+                    sourceSet.runtimeClasspath = project.objects.fileCollection().from(runtimeClasspath as Object[])
+                }
 
-                Configuration annotationProcessor = project.configurations.getByName(parentSourceSet.annotationProcessorConfigurationName)
-                project.configurations.getByName(sourceSet.annotationProcessorConfigurationName).extendsFrom(annotationProcessor)
+                Configuration implementationConfiguration = configurations.getByName(parentSourceSet.implementationConfigurationName)
+                Configuration runtimeOnlyConfiguration = configurations.getByName(parentSourceSet.runtimeOnlyConfigurationName)
+                Configuration annotationProcessorConfiguration = configurations.getByName(parentSourceSet.annotationProcessorConfigurationName)
+                Configuration facetImplementationConfiguration = configurations.getByName(sourceSet.implementationConfigurationName)
+                Configuration facetRuntimeOnlyConfiguration = configurations.getByName(sourceSet.runtimeOnlyConfigurationName)
+                Configuration facetAnnotationProcessorConfiguration = configurations.getByName(sourceSet.annotationProcessorConfigurationName)
 
-                // Make sure at the classes get built as part of build
+                facetImplementationConfiguration.extendsFrom(implementationConfiguration)
+                facetRuntimeOnlyConfiguration.extendsFrom(runtimeOnlyConfiguration)
+                facetAnnotationProcessorConfiguration.extendsFrom(annotationProcessorConfiguration)
+
                 project.tasks.named('build').configure(new Action<Task>() {
                     @Override
                     void execute(Task buildTask) {
@@ -61,7 +83,24 @@ class MySourceSetPlugin implements Plugin<Project> {
 
 
     }
+    private void addParentSourceSetOutputs( Set<Object> classpath, SourceSet parentSourceSet, SourceSetContainer sourceSets) {
+        classpath.add(parentSourceSet.output)
+        Configuration parentSourceSetImplementationConfiguration = project.configurations.findByName(parentSourceSet.implementationConfigurationName)
+        if(!parentSourceSetImplementationConfiguration || !parentSourceSetImplementationConfiguration.extendsFrom) {
+            return
+        }
 
+        Configuration extendsFrom = parentSourceSetImplementationConfiguration.extendsFrom.find()
+        if(!extendsFrom) {
+            return
+        }
+
+        if(extendsFrom.name == IMPLEMENTATION_CONFIG_NAME) {
+            addParentSourceSetOutputs(classpath, sourceSets.getByName(MAIN_SOURCE_SET_NAME), sourceSets)
+        } else {
+            addParentSourceSetOutputs(classpath, sourceSets.getByName(extendsFrom.name.replaceAll(IMPLEMENTATION_CONFIG_NAME.capitalize(), '')), sourceSets)
+        }
+    }
     /**
      * Creates the integration test Gradle task and defines the output directories.
      *
@@ -94,6 +133,7 @@ class MySourceSetPlugin implements Plugin<Project> {
     SourceSet createSourceSet(SourceSet parentSourceSet) {
         JavaPluginConvention javaConvention = project.convention.getPlugin(JavaPluginConvention)
         SourceSetContainer sourceSets = javaConvention.sourceSets
+       // sourceSets.create('integrationTest')
         sourceSets.create('integrationTest') { SourceSet sourceSet ->
             //our new source set needs to see compiled classes from its parent
             //the parent can be also inheriting so we need to extract all the output from previous parents
@@ -101,7 +141,7 @@ class MySourceSetPlugin implements Plugin<Project> {
             Set<Object> compileClasspath = new LinkedHashSet<Object>()
             compileClasspath.add(sourceSet.compileClasspath)
             compileClasspath.add(parentSourceSet.output)
-            compileClasspath.addAll(extractAllOutputs(parentSourceSet.compileClasspath))
+          //  compileClasspath.addAll(extractAllOutputs(parentSourceSet.compileClasspath))
 
             //we are using from to create ConfigurableFileCollection so if we keep inhering from created facets we can
             //still extract chain of output from all parents
@@ -109,16 +149,23 @@ class MySourceSetPlugin implements Plugin<Project> {
             //runtime classpath of parent already has parent output so we don't need to explicitly add it
             Set<Object> runtimeClasspath = new LinkedHashSet<Object>()
             runtimeClasspath.add(sourceSet.runtimeClasspath)
-            runtimeClasspath.addAll(extractAllOutputs(parentSourceSet.runtimeClasspath))
+            runtimeClasspath.add(parentSourceSet.output)
+        //    runtimeClasspath.addAll(extractAllOutputs(parentSourceSet.runtimeClasspath))
 
             sourceSet.runtimeClasspath = project.objects.fileCollection().from(runtimeClasspath as Object[])
         }
     }
 
 
-    private static Set<Object> extractAllOutputs(FileCollection classpath) {
+    private Set<Object> extractAllOutputs(FileCollection classpath) {
         if (classpath instanceof ConfigurableFileCollection) {
-            (classpath as ConfigurableFileCollection).from.findAll {it instanceof FileCollection }. collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
+            def from = (classpath as ConfigurableFileCollection).from
+            boolean usesJvmTestPlugin = from.any { it.class.name.contains('JvmTestSuitePlugin')}
+            def testing = project.getExtensions().getByType(org.gradle.testing.base.TestingExtension)
+            testing.suites.withType(org.gradle.api.plugins.jvm.JvmTestSuite) {
+                true
+            }
+            from.findAll { it instanceof FileCollection }.collectMany { extractAllOutputs(it as FileCollection) } as Set<Object>
         }
         else if (classpath instanceof UnionFileCollection) {
             (classpath as UnionFileCollection).sources.collectMany { extractAllOutputs(it) } as Set<Object>
