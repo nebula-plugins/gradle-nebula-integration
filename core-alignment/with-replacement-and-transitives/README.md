@@ -1,5 +1,36 @@
 # Core alignment issue with replacements and transitive dependencies
 
+--------------
+
+**Update: this is resolved with Gradle 7.3-rc-1**
+
+Now we see:
+
+```
+./gradlew dependencyInsight --dependency guava --configuration runtimeClasspath
+```
+showing
+```
+> Task :dependencyInsight
+com.google.guava:guava:19.0
+   variant "runtime" [
+      org.gradle.status              = release (not requested)
+      org.gradle.usage               = java-runtime
+      org.gradle.libraryelements     = jar
+      org.gradle.category            = library
+
+      Requested attributes not found in the selected variant:
+         org.gradle.dependency.bundling = external
+         org.gradle.jvm.environment     = standard-jvm
+         org.gradle.jvm.version         = 8
+   ]
+
+com.google.guava:guava:19.0
+\--- runtimeClasspath
+```
+
+--------------
+
 We are seeing some odd items with a replacement in this example project, using Gradle 6.9.
 
 In this one, a single dependency gets replaced, but the transitive dependencies remain. This leads to unexpected output like:

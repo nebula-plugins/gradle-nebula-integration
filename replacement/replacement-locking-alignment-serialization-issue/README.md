@@ -1,5 +1,11 @@
 # Issue with replacement rule causing a binary store exception/ InvalidUserCodeException/ lock out of date
 
+--------------
+
+**Update: this is resolved with Gradle 7.3-rc-1**
+
+--------------
+
 Initially, I was seeing following error in the `runtimeClasspath` when the dependencies were locked using core Gradle locking:
 ```
 > Resolved dependencies were missing from the lock state:
@@ -201,7 +207,7 @@ Caused by: java.lang.IllegalStateException: Corrupt serialized resolution result
 
 ## InvalidUserCodeException
 
-Setting the dependencies to 
+Setting the dependencies to
 ```
 dependencies {
     configA 'com.nebula.gen:p:4.0.0-SNAPSHOT'
