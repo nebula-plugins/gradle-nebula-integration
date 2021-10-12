@@ -1,0 +1,17 @@
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            preferProjectModules()
+        }
+    }
+    apply plugin: 'java-library'
+
+    group = 'netflix.test'
+    repositories {
+        maven {
+            url "${project.rootProject.projectDir}/repo"
+        }
+        mavenCentral()
+    }
+
+}
