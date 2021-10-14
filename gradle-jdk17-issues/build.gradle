@@ -1,0 +1,30 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    distribution {
+        maxRemoteExecutors = 0
+        enabled = true
+    }
+}
+
+gradlePlugin {
+    plugins {
+        netflixNebula {
+            id = 'my.plugin'
+            implementationClass = 'netflix.MyPlugin'
+        }
+    }
+}

@@ -1,0 +1,9 @@
+plugins {
+    id('com.gradle.enterprise') version '3.7'
+    id('com.gradle.enterprise.test-distribution') version '2.2.1'
+}
+
+gradleEnterprise {
+    server = 'https://gradle-enterprise.mycompany.com'
+}
+rootProject.name = 'gradle-jdk17-issues'
