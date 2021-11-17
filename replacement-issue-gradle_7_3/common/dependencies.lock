@@ -1,0 +1,27 @@
+{
+    "compileClasspath": {
+        "netflix:a": {
+            "locked": "1.0.0"
+        }
+    },
+    "resolutionRules": {
+        "netflix.nebula.test.gradle.issue:replacement-issue-gradle_7_3": {
+            "project": true
+        }
+    },
+    "runtimeClasspath": {
+        "netflix:a": {
+            "locked": "1.0.0"
+        }
+    },
+    "testCompileClasspath": {
+        "netflix:a": {
+            "locked": "1.0.0"
+        }
+    },
+    "testRuntimeClasspath": {
+        "netflix:a": {
+            "locked": "1.0.0"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "align": [],
+  "deny": [],
+  "exclude": [],
+  "reject": [],
+  "replace" : [
+    {
+      "module" : "netflix:b-standalone",
+      "with" : "netflix:b-standalone-original",
+      "reason": "test",
+      "author": "test",
+      "date": "9999-06-22"
+    }
+  ],
+  "substitute": []
+}

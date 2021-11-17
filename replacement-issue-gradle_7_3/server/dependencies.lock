@@ -1,0 +1,87 @@
+{
+    "compileClasspath": {
+        "netflix.nebula.test.gradle.issue:common": {
+            "project": true
+        },
+        "netflix.nebula.test.gradle.issue:data-interface": {
+            "project": true
+        },
+        "netflix:a": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:common"
+            ],
+            "locked": "1.0.0"
+        },
+        "netflix:b": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:data-interface"
+            ],
+            "locked": "1.0.0"
+        }
+    },
+    "resolutionRules": {
+        "netflix.nebula.test.gradle.issue:replacement-issue-gradle_7_3": {
+            "project": true
+        }
+    },
+    "runtimeClasspath": {
+        "netflix.nebula.test.gradle.issue:common": {
+            "project": true
+        },
+        "netflix.nebula.test.gradle.issue:data-interface": {
+            "project": true
+        },
+        "netflix:a": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:common"
+            ],
+            "locked": "1.0.0"
+        },
+        "netflix:b": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:data-interface"
+            ],
+            "locked": "1.0.0"
+        }
+    },
+    "testCompileClasspath": {
+        "netflix.nebula.test.gradle.issue:common": {
+            "project": true
+        },
+        "netflix.nebula.test.gradle.issue:data-interface": {
+            "project": true
+        },
+        "netflix:a": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:common"
+            ],
+            "locked": "1.0.0"
+        },
+        "netflix:b": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:data-interface"
+            ],
+            "locked": "1.0.0"
+        }
+    },
+    "testRuntimeClasspath": {
+        "netflix.nebula.test.gradle.issue:common": {
+            "project": true
+        },
+        "netflix.nebula.test.gradle.issue:data-interface": {
+            "project": true
+        },
+        "netflix:a": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:common"
+            ],
+            "locked": "1.0.0"
+        },
+        "netflix:b": {
+            "firstLevelTransitive": [
+                "netflix.nebula.test.gradle.issue:data-interface"
+            ],
+            "locked": "1.0.0"
+        }
+    }
+}

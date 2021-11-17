@@ -1,0 +1,5 @@
+apply plugin: 'java-library'
+
+dependencies {
+    api 'netflix:b-standalone:1.0.0'
+}
