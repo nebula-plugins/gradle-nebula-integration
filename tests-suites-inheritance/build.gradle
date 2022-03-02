@@ -13,13 +13,13 @@ testing {
             dependencies {
                 implementation 'org.junit.jupiter:junit-jupiter:5.+'
             }
+            useJUnit()
         }
 
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation project
                 implementation 'junit:junit:4.13'
-                implementation 'com.google.guava:guava:19.0'
             }
 
             targets {
@@ -31,6 +31,11 @@ testing {
             }
         }
     }
+}
+
+
+dependencies {
+    implementation 'com.google.guava:guava:19.0'
 }
 
 tasks.named('check') {
