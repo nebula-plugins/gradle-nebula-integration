@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'jvm-test-suite'
+}
+
+repositories {
+    mavenCentral()
+}
+
+testing {
+    suites {
+        test {
+            dependencies {
+                implementation 'org.junit.jupiter:junit-jupiter:5.+'
+            }
+        }
+
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation project
+                implementation 'junit:junit:4.13'
+                implementation 'com.google.guava:guava:19.0'
+            }
+
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(test)
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn(testing.suites.integrationTest)
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+
