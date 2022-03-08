@@ -1,6 +1,12 @@
 plugins {
+    id 'netflix.nebula'
     id 'java'
     id 'jvm-test-suite'
+    id 'org.springframework.boot' version '2.5.0'
+}
+
+bootJar {
+    mainClass = 'netflix.MyApp'
 }
 
 repositories {

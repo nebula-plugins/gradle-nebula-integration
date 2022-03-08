@@ -6,6 +6,7 @@ public class MapIntegTest {
     //@Autowired
     @Test
     public void isMap() {
+        MyEnum t = MyEnum.SOMETHING;
         assert true;
     }
 }

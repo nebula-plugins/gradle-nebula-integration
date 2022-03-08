@@ -1,0 +1,6 @@
+apply plugin: netflix.test.MyPlugin
+
+myExtension {
+    defaultVersionStrategy = 'test2'
+}
+
