@@ -1,0 +1,43 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'netflix.nebula'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+testing {
+	suites {
+		test {
+			useJUnitJupiter()
+		}
+
+		integrationTest(JvmTestSuite) {
+			dependencies {
+				implementation project
+			}
+
+			targets {
+				all {
+					testTask.configure {
+						shouldRunAfter(test)
+					}
+				}
+			}
+		}
+	}
+}
+
+tasks.named('check') {
+	dependsOn(testing.suites.integrationTest)
+}

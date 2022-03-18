@@ -19,7 +19,14 @@ class TestSuitesGradleTestPluginFunctionalTest extends Specification {
 
     def "can run task"() {
         given:
-        settingsFile << ""
+        settingsFile << """
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+    }
+}
+"""
         buildFile << """
         plugins {
             id 'java'
@@ -60,7 +67,7 @@ class TestSuitesGradleTestPluginFunctionalTest extends Specification {
         }
 """
 
-        def test = """"\
+        def test = """
             package netflix.nebula;
             import org.junit.jupiter.api.Test;
             import com.google.common.collect.ImmutableMap;
@@ -84,7 +91,7 @@ class TestSuitesGradleTestPluginFunctionalTest extends Specification {
         def runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("build")
+        runner.withArguments("build", '--scan')
         runner.withProjectDir(projectDir)
         def result = runner.build()
 
