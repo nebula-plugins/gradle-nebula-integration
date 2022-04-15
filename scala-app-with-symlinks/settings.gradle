@@ -1,0 +1,4 @@
+rootProject.name = 'scala-app-with-symlinks'
+include('app_2.13.8')
+include('app')
+
