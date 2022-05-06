@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    apply plugin: 'java-library'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        def alignmentGroup = 'com.fasterxml.jackson'
+        components.all { ComponentMetadataDetails details ->
+            if (details.id.group.startsWith(alignmentGroup)) {
+                details.belongsTo("aligned-platform:$alignmentGroup:${details.id.version}")
+            }
+        }
+
+
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+        api 'org.apache.commons:commons-math3:3.6.1'
+        implementation 'com.google.guava:guava:30.1.1-jre'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+
+    dependencyLocking {
+        lockAllConfigurations()
+    }
+}
+
+project('sub1') {
+    dependencies {
+        implementation "com.fasterxml.jackson.core:jackson-core:2.11.0"
+        implementation "com.fasterxml.jackson.core:jackson-annotations:2.12.+"
+        implementation "com.fasterxml.jackson.core:jackson-databind:2.12.+"
+    }
+}
+
+project('sub2') {
+    dependencies {
+        implementation "com.fasterxml.jackson.core:jackson-core:2.10.0"
+        implementation "com.fasterxml.jackson.core:jackson-annotations:2.12.+"
+        implementation "com.fasterxml.jackson.core:jackson-databind:2.12.+"
+    }
+}
+
+project('sub3') {
+    dependencies {
+        implementation "com.fasterxml.jackson.core:jackson-core:2.9.0"
+        implementation "com.fasterxml.jackson.core:jackson-annotations:2.12.+"
+        implementation "com.fasterxml.jackson.core:jackson-databind:2.12.+"
+    }
+}
