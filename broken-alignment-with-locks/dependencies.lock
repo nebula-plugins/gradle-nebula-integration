@@ -1,0 +1,46 @@
+{
+    "compileClasspath": {
+        "test.nebula:a": {
+            "locked": "0.15.0"
+        },
+        "test.nebula:b": {
+            "locked": "1.0.0"
+        },
+        "test.nebula:c": {
+            "locked": "0.15.0"
+        }
+    },
+    "runtimeClasspath": {
+        "test.nebula:a": {
+            "locked": "0.15.0"
+        },
+        "test.nebula:b": {
+            "locked": "1.0.0"
+        },
+        "test.nebula:c": {
+            "locked": "0.15.0"
+        }
+    },
+    "testCompileClasspath": {
+        "test.nebula:a": {
+            "locked": "0.15.0"
+        },
+        "test.nebula:b": {
+            "locked": "1.0.0"
+        },
+        "test.nebula:c": {
+            "locked": "0.15.0"
+        }
+    },
+    "testRuntimeClasspath": {
+        "test.nebula:a": {
+            "locked": "0.15.0"
+        },
+        "test.nebula:b": {
+            "locked": "1.0.0"
+        },
+        "test.nebula:c": {
+            "locked": "0.15.0"
+        }
+    }
+}
