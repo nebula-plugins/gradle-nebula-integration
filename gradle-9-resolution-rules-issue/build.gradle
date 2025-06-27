@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+    id("com.netflix.nebula.resolution-rules") version "12.0.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
+}
+
+project.plugins.withType(JavaLibraryPlugin).configureEach {
+    JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
+    javaPluginExtension.withSourcesJar()
+}
