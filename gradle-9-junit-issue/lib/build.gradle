@@ -1,0 +1,53 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api libs.commons.math3
+    implementation libs.guava
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.register('customTest', Test).configure {
+    useJUnitPlatform {
+        includeTags 'customtest'
+    }
+    addTestListener(new MyTestDiscoveryListener())
+}
+
+import org.gradle.api.tasks.testing.TestListener
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestResult
+
+ class MyTestDiscoveryListener implements TestListener {
+    @Override
+    void beforeSuite(TestDescriptor suite) {
+        System.out.println("Suite started: " + suite.getName())
+    }
+
+    @Override
+    void afterSuite(TestDescriptor suite, TestResult result) {
+        System.out.println("Suite finished: " + suite.getName() + " - " + result.getResultType())
+    }
+
+    @Override
+    void beforeTest(TestDescriptor testDescriptor) {
+        System.out.println("Test started: " + testDescriptor.getName())
+    }
+
+    @Override
+    void afterTest(TestDescriptor testDescriptor, TestResult result) {
+        System.out.println("Test finished: " + testDescriptor.getName() + " - " + result.getResultType())
+    }
+}

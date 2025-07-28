@@ -11,7 +11,3 @@ dependencies {
     resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
 }
 
-project.plugins.withType(JavaLibraryPlugin).configureEach {
-    JavaPluginExtension javaPluginExtension = project.extensions.getByType(JavaPluginExtension)
-    javaPluginExtension.withSourcesJar()
-}
